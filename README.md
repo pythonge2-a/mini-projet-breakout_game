@@ -1,39 +1,79 @@
-[![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-22041afd0340ce965d47ae6ef1cefeee28c7c493a6346c4f15d667ab976d596c.svg)](https://classroom.github.com/a/oOQR1xPR)
-# Nom du projet
+# Description du projet
 
-## Membres
+## Objectif
 
-- Nom 1
-- Nom 2
-- Nom 3
-- ...
+L'objectif est de créer un casse brique modulable.
+Dans un premier temps, nous allons créer programmer une version simple du jeu afin de nous assurer que la base du jeu fonctionne. Pars la suite, nous allons ajouter les fonctionnalitées citées ci-dessous.
 
-## Description
+## Cahier des charge (basic)
 
-Description du projet en quelques lignes
+Comme décrit ci-dessus, voici la liste de fonctionnalitées basiques qu'il est nécessaire d'implémenter au
+départ
 
-## Cahier des charges
+- Une grille de brique fixe (à définir)
+- Une balle à angle variable
+- Une raquette à taille fixe
+- Des briques pouvant subir plusieurs coups avant d'êtres détruites
+- Un système de score
+- Un menu permettant au joueur de _jouer_ ou _quitter_
+- Au moins 3 niveaux de briques différents
+- Un système de couleur permettant l'identification des vies des briques
 
-- Ceci **doit** être fait
-- Ceci **doit** être fait
-- Ceci **devrait** être fait (si le temps le permet)
-- ...
+## Cahier des charge (advanced)
 
-## Installation
+Dans un deuxième temps, voici ce qui est prévu d'être implémenté
 
-```bash
-poetry install
-...
-```
+- Différents thèmes (tilesets)
+- Vitesse variable de la balle
+- Ajout de bonus (aggrandissement de la raquette, super balle etc...)
+- Briques invincibles, mobiles
+- Ajout de malus (inversion des commandes, ratraicissement de la raquette)
+- Multiballe
 
-## (Pour les étudiants, à supprimer une fois fait)
+# Gestion GIT
 
-### Comment créer le module
+## Phase développement
 
-1. Créer un nouveau répertoire avec le nom du module
-2. Créer un fichier `__init__.py` vide
-3. Créer un fichier `__main__.py` vide
-4. Mettre à jour le fichier `README.md`
-5. Créer un projet Poetry avec `poetry new`
-6. Ajouter les fichiers à Git
-7. Commit et push
+Dans un premier temps, durant la phase dite de "développement" la totalité de l'équipe travail sur une seule branche (main). Cela permet à tout le monde de modifier les différentes classes, de ce fait, cela permet à tout le monde d'ajouter les fonctionnalitées nécessaires (les dépendances inter-classes) au bon fonctionnement de leurs tâches.
+Il est extrement important d'effectuer des Pull réguliers, des commits ainsi que des push afin que tout le monde travail presque constamment sur la dernière version du projet.
+
+## Phase secondaire
+
+Dans cette phase, une version du jeu "stable" est disponible sur la branche main. L'ajout de nouvelles fonctionnalitées nécessitera la création de branches. De cette manière, la version stable du jeu n'est pas altérée par la création de nouvelles fonctions.
+Une fois la branche stable (la fonctionnalité implémentée), un merge request est généré, analysé par l'équipe de développement, et soit validée, soit refusé selon les conflits.
+
+# Tâches
+
+## Integration Pygame
+
+Ding Jérémy
+
+- Créer une fenêtre
+- Taille fixe
+- Gestion d'entrées
+- Gestion affichage
+
+## Collisions
+
+Decrausaz Marc
+
+- Ball- brique
+- Ball - murs
+- Ball - raquette
+- Coins ?
+- Rebond ?
+
+## Gestion Niveau
+
+Tornare Magali
+
+- Création du champ de brique
+- Création des niveaux
+- Essayer de comprendre un truc en python...
+
+## Gestion Bonus
+
+Chaignat Bastien
+
+- Création des bonus
+- Intégration dans les briques
