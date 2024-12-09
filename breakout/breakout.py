@@ -27,8 +27,9 @@ class Breakout:
         # Define if game playing
         self.running = True
         # Create one ball
-        # self.balls.append(Ball(screen))
+        self.balls.append(Ball(self, screen))
 
+        # Create a racket
         self.racket = Racket(self, screen)
 
     def update(self):

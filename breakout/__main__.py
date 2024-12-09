@@ -37,7 +37,7 @@ while breakout.running:
         if event.type == pygame.QUIT:
             breakout.running = False
     # Draws background
-    screen.fill("black")
+    screen.fill((50, 50, 50))
     # Draws game
     breakout.show()
 
