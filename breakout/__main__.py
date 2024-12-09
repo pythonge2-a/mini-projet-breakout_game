@@ -30,10 +30,10 @@ breakout = Breakout(screen, font)
 
 
 # Test d'ajout
-while running:
+while breakout.running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
-            running = False
+            breakout.running = False
     # Draws background
     screen.fill("black")
     # Draws game
