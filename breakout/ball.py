@@ -46,8 +46,17 @@ class Ball:
         self.radius = C.BALL_RADIUS
         self.color = C.BALL_COLOR
         self.speed = C.BALL_SPEED
-        # Start the ball to go up
-        self.vel = np.array([0, -self.speed])
+
+        # Start the ball to go up with a random angle
+        # Generate a random angle between -pi and pi
+        angle = np.random.uniform(-np.pi / 2, np.pi / 2)
+
+        # Compute the vector components
+        x = self.speed * np.cos(angle)
+        y = self.speed * np.sin(angle)
+
+        # Create the vector
+        self.vel = np.array([x, y])
 
     def move(self):
         """Update ball position from velocity vector"""
@@ -56,6 +65,7 @@ class Ball:
 
     def check_colls(self, brick_field, racket):
         """Check ball collisions"""
+        # Define ball, racket symbols
         b_y = self.pos[1]
         b_x = self.pos[0]
         b_r = self.radius
@@ -65,8 +75,11 @@ class Ball:
         r_h = racket.size[1]
         r_w = racket.size[0]
 
+        # Check racket collision
         if b_y + 2 * b_r > r_y and b_x + 2 * b_r > r_x and b_x < r_x + r_w:
             self.vel[1] *= -1
+
+        # Check walls collision
         if b_y - b_r <= 0:
             self.vel[1] *= -1
         if b_x + 2 * b_r >= C.WINDOW_WIDTH or b_x <= 0:

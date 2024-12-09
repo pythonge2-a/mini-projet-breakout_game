@@ -27,10 +27,10 @@ BRICK_COLOR_MAP = (
 
 # BALL #
 BALL_RADIUS = 10  # Base radius
-BALL_SPEED = 1  # Base speed
+BALL_SPEED = 5  # Base speed
 
 BALL_START_X = WINDOW_WIDTH / 2
-BALL_START_Y = WINDOW_HEIGHT - BALL_RADIUS
+BALL_START_Y = WINDOW_HEIGHT - 20 - 2 * BALL_RADIUS
 
 BALL_BOUNCE_COEFFICIENT = 5  # Bouncing coefficient (see ball class)
 BALL_COLOR = (255, 0, 64)
