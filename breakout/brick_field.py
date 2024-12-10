@@ -37,8 +37,8 @@ class Brick_field:
         for i in range(C.BRICK_NB_BRICKS_Y):
             for j in range(C.BRICK_NB_BRICKS_X):
                 # Compute brick position
-                x = j * C.BRICK_WIDTH
-                y = i * C.BRICK_HEIGHT
+                x = j * (C.BRICK_WIDTH + C.BRICK_HORIZONTAL_SPACING) 
+                y = i * (C.BRICK_HEIGHT + C.BRICK_VERTICAL_SPACING)
                 pos = [x, y]
                 lives = np.random.randint(0, C.BRICK_MAX_LIVES)
                 # Add brick
