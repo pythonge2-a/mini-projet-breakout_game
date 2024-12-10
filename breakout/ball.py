@@ -36,7 +36,17 @@ import numpy as np
 
 
 class Ball:
-    def __init__(self, breakout, screen ,radius = C.BALL_RADIUS, color = C.BALL_COLOR, speed = C.BALL_SPEED,angle = None,positionX = C.BALL_START_X, positionY = C.BALL_START_Y):
+    def __init__(
+        self,
+        breakout,
+        screen,
+        radius=C.BALL_RADIUS,
+        color=C.BALL_COLOR,
+        speed=C.BALL_SPEED,
+        angle=None,
+        positionX=C.BALL_START_X,
+        positionY=C.BALL_START_Y,
+    ):
         # Game attributs
         self.breakout = breakout
         self.screen = screen
@@ -56,12 +66,13 @@ class Ball:
         x = self.speed * np.cos(angle)
         y = self.speed * np.sin(angle)
 
-        # Create the vector
-        self.vel = np.array([x, y])
+        # Create the velocity vector
+        self.vel = np.array([x, -y])
 
     def move(self):
         """Update ball position from velocity vector"""
         self.pos += self.vel
+        # Check collisions
         self.check_colls(None, self.breakout.racket)
 
     def check_colls(self, brick_field, racket):
