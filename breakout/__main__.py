@@ -6,7 +6,7 @@
 
 import pygame
 import sys
-import constants
+import constants as C
 
 from breakout import Breakout
 
@@ -17,7 +17,7 @@ pygame.init()
 font = pygame.font.Font(pygame.font.get_default_font(), 36)
 
 # Set up the screen dimensions and create a window
-screen_width, screen_height = constants.WINDOW_WIDTH, constants.WINDOW_HEIGHT
+screen_width, screen_height = C.WINDOW_WIDTH, C.WINDOW_HEIGHT
 
 screen = pygame.display.set_mode((screen_width, screen_height))
 pygame.display.set_caption("Breakout Game")
@@ -38,7 +38,7 @@ while breakout.running:
         if event.type == pygame.QUIT:
             breakout.running = False
     # Draws background
-    screen.fill((50, 50, 50))
+    screen.fill(C.WINDOW_BACKGROUND_COLOR)
     # Draws game
     breakout.show()
 

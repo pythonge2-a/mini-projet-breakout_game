@@ -17,6 +17,9 @@ class Brick:
         self.color = C.BRICK_COLOR_MAP[self.lives]
         self.brick_border_width = C.BRICK_BORDER_WIDTH
 
+        # Define score as its own lives
+        self.reward = lives
+
     def show(self):
         """Commentaire de fonction"""
         rect_position = (self.position, self.size)

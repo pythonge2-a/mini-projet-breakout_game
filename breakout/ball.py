@@ -84,11 +84,14 @@ class Ball:
             self.vel[1] *= -1
 
         if brick_field != None:
+            # Goes through each brick of the field
             for brick in brick_field.bricks:
+                # Compute position values
                 brick_x = brick.position[0]
                 brick_y = brick.position[1]
                 brick_w = brick.size[0]
                 brick_h = brick.size[1]
+                # If brick collision
                 if (
                     b_x + b_r > brick_x
                     and b_x - b_r < brick_x + brick_w
@@ -100,14 +103,18 @@ class Ball:
                         self.vel[1] *= -1
                     else:
                         self.vel[0] *= -1
+
                     # If the brick still has 1 life left at least
                     if brick.lives > 1:
+                        # Update lives and color
                         brick.lives -= 1
                         brick.color = C.BRICK_COLOR_MAP[brick.lives]
                     else:
+                        # Update points
+                        self.breakout.score += brick.reward
+                        # Remove brick
                         brick_field.bricks.remove(brick)
                     break
 
     def show(self):
-
         pygame.draw.circle(self.screen, self.color, self.pos, self.radius)
