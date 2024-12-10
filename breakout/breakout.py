@@ -46,7 +46,7 @@ class Breakout:
 
     def show_menu(self):
         self.menu.show()
-
+ 
     def show(self):
         """Displays game on the screen"""
         # Show bricks
