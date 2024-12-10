@@ -44,11 +44,11 @@ class Ball:
         self.pos += self.vel
         # Check collisions
         self.check_colls(self.breakout.brick_field, self.breakout.racket)
-        # rambow ball  
+        # rambow ball
         self.color = (
-            (np.sin(pygame.time.get_ticks() * 0.001 + 0) * 127 + 128,
-             np.sin(pygame.time.get_ticks() * 0.001 + 2) * 127 + 128,
-             np.sin(pygame.time.get_ticks() * 0.001 + 4) * 127 + 128)
+            np.sin(pygame.time.get_ticks() * 0.001 + 0) * 127 + 128,
+            np.sin(pygame.time.get_ticks() * 0.001 + 2) * 127 + 128,
+            np.sin(pygame.time.get_ticks() * 0.001 + 4) * 127 + 128,
         )
 
     def check_colls(self, brick_field, racket):
@@ -70,20 +70,22 @@ class Ball:
             and b_x + b_r > r_x
             and b_x < r_x + r_w
         ):
+            # Adjust the ball's velocity based on where it hit the racket
             self.vel[1] = -abs(self.vel[1])
             # Simplify the complex expression
             self.vel[0] += (b_x - r_x - r_w / 2) / (r_w / 2)
-           
+            # Normalize the velocity
+            self.vel = (self.vel / np.linalg.norm(self.vel)) * self.speed
+
+
         # Check walls collision
         if b_y - b_r <= 0:
             self.vel[1] *= -1
-        if b_x + b_r >= C.WINDOW_WIDTH or b_x + b_r <= 0:
+        if b_x + b_r >= C.WINDOW_WIDTH or b_x - b_r <= 0:
             self.vel[0] *= -1
 
-        if b_y + b_r >= C.WINDOW_HEIGHT:
-            self.vel[1] *= -1
-
-            #del self
+        if b_y - b_r >= C.WINDOW_HEIGHT:
+            del self
 
         if brick_field != None:
             for brick in brick_field.bricks:
@@ -107,7 +109,8 @@ class Ball:
                         brick.color = C.BRICK_COLOR_MAP[brick.lives]
                     else:
                         brick_field.bricks.remove(brick)
-                    break         
+                    break
+
     def show(self):
-        
+
         pygame.draw.circle(self.screen, self.color, self.pos, self.radius)
