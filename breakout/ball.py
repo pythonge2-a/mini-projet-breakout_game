@@ -48,19 +48,21 @@ class Ball:
         self.speed = C.BALL_SPEED
 
         # Start the ball to go up with a random angle
-        # Generate a random angle between -pi and pi
-        angle = np.random.uniform(-np.pi / 2, np.pi / 2)
+        # Generate a random angle between pi/4 and 3pi/4
+
+        angle = np.random.uniform(np.pi / 4, 3 * np.pi / 4)
 
         # Compute the vector components
         x = self.speed * np.cos(angle)
         y = self.speed * np.sin(angle)
 
-        # Create the vector
-        self.vel = np.array([x, y])
+        # Create the velocity vector
+        self.vel = np.array([x, -y])
 
     def move(self):
         """Update ball position from velocity vector"""
         self.pos += self.vel
+        # Check collisions
         self.check_colls(None, self.breakout.racket)
 
     def check_colls(self, brick_field, racket):
