@@ -26,10 +26,14 @@ class Brick:
         pygame.draw.rect(self.screen, self.color, rect_position)
         pygame.draw.rect(
             self.screen,
-            C.BRICK_BORDER_COLOR,
+            self.darken_color(self.color, C.BRICK_BORDER_COLOR_FACTOR),
             rect_position,
             width=self.brick_border_width,
         )
+
+    def darken_color(self, color, factor):
+        """Return a darker color version"""
+        return tuple(max(0, min(int(c * factor), 255)) for c in color)
 
 
 class Brick_field:
