@@ -64,7 +64,7 @@ import constants as C
 
 
 class Racket:
-    def __init__(self, breakout, screen,paddle_width = C.RACKET_WIDTH, paddle_height = C.RACKET_HEIGHT, paddle_color = C.RACKET_COLOR, paddle_speed = C.RACKET_SPEED, x = C.RACKET_START_X, y = C.RACKET_START_Y,color_border = C.RACKET_BORDER_COLOR):
+    def __init__(self, breakout, screen,paddle_width = C.RACKET_WIDTH, paddle_height = C.RACKET_HEIGHT, paddle_color = C.RACKET_COLOR, paddle_speed = C.RACKET_SPEED, x = C.RACKET_START_X, y = C.RACKET_START_Y,color_border = C.RACKET_BORDER_COLOR, border_width = C.RACKET_BORDER_WIDTH):
         # Game attributs
         self.breakout = breakout
         self.screen = screen
@@ -73,8 +73,8 @@ class Racket:
         self.pos = [x, y]
         self.size = [paddle_width, paddle_height]
         self.color = paddle_color
-        self.border_color = C.RACKET_BORDER_COLOR
-        self.border_width = C.RACKET_BORDER_WIDTH
+        self.border_color = color_border
+        self.border_width = border_width
         self.speed = paddle_speed
 
     def move(self):

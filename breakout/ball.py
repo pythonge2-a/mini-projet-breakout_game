@@ -77,14 +77,18 @@ class Ball:
         r_w = racket.size[0]
 
         # Check racket collision
-        if b_y + 2 * b_r > r_y and b_x + 2 * b_r > r_x and b_x < r_x + r_w:
+        if b_y + b_r > r_y and b_x + b_r > r_x and b_x < r_x + r_w:
             self.vel[1] *= -1
 
         # Check walls collision
         if b_y - b_r <= 0:
             self.vel[1] *= -1
-        if b_x + 2 * b_r >= C.WINDOW_WIDTH or b_x <= 0:
+        if b_x + b_r >= C.WINDOW_WIDTH or b_x + b_r <= 0:
             self.vel[0] *= -1
+            
+        if b_y + b_r >= C.WINDOW_HEIGHT:
+            del self
+            
 
     def show(self):
         pygame.draw.circle(self.screen, self.color, self.pos, self.radius)
