@@ -31,9 +31,9 @@ class Brick:
             width=self.brick_border_width,
         )
 
-    def darken_color(self):
-        print("Hey")
-        pass
+    def darken_color(self, color, factor):
+        """Return a darker color version"""
+        return tuple(max(0, min(int(c * factor), 255)) for c in color)
 
 
 class Brick_field:
