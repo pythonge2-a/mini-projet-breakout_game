@@ -45,7 +45,7 @@ class Brick_field:
         self.bricks = []
 
         # Generate bricks
-        self.load_map(0)
+        self.load_map(3)
 
     def show(self):
         for b in self.bricks:
