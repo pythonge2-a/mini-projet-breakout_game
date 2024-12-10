@@ -36,20 +36,21 @@ import numpy as np
 
 
 class Ball:
-    def __init__(self, breakout, screen):
+    def __init__(self, breakout, screen ,radius = C.BALL_RADIUS, color = C.BALL_COLOR, speed = C.BALL_SPEED,angle = None,positionX = C.BALL_START_X, positionY = C.BALL_START_Y):
         # Game attributs
         self.breakout = breakout
         self.screen = screen
 
         # Gemoetrical and graphical attributs
-        self.pos = np.array([C.BALL_START_X, C.BALL_START_Y])
-        self.radius = C.BALL_RADIUS
-        self.color = C.BALL_COLOR
-        self.speed = C.BALL_SPEED
+        self.pos = np.array([positionX, positionY])
+        self.radius = radius
+        self.color = color
+        self.speed = speed
 
         # Start the ball to go up with a random angle
         # Generate a random angle between -pi and pi
-        angle = np.random.uniform(-np.pi / 2, np.pi / 2)
+        if angle is None:
+            angle = np.random.uniform(-np.pi / 2, np.pi / 2)
 
         # Compute the vector components
         x = self.speed * np.cos(angle)

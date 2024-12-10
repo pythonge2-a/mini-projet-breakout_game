@@ -64,18 +64,18 @@ import constants as C
 
 
 class Racket:
-    def __init__(self, breakout, screen):
+    def __init__(self, breakout, screen,paddle_width = C.RACKET_WIDTH, paddle_height = C.RACKET_HEIGHT, paddle_color = C.RACKET_COLOR, paddle_speed = C.RACKET_SPEED, x = C.RACKET_START_X, y = C.RACKET_START_Y,color_border = C.RACKET_BORDER_COLOR):
         # Game attributs
         self.breakout = breakout
         self.screen = screen
 
         # Gemoetrical and graphical attributs
-        self.pos = [C.RACKET_START_X, C.RACKET_START_Y]
-        self.size = [C.RACKET_WIDTH, C.RACKET_HEIGHT]
-        self.color = C.RACKET_COLOR
+        self.pos = [x, y]
+        self.size = [paddle_width, paddle_height]
+        self.color = paddle_color
         self.border_color = C.RACKET_BORDER_COLOR
         self.border_width = C.RACKET_BORDER_WIDTH
-        self.speed = C.RACKET_SPEED
+        self.speed = paddle_speed
 
     def move(self):
         """Move the racket based on given players input"""
