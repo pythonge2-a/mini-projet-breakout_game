@@ -15,6 +15,7 @@ pygame.init()
 
 # Initialize font
 font = pygame.font.Font(pygame.font.get_default_font(), 36)
+
 # Set up the screen dimensions and create a window
 screen_width, screen_height = constants.WINDOW_WIDTH, constants.WINDOW_HEIGHT
 

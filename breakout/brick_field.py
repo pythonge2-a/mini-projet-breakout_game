@@ -21,10 +21,15 @@ class Brick:
     def show(self):
         """Commentaire de fonction"""
         rect_position = (self.position, self.size)
-    
+
         # Draws a rectangle to the screen
         pygame.draw.rect(self.screen, self.color, rect_position)
-        pygame.draw.rect(self.screen, C.BRICK_BORDER_COLOR, rect_position, width = self.brick_border_width)
+        pygame.draw.rect(
+            self.screen,
+            C.BRICK_BORDER_COLOR,
+            rect_position,
+            width=self.brick_border_width,
+        )
 
 
 class Brick_field:
@@ -36,19 +41,27 @@ class Brick_field:
         self.bricks = []
 
         # Generate bricks
-        for i in range(C.BRICK_NB_BRICKS_Y):
-            for j in range(C.BRICK_NB_BRICKS_X):
-                # Compute brick position
-                x = j * (C.BRICK_WIDTH + C.BRICK_HORIZONTAL_SPACING)
-                y = i * (C.BRICK_HEIGHT + C.BRICK_VERTICAL_SPACING)
-                x = j * (C.BRICK_WIDTH + C.BRICK_HORIZONTAL_SPACING) 
-                y = C.BRICK_TOP_CLEARANCE + i * (C.BRICK_HEIGHT + C.BRICK_VERTICAL_SPACING)
-                pos = [x, y]
-                lives = np.random.randint(0, C.BRICK_MAX_LIVES)
-                # Add brick
-                self.bricks.append(Brick(self.screen, pos, lives))
+        self.load_map(0)
 
     def show(self):
         for b in self.bricks:
             b.show()
         pass
+
+    def load_map(self, map_index):
+        """Load a map from the constants script."""
+        map = C.LEVELS_MAPS[map_index]  # Save the map
+
+        for i in range(C.BRICK_NB_BRICKS_Y):
+            for j in range(C.BRICK_NB_BRICKS_X):
+                # Compute brick position
+                x = j * (C.BRICK_WIDTH + C.BRICK_HORIZONTAL_SPACING)
+                y = i * (C.BRICK_HEIGHT + C.BRICK_VERTICAL_SPACING)
+                x = j * (C.BRICK_WIDTH + C.BRICK_HORIZONTAL_SPACING)
+                y = C.BRICK_TOP_CLEARANCE + i * (
+                    C.BRICK_HEIGHT + C.BRICK_VERTICAL_SPACING
+                )
+                pos = [x, y]
+                lives = int(map[i * C.BRICK_NB_BRICKS_X + j])
+                # Add brick
+                self.bricks.append(Brick(self.screen, pos, lives))
