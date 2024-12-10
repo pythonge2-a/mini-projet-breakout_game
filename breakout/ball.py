@@ -43,7 +43,7 @@ class Ball:
         """Update ball position from velocity vector"""
         self.pos += self.vel
         # Check collisions
-        self.check_colls(None, self.breakout.racket)
+        self.check_colls(self.breakout.brick_field, self.breakout.racket)
 
     def check_colls(self, brick_field, racket):
         """Check ball collisions"""
@@ -64,7 +64,7 @@ class Ball:
             and b_x + b_r > r_x
             and b_x < r_x + r_w
         ):
-            self.vel[1] *= -1
+            self.vel[1] = -abs(self.vel[1])
 
         # Check walls collision
         if b_y - b_r <= 0:
@@ -73,18 +73,30 @@ class Ball:
             self.vel[0] *= -1
 
         if b_y + b_r >= C.WINDOW_HEIGHT:
-            del self
+            self.vel[1] *= -1
+           # del self
 
-        if brick_field is not None:
+        if brick_field != None:
             for brick in brick_field.bricks:
                 brick_x = brick.position[0]
                 brick_y = brick.position[1]
                 brick_w = brick.size[0]
                 brick_h = brick.size[1]
-                if b_x + b_r > brick_x - brick_w and b_x - b_r < brick_x + brick_w:
-                    self.vel[0] *= -1
-                if b_y + b_r > brick_y - brick_h and b_y - b_r < brick_y + brick_h:
-                    self.vel[1] *= -1
-
+                if (
+                    b_x + b_r > brick_x
+                    and b_x - b_r < brick_x + brick_w
+                    and b_y + b_r > brick_y
+                    and b_y - b_r < brick_y + brick_h
+                ):
+                    # Check if the collision is vertical
+                    if b_y - b_r < brick_y or b_y + b_r > brick_y + brick_h:
+                        self.vel[1] *= -1
+                    else:
+                        self.vel[0] *= -1
+                   
+                    brick_field.bricks.remove(brick)
+                    break
+                    
+                
     def show(self):
         pygame.draw.circle(self.screen, self.color, self.pos, self.radius)

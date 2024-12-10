@@ -31,6 +31,9 @@ BRICK_COLOR_MAP = (
     (0, 153, 255),  # Blue
 )
 
+BRICK_BORDER_WIDTH = 2
+BRICK_BORDER_COLOR = (255, 255, 255)
+
 # BALL #
 BALL_RADIUS = 10  # Base radius
 BALL_SPEED = 5  # Base speed
