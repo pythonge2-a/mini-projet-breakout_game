@@ -4,36 +4,6 @@ import racket
 import constants as C
 import numpy as np
 
-"""class Ball:
-    def __init__(self, screen, x, y, dx, dy, radius, color):
-        self.screen = screen
-        self.x = x
-        self.y = y
-        self.dx = dx
-        self.dy = dy
-        self.radius = radius
-        self.color = color
-        
-    def move(self, Racket, bricks):
-        # Check if the ball hit the paddle
-        if self.y + self.dy + self.radius >  Racket.height and self.x > Racket.x and self.x < Racket.x + Racket.width:
-            self.dy = -self.dy       
-        if self.y + self.dy - self.radius < self.sreen.get_height():
-            self.dy = -self.dy
-        if self.x + self.dx - self.radius < 0 or self.x + self.dx + self.radius > self.screen.get_width():
-            self.dx = -self.dx
-        if  self.y + self.dy - self.radius < 0:
-            del(self)
-        
-        self.x += self.dx
-        self.y += self.dy
-
-
-    def show(self):
-        pygame.draw.circle(self.screen, self.color, (self.x, self.y), self.radius)
-
-"""
-
 
 class Ball:
     def __init__(
@@ -88,7 +58,12 @@ class Ball:
         r_w = racket.size[0]
 
         # Check racket collision
-        if b_y + b_r > r_y and b_x + b_r > r_x and b_x < r_x + r_w:
+        if (
+            b_y + b_r < r_y + r_h
+            and b_y + b_r > r_y
+            and b_x + b_r > r_x
+            and b_x < r_x + r_w
+        ):
             self.vel[1] *= -1
 
         # Check walls collision
@@ -96,10 +71,20 @@ class Ball:
             self.vel[1] *= -1
         if b_x + b_r >= C.WINDOW_WIDTH or b_x + b_r <= 0:
             self.vel[0] *= -1
-            
+
         if b_y + b_r >= C.WINDOW_HEIGHT:
             del self
-            
+
+        if brick_field is not None:
+            for brick in brick_field.bricks:
+                brick_x = brick.position[0]
+                brick_y = brick.position[1]
+                brick_w = brick.size[0]
+                brick_h = brick.size[1]
+                if b_x + b_r > brick_x - brick_w and b_x - b_r < brick_x + brick_w:
+                    self.vel[0] *= -1
+                if b_y + b_r > brick_y - brick_h and b_y - b_r < brick_y + brick_h:
+                    self.vel[1] *= -1
 
     def show(self):
         pygame.draw.circle(self.screen, self.color, self.pos, self.radius)
