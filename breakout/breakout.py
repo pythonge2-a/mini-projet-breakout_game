@@ -35,6 +35,7 @@ class Breakout:
         # Score
         self.score = 0
         self.level = 0
+        self.lives = C.GAME_START_LIVES
 
     def update(self):
         """Run a \"Game tick\" Update object's position, read player input etc."""
@@ -43,13 +44,13 @@ class Breakout:
         self.racket.move()
 
     def show_game(self):
+        """Show the breakout game to the screen"""
         self.brick_field.show()
         for b in self.balls:
             b.show()
         self.racket.show()
-        # Shows score and lvl
-        self.display_score()
-        self.display_level()
+        # Shows infos
+        self.display_infos()
 
     def show_menu(self):
         self.menu.show()
@@ -66,11 +67,17 @@ class Breakout:
             self.update()
             self.show_game()
 
+    def display_infos(self):
+        """Shows score, lives, level"""
+        self.display_score()
+        self.display_lives()
+        self.display_level()
+
     def display_score(self):
         """Displays score"""
 
         # Define text
-        score_txt = self.font.render(f"Score: {self.score}", True, SCORE_FONT_COLOR)
+        score_txt = self.font.render(f"Score:{self.score}", True, SCORE_FONT_COLOR)
 
         c_x = C.SCORE_RECT_X
         c_y = C.SCORE_RECT_Y
@@ -82,7 +89,7 @@ class Breakout:
     def display_level(self):
         """Writes level"""
         # Define text
-        level_txt = self.font.render(f"Level: {self.level}", True, LEVEL_FONT_COLOR)
+        level_txt = self.font.render(f"Level:{self.level}", True, LEVEL_FONT_COLOR)
 
         c_x = C.LEVEL_RECT_X
         c_y = C.LEVEL_RECT_Y
@@ -93,4 +100,13 @@ class Breakout:
 
     def display_lives(self):
         """Shows lives"""
+        # Define text
+        lives_txt = self.font.render(f"Lives:{self.lives}", True, LIVES_FONT_COLOR)
+
+        c_x = C.LIVES_RECT_X
+        c_y = C.LIVES_RECT_Y
+
+        # Define rectangle
+        lives_rec = lives_txt.get_rect(topleft=(c_x, c_y))
+        self.screen.blit(lives_txt, lives_rec)
         pass

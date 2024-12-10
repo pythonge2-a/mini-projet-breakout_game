@@ -14,7 +14,7 @@ from breakout import Breakout
 pygame.init()
 
 # Initialize font
-font = pygame.font.Font(pygame.font.get_default_font(), 36)
+font = pygame.font.Font("breakout/fonts/bedstead.otf", C.TXT_FONT_SIZE)
 
 # Set up the screen dimensions and create a window
 screen_width, screen_height = C.WINDOW_WIDTH, C.WINDOW_HEIGHT
