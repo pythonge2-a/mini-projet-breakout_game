@@ -6,38 +6,47 @@ import constants as C
 class bolus:
     """Création des bonus et des malus"""
 
-    list_bonus = [
-        "grow_racket",
-        "grow_ball",
-        "speed_up_racket",
-        "speed_down_ball",
-        "add_ball",
-        "unstoppable",
-        "glu",
-        "break_brick",
-        "net",
-    ]
-    list_malus = [
-        "speed_up_ball",
-        "speed_down_racket",
-        "shrink_racket",
-        "shrink_ball",
-        "reinforce_brick",
-        "ghost",
-        "reverse",
-        "explosion",
-        "unbreakable",
-    ]
-    proba_bonus = [100, 50, 75, 75, 100, 10, 25, 50, 10]
-    proba_malus = [100, 75, 75, 50, 75, 20, 25, 10, 5]
-
-    def __init__(self, speed=C.BONUS_SPEED, y=None, x=None, brick = None, bonus = False, malus = False):
+    def __init__(self, breakout, speed=C.BONUS_SPEED, y=None, x=None, brick = None, bonus = False, malus = False):
+        self.breakout = breakout
         self.speed = speed
         self.y = y
         self.x = x
         self.brick = brick
         self.bonus = bonus
         self.malus = malus
+
+        if self.bonus and not self.malus :
+            self.bolus = self.set_bonus()
+        elif not self.bonus and self.malus :
+            self.bolus = self.set_malus()
+        else :
+            self.bolus = self.set_bolus()
+
+
+        self.list_bonus = [
+        self.grow_racket,
+        self.grow_ball,
+        self.speed_up_racket,
+        self.speed_down_ball,
+        self.add_ball,
+        self.unstoppable,
+        self.glu,
+        self.break_brick,
+        self.net
+        ]
+        self.list_malus = [
+        self.speed_up_ball,
+        self.speed_down_racket,
+        self.shrink_racket,
+        self.shrink_ball,
+        self.reinforce_brick,
+        self.ghost,
+        self.reverse,
+        self.explosion,
+        self.unbreakable
+        ]
+        self.proba_bonus = [100, 50, 75, 75, 100, 10, 25, 50, 10]
+        self.proba_malus = [100, 75, 75, 50, 75, 20, 25, 10, 5]
 
     def set_bonus(self):
         """Créé un bonus aléatoire"""
@@ -64,6 +73,8 @@ class bolus:
         
         if self.y <= C.WINDOW_HEIGHT :
             self.y += self.speed
+            if self.y == self.breakout.racket.pos[1] :
+                self.bolus()    
         else :
             self.kill()     # est détruit en sortant de l'écran
 
