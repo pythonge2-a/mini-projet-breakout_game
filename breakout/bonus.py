@@ -1,5 +1,7 @@
 import random as rd
 import constants as C
+from ball import *
+
 
 
 # création des bonus/malus
@@ -22,6 +24,7 @@ class bolus:
         else :
             self.bolus = self.set_bolus()
 
+        
 
         self.list_bonus = [
         self.grow_racket,
@@ -45,7 +48,7 @@ class bolus:
         self.explosion,
         self.unbreakable
         ]
-        self.proba_bonus = [100, 50, 75, 75, 100, 10, 25, 50, 10]
+        self.proba_bonus = [100, 50, 75, 75, 100, 5, 50, 25, 10]
         self.proba_malus = [100, 75, 75, 50, 75, 20, 25, 10, 5]
 
     def set_bonus(self):
@@ -84,38 +87,61 @@ class bolus:
 
     def grow_racket(self) :
         """Bonus d'agrandissement de la raquette"""
+
+        self.breakout.racket.paddle_width += 5
         pass
 
     def grow_ball(self) :
         """"Bonus d'agrandissement de la balle"""
+
+        for b in self.breakout.balls :
+            b.radius += 1 
         pass
 
     def speed_up_racket(self) :
         """Bonus d'accélération de la raquette"""
+
+        self.breakout.racket.paddle_speed += 1
         pass
 
     def speed_down_ball(self) :
         """Bonus de ralentissement de la balle"""
+
+        for b in self.breakout.balls :
+            b.speed -= 1
         pass
 
     def add_ball(self) :
         """Bonus d'ajout d'une balle"""
+
+        self.breakout.balls.append(Ball(self, self.breakout.screen))
         pass
 
     def unstoppable(self) :
         """Bonus pour que la balle détruise tout sur son passage"""
+
+
         pass
 
     def glu(self) :
         """Bonus qui arrête la balle sur la raquette (lâche avec un bouton ou un temps)"""
+
+
         pass
 
     def break_brick(self) :
         """Bonus qui casse une brique aléatoire"""
-        pass
+
+        brick_to_break = rd.choice(self.breakout.brick_field.bricks)
+
+        brick_to_break.lives = 0
+
+        self.kill()
 
     def net(self) :
         """Bonus qui empêche de perdre une bille"""
+
+
         pass
 
     def speed_up_ball(self) :
@@ -124,34 +150,54 @@ class bolus:
 
     def speed_down_racket(self) :
         """Malus de ralentissement de la raquette"""
+
+        self.breakout.racket.paddle_speed -= 1
         pass
 
     def shrink_racket(self) :
         """Malus de rétrécissement de la raquette"""
+
+        self.breakout.racket.paddle_width -= 5
         pass
 
     def shrink_ball(self) :
         """Malus de rétrécissement de la balle"""
+
+        for b in self.breakout.balls :
+            b.radius -= 1
         pass
 
     def reinforce_brick(self) :
         """Malus d'ajout d'une vie à une brique"""
-        pass
+
+        brick_to_reinforce = rd.choice(self.breakout.brick_field.bricks)
+
+        brick_to_reinforce.lives += 1
+
+        self.kill()
 
     def ghost(self) :
         """Malus qui empêche la balle de toucher les briques"""
+
+
         pass
 
     def reverse(self) :
         """Malus qui change les sens des contrôles"""
+
+
         pass
 
     def explosion(self) :
         """Malus qui rend des briques ou la balle explosive (vitesse de la bille augmente, angle change)"""
+
+
         pass
 
     def unbreakable(self) :
         """Malus qui rend une brique temporairement incassable"""
+
+
         pass
     
 
