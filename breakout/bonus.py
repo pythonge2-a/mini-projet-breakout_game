@@ -8,14 +8,15 @@ from ball import *
 class bolus:
     """Création des bonus et des malus"""
 
-    def __init__(self, breakout, speed=C.BONUS_SPEED, y=None, x=None, brick = None, bonus = False, malus = False):
+    def __init__(self, breakout, speed=C.BONUS_SPEED, brick = None, bonus = False, malus = False):
         self.breakout = breakout
         self.speed = speed
-        self.y = y
-        self.x = x
+        self.y = brick.position[1]
+        self.x = brick.position[0]
         self.brick = brick
         self.bonus = bonus
         self.malus = malus
+        self.size = [C.BONUS_WIDTH, C.BONUS_HEIGHT]
 
         if self.bonus and not self.malus :
             self.bolus = self.set_bonus()
@@ -24,7 +25,6 @@ class bolus:
         else :
             self.bolus = self.set_bolus()
 
-        
 
         self.list_bonus = [
         self.grow_racket,
@@ -76,13 +76,41 @@ class bolus:
         
         if self.y <= C.WINDOW_HEIGHT :
             self.y += self.speed
-            if self.y == self.breakout.racket.pos[1] :
+            if self.check_take() :
                 self.bolus()    
         else :
             self.kill()     # est détruit en sortant de l'écran
 
+    def check_take(self) :
+        """Vérifie si le bonus est pris"""
+
+        # position et taille du bonus/malus
+        bm_x = self.x
+        bm_y = self.y
+        bm_h = self.size[1]
+        bm_w = self.size[0]
+
+        # position et taille de la raquette
+        r_x = self.breakout.racket.x
+        r_y = self.breakout.racket.y
+        r_h = self.breakout.racket.paddle_height
+        r_w = self.breakout.racket.paddle_width
+
+        # vérifie si le bonus/malus est pris
+        if (((bm_x - bm_w) < (r_x + r_w)) and ((bm_x + bm_w) > (r_x - r_w))) or (((bm_y - bm_h) < (r_y + r_h)) and ((bm_y + bm_h) > (r_y - r_h))) :
+            return True
+        else :
+            return False
+
+    def update(self) :
+        """"met à jour l'état du bonus/malus"""
+
+        if self.brick is None :
+            self.move()
+
     def kill(self):
         """Détruit le bonus/malus"""
+
         del self
 
     def grow_racket(self) :
@@ -115,7 +143,8 @@ class bolus:
         """Bonus d'ajout d'une balle"""
 
         self.breakout.balls.append(Ball(self, self.breakout.screen))
-        pass
+        
+        self.kill()
 
     def unstoppable(self) :
         """Bonus pour que la balle détruise tout sur son passage"""
