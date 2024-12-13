@@ -161,9 +161,10 @@ class bolus:
     def break_brick(self) :
         """Bonus qui casse une brique aléatoire"""
 
-        brick_to_break = rd.choice(self.breakout.brick_field.bricks)
+        if len(self.breakout.brick_field.bricks) != 0 :
+            brick_to_break = rd.choice(self.breakout.brick_field.bricks)
 
-        brick_to_break.lives = 0
+            brick_to_break.lives = 0
 
         self.kill()
 
@@ -199,9 +200,10 @@ class bolus:
     def reinforce_brick(self) :
         """Malus d'ajout d'une vie à une brique"""
 
-        brick_to_reinforce = rd.choice(self.breakout.brick_field.bricks)
+        if len(self.breakout.brick_field.bricks) != 0 :
+            brick_to_reinforce = rd.choice(self.breakout.brick_field.bricks)
 
-        brick_to_reinforce.lives += 1
+            brick_to_reinforce.lives += 1
 
         self.kill()
 

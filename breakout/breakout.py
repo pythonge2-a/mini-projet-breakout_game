@@ -38,6 +38,8 @@ class Breakout:
         # Create a racket
         self.racket = Racket(self, screen)
 
+        self.bonus_malus = self.add_bonus_malus()
+
 
 
     def update(self):
@@ -113,6 +115,20 @@ class Breakout:
         lives_rec = lives_txt.get_rect(topleft=(c_x, c_y))
         self.screen.blit(lives_txt, lives_rec)
         pass
+
+    def add_bonus_malus(self) :
+        """add bonus or malus in bricks"""
+
+        # à modifier, plusieurs bonus/malus peuvent être mis dans la même brique (et pas sûr du fonctionnement)
+        bonus_malus = []
+        for i in C.BONUS_QUANTITY :
+            brick_bonus_malus = rd.choice(self.brick_field.bricks)
+
+            bonus_malus.append(bolus(breakout=self, brick=brick_bonus_malus))
+
+        return bonus_malus
+
+
     
     
 
