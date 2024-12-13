@@ -72,6 +72,27 @@ class Ball:
         r_h = racket.size[1]
         r_w = racket.size[0]
 
+        for other_ball in self.breakout.balls: 
+            if other_ball is self:
+                continue
+            if np.linalg.norm(self.pos - other_ball.pos) < self.radius + other_ball.radius:
+                # Calculate the normal vector
+                normal = (self.pos - other_ball.pos) / np.linalg.norm(self.pos - other_ball.pos)
+                # Calculate the relative velocity
+                relative_velocity = self.vel - other_ball.vel
+                # Calculate the velocity along the normal
+                velocity_along_normal = np.dot(relative_velocity, normal)
+                # If the balls are moving apart, do nothing
+                if velocity_along_normal > 0:
+                    continue
+                # Calculate the impulse scalar
+                impulse = 2 * velocity_along_normal / (1 / self.radius + 1 / other_ball.radius)
+                # Apply the impulse to the velocities
+                self.vel -= impulse * normal / self.radius
+                other_ball.vel += impulse * normal / other_ball.radius
+
+
+            
         # Check racket collision
         if (
             b_y + b_r < r_y + r_h
@@ -88,9 +109,11 @@ class Ball:
 
         # Check walls collision
         if b_y - b_r <= 0:
-            self.vel[1] *= -1
-        if b_x + b_r >= C.WINDOW_WIDTH or b_x - b_r <= 0:
-            self.vel[0] *= -1
+            self.vel[1] = abs(self.vel[1])
+        if b_x + b_r >= C.WINDOW_WIDTH: 
+            self.vel[0] = -abs(self.vel[0])
+        if b_x - b_r <= 0:
+            self.vel[0] = abs(self.vel[0])
 
         if b_y - b_r >= C.WINDOW_HEIGHT:
             if self.breakout.lives  == 0 or len(self.breakout.balls) > 1:
@@ -100,6 +123,8 @@ class Ball:
                 self.pos[0] = self.breakout.racket.pos[0] + self.breakout.racket.size[0]/2
                 self.pos[1] = self.breakout.racket.pos[1] - self.radius
                 self.coller = True
+        
+
 
         if brick_field != None:
             # Goes through each brick of the field
@@ -146,8 +171,9 @@ class Ball:
                         # Update points
                         self.breakout.score += brick.reward
                         brick_field.bricks.remove(brick) 
-                        '''je m'ammuse a rajouter des balles quand on casse une brique c'est fun mais pas très utile'''
-                        #self.breakout.balls.append(Ball(self.breakout, self.screen, coller = False, positionX = self.pos[0], positionY = self.pos[1]))
+                        #'''je m'ammuse a rajouter des balles quand on casse une brique c'est fun mais pas très utile'''
+                        #self.breakout.racket.size[0] += 50
+                        #self.breakout.balls.append(Ball(self.breakout, self.screen, coller = False, positionX = self.pos[0]+2*self.radius, positionY = self.pos[1]+2*self.radius))
    
                     break
 
