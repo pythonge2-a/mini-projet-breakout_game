@@ -113,3 +113,6 @@ class Breakout:
         lives_rec = lives_txt.get_rect(topleft=(c_x, c_y))
         self.screen.blit(lives_txt, lives_rec)
         pass
+    
+    
+

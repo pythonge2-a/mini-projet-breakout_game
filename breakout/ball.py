@@ -43,8 +43,6 @@ class Ball:
 
     def move(self):
         """Update ball position from velocity vector"""
-        
-     
         if(self.coller == True):
             self.pos[0] = self.breakout.racket.pos[0] + self.breakout.racket.size[0]/2
             self.pos[1] = self.breakout.racket.pos[1] - self.radius
@@ -96,7 +94,7 @@ class Ball:
 
         if b_y - b_r >= C.WINDOW_HEIGHT:
             if self.breakout.lives  == 0 or len(self.breakout.balls) > 1:
-                del self
+                self.breakout.balls.remove(self)
             else:
                 self.breakout.lives -= 1
                 self.pos[0] = self.breakout.racket.pos[0] + self.breakout.racket.size[0]/2
@@ -147,10 +145,10 @@ class Ball:
                     else:
                         # Update points
                         self.breakout.score += brick.reward
-                        brick_field.bricks.remove(brick)
-
-                        
-                           
+                        brick_field.bricks.remove(brick) 
+                        '''je m'ammuse a rajouter des balles quand on casse une brique c'est fun mais pas très utile'''
+                        #self.breakout.balls.append(Ball(self.breakout, self.screen, coller = False, positionX = self.pos[0], positionY = self.pos[1]))
+   
                     break
 
     def show(self):
