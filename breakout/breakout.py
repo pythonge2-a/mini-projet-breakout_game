@@ -38,15 +38,19 @@ class Breakout:
         # Create a racket
         self.racket = Racket(self, screen)
 
-        self.bonus_malus = self.add_bonus_malus()
-
-
+        # Create bonus list
+        self.bonus_malus = []
+        if len(self.bonus_malus) <= 0 :
+            self.bonus_malus = self.add_bonus_malus()
 
     def update(self):
         """Run a \"Game tick\" Update object's position, read player input etc."""
         for b in self.balls:
             b.move()
         self.racket.move()
+        #update bonus state
+        for bo_ma in self.bonus_malus :
+            bo_ma.update_bolus()
 
     def show_game(self):
         """Show the breakout game to the screen"""
@@ -121,10 +125,10 @@ class Breakout:
 
         # à modifier, plusieurs bonus/malus peuvent être mis dans la même brique (et pas sûr du fonctionnement)
         bonus_malus = []
-        for i in C.BONUS_QUANTITY :
+        for i in range(C.BONUS_QUANTITY) :
             brick_bonus_malus = rd.choice(self.brick_field.bricks)
 
-            bonus_malus.append(bolus(breakout=self, brick=brick_bonus_malus))
+            bonus_malus.append(bolus(screen=self.screen, breakout=self, brick=brick_bonus_malus, racket=self.racket))
 
         return bonus_malus
 
