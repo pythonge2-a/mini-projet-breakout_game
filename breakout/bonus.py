@@ -116,7 +116,7 @@ class bolus:
     def update_bolus(self) :
         """"met à jour l'état du bonus/malus"""
 
-        if self.brick is not None :
+        if self.brick is None :
             self.move_bolus()
 
     def kill(self):
