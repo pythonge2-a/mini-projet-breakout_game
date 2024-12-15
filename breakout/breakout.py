@@ -5,6 +5,7 @@ from racket import *
 from menu import *
 from constants import *
 
+from animation import *
 
 class Breakout:
     """Defines the breakout game."""
@@ -42,17 +43,22 @@ class Breakout:
         self.bonus_malus = []
         if len(self.bonus_malus) <= 0 :
             self.bonus_malus = self.add_bonus_malus()
-       
+        self.animationBriques = []
 
 
     def update(self):
         """Run a \"Game tick\" Update object's position, read player input etc."""
         for b in self.balls:
             b.move()
+            
         self.racket.move()
         #update bonus state
         for bo_ma in self.bonus_malus :
             bo_ma.update_bolus()
+        if self.animationBriques != [] :
+            for anim in self.animationBriques :
+                anim.update()
+      
 
     def show_game(self):
         """Show the breakout game to the screen"""
@@ -62,6 +68,11 @@ class Breakout:
         self.racket.show()
         # Shows infos
         self.display_infos()
+        
+        if self.animationBriques != [] :
+            # Dessiner les animations en cours
+            for anim in self.animationBriques:
+                anim.draw(self.screen)
 
     def show_menu(self):
         self.menu.show()

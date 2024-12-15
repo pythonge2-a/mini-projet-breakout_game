@@ -3,7 +3,7 @@ import brick_field
 import racket
 import constants as C
 import numpy as np
-
+import animation
 
 class Ball:
     def __init__(
@@ -171,13 +171,22 @@ class Ball:
 
                     # If the brick still has 1 life left at least
                     if brick.lives > 1:
+                        # add animation
+                        self.breakout.animationBriques.append(
+                            animation.BrickAnimation(brick.position, brick.size, brick.color, number_of_fragments = 30)
+                        )
                         # Update lives and color
                         brick.lives -= 1
                         brick.color = C.BRICK_COLOR_MAP[brick.lives]
+                        
                     else:
                         # Update points
                         self.breakout.score += brick.reward
                         brick_field.bricks.remove(brick)
+                        # add animation
+                        self.breakout.animationBriques.append(
+                            animation.BrickAnimation(brick.position, brick.size, brick.color)
+                        )
                         #'''je m'ammuse a rajouter des balles quand on casse une brique c'est fun mais pas très utile'''
                         #self.breakout.racket.size[0] += 50
                         #self.breakout.balls.append(Ball(self.breakout, self.screen, coller = False, positionX = self.pos[0]+2*self.radius, positionY = self.pos[1]+2*self.radius))
