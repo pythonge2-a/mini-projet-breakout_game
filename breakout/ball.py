@@ -114,21 +114,24 @@ class Ball:
             self.vel[0] = -abs(self.vel[0])
         if b_x - b_r <= 0:
             self.vel[0] = abs(self.vel[0])
-
+            
         if b_y - b_r >= C.WINDOW_HEIGHT:
-            if self.breakout.lives  == 0 or len(self.breakout.balls) > 1:
+           """ if self.breakout.lives  == 0 or len(self.breakout.balls) > 1:
                 self.breakout.balls.remove(self)
             else:
                 self.breakout.lives -= 1
                 self.pos[0] = self.breakout.racket.pos[0] + self.breakout.racket.size[0]/2
                 self.pos[1] = self.breakout.racket.pos[1] - self.radius
                 self.coller = True
-        
+    """     
+           self.vel[1] = -abs(self.vel[1])
+           
 
 
         if brick_field != None:
             # Goes through each brick of the field
             for brick in brick_field.bricks:
+
                 # Compute position values
                 brick_x = brick.position[0]
                 brick_y = brick.position[1]
@@ -148,18 +151,23 @@ class Ball:
                     overlap_right = abs(b_x - b_r - (brick_x + brick_w))
 
                     # Trouver le côté avec la plus petite distance d'overlap
-                    min_overlap = min(
-                        overlap_top, overlap_bottom, overlap_left, overlap_right
-                    )
+                    overlaps = {
+                        'top': overlap_top,
+                        'bottom': overlap_bottom,
+                        'left': overlap_left,
+                        'right': overlap_right
+                    }
+                    min_overlap = min(overlaps.values())
+                    min_sides = [side for side, overlap in overlaps.items() if overlap == min_overlap]
 
                     # Ajuster la vitesse en fonction du côté
-                    if min_overlap == overlap_top:
+                    if 'top' in min_sides:
                         self.vel[1] *= -1  # Collision avec le haut de la brique
-                    elif min_overlap == overlap_bottom:
+                    if 'bottom' in min_sides:
                         self.vel[1] *= -1  # Collision avec le bas de la brique
-                    elif min_overlap == overlap_left:
+                    if 'left' in min_sides:
                         self.vel[0] *= -1  # Collision avec le côté gauche de la brique
-                    elif min_overlap == overlap_right:
+                    if 'right' in min_sides:
                         self.vel[0] *= -1  # Collision avec le côté droit de la brique
 
                     # If the brick still has 1 life left at least
@@ -170,7 +178,7 @@ class Ball:
                     else:
                         # Update points
                         self.breakout.score += brick.reward
-                        brick_field.bricks.remove(brick) 
+                        brick_field.bricks.remove(brick)
                         #'''je m'ammuse a rajouter des balles quand on casse une brique c'est fun mais pas très utile'''
                         #self.breakout.racket.size[0] += 50
                         #self.breakout.balls.append(Ball(self.breakout, self.screen, coller = False, positionX = self.pos[0]+2*self.radius, positionY = self.pos[1]+2*self.radius))

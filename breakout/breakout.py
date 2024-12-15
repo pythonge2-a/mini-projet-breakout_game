@@ -42,6 +42,8 @@ class Breakout:
         self.bonus_malus = []
         if len(self.bonus_malus) <= 0 :
             self.bonus_malus = self.add_bonus_malus()
+       
+
 
     def update(self):
         """Run a \"Game tick\" Update object's position, read player input etc."""
