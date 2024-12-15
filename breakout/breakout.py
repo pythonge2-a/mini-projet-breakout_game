@@ -43,7 +43,7 @@ class Breakout:
         self.bonus_malus = []
         if len(self.bonus_malus) <= 0 :
             self.bonus_malus = self.add_bonus_malus()
-        self.animationBriques = []
+        self.Animation_Break = []
 
 
     def update(self):
@@ -55,10 +55,10 @@ class Breakout:
         #update bonus state
         for bo_ma in self.bonus_malus :
             bo_ma.update_bolus()
-        if self.animationBriques != [] :
-            for anim in self.animationBriques :
+        if self.Animation_Break != [] :
+            for anim in self.Animation_Break :
                 anim.update()
-      
+        
 
     def show_game(self):
         """Show the breakout game to the screen"""
@@ -69,10 +69,11 @@ class Breakout:
         # Shows infos
         self.display_infos()
         
-        if self.animationBriques != [] :
+        if self.Animation_Break != [] :
             # Dessiner les animations en cours
-            for anim in self.animationBriques:
+            for anim in self.Animation_Break:
                 anim.draw(self.screen)
+      
 
     def show_menu(self):
         self.menu.show()

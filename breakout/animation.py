@@ -4,7 +4,7 @@ import constants as C
 import numpy as np
 
 
-class BrickAnimation:
+class Animation_Break:
     """Class to handle brick destruction animations."""
     def __init__(self, position, size, color,number_of_fragments = C.ANIMATION_NUMBER_OF_FRAGMENTS,lifetime = C.ANIMATION_LIFETIME):
         self.particles = []
@@ -34,5 +34,3 @@ class BrickAnimation:
         """Draw particles on the screen."""
         for particle in self.particles:
             pygame.draw.circle(screen, particle["color"], particle["pos"].astype(int), particle["size"])
-    
-    

@@ -116,6 +116,9 @@ class Ball:
             self.vel[0] = abs(self.vel[0])
             
         if b_y - b_r >= C.WINDOW_HEIGHT:
+            self.breakout.Animation_Break.append(
+                animation.Animation_Break(self.pos, (self.radius,self.radius), self.color, number_of_fragments = 300)
+            )
             if self.breakout.lives  == 0 or len(self.breakout.balls) > 1:
                 self.breakout.balls.remove(self)
             else:
@@ -168,12 +171,12 @@ class Ball:
                         self.vel[0] *= -1  # Collision avec le côté gauche de la brique
                     if 'right' in min_sides:
                         self.vel[0] *= -1  # Collision avec le côté droit de la brique
-
+                    
                     # If the brick still has 1 life left at least
                     if brick.lives > 1:
                         # add animation
-                        self.breakout.animationBriques.append(
-                            animation.BrickAnimation(brick.position, brick.size, brick.color, number_of_fragments = 30)
+                        self.breakout.Animation_Break.append(
+                            animation.Animation_Break(brick.position, brick.size, brick.color, number_of_fragments = 30)
                         )
                         # Update lives and color
                         brick.lives -= 1
@@ -184,8 +187,8 @@ class Ball:
                         self.breakout.score += brick.reward
                         brick_field.bricks.remove(brick)
                         # add animation
-                        self.breakout.animationBriques.append(
-                            animation.BrickAnimation(brick.position, brick.size, brick.color)
+                        self.breakout.Animation_Break.append(
+                            animation.Animation_Break(brick.position, brick.size, brick.color)
                         )
                         #'''je m'ammuse a rajouter des balles quand on casse une brique c'est fun mais pas très utile'''
                         #self.breakout.racket.size[0] += 50
