@@ -10,12 +10,17 @@ class Game_object:
 
     def __init__(
         self,
+        breakout,
         position: np.array,
         size: np.array,
         sprites: list,
         velocity: np.array = np.array([0, 0]),
         acceleration: np.array = np.array([0, 0]),
     ):
+        # Defines references
+        self.breakout = breakout
+        self.screen = breakout.screen
+
         # Defines physical properties
         self.position = position
         self.size = size
@@ -43,3 +48,7 @@ class Game_object:
             self.animation_index = 0
         # Modify sprite
         self.current_sprite = self.sprites[self.animation_index]
+
+    def show(self):
+        """Displays game object on the screen"""
+        pass

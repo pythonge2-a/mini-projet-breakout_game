@@ -2,18 +2,22 @@ import pygame
 import numpy as np
 import random
 import constants as C
+from game_object import Game_object
 
 
-class Brick:
+class Brick(Game_object):
     """Commentaire de classe"""
 
-    def __init__(self, screen, position, lives):
+    def __init__(self, breakout, sprites, position: np.array, lives, sprite=None):
+        super().__init__(
+            breakout=breakout,
+            position=position,
+            sprites=sprites,
+            size=[C.BRICK_WIDTH, C.BRICK_HEIGHT],
+        )
         # Screen object
-        self.screen = screen
         # Define the brick dimensions
-        self.position = position
         self.lives = lives
-        self.size = [C.BRICK_WIDTH, C.BRICK_HEIGHT]
         self.color = C.BRICK_COLOR_MAP[self.lives]
         self.brick_border_width = C.BRICK_BORDER_WIDTH
 
@@ -42,13 +46,18 @@ class Brick:
 class Brick_field:
     """Define the field of bricks"""
 
-    def __init__(self, screen):
-        self.screen = screen
+    def __init__(self, breakout):
+        self.breakout = breakout
         # Create the brick array
         self.bricks = []
 
         # Generate map
         self.load_map(0)
+
+    def update(self):
+        """Updates brick field"""
+        for b in self.bricks:
+            b.update()
 
     def show(self):
         # Shows bricks
@@ -73,4 +82,4 @@ class Brick_field:
                 # Get corresponding brick lives (map)
                 lives = int(map[i * C.BRICK_NB_BRICKS_X + j])
                 # Add brick
-                self.bricks.append(Brick(self.screen, pos, lives))
+                self.bricks.append(Brick(self.breakout, [None], pos, lives))

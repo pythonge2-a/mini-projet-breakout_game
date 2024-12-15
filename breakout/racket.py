@@ -1,33 +1,36 @@
 import pygame
 import constants as C
+from game_object import *
 
 
-class Racket:
-    def __init__(self, breakout, screen,paddle_width = C.RACKET_WIDTH, paddle_height = C.RACKET_HEIGHT, paddle_color = C.RACKET_COLOR, paddle_speed = C.RACKET_SPEED, x = C.RACKET_START_X, y = C.RACKET_START_Y,color_border = C.RACKET_BORDER_COLOR, border_width = C.RACKET_BORDER_WIDTH):
-        # Game attributs
-        self.breakout = breakout
-        self.screen = screen
+class Racket(Game_object):
+    """Define the user's racket"""
 
-        # Gemoetrical and graphical attributs
-        self.pos = [x, y]
-        self.size = [paddle_width, paddle_height]
-        self.color = paddle_color
-        self.border_color = color_border
-        self.border_width = border_width
-        self.speed = paddle_speed
+    def __init__(self, breakout, sprite=None):
+        super().__init__(
+            breakout,
+            size=[C.RACKET_WIDTH, C.RACKET_HEIGHT],
+            position=[C.RACKET_START_X, C.RACKET_START_Y],
+            sprites=[sprite],
+        )
+        # Save special attributs
+        self.color = C.RACKET_COLOR
+        self.border_color = C.RACKET_BORDER_COLOR
+        self.border_width = C.BRICK_BORDER_WIDTH
+        self.speed = C.RACKET_SPEED
 
-    def move(self):
+    def update(self):
         """Move the racket based on given players input"""
-        x = self.pos[0]
+        x = self.position[0]
         width = self.size[0]
         # Check player's input, move the racket accordingly
         if pygame.key.get_pressed()[pygame.K_LEFT] and x > 0:
-            self.pos[0] -= self.speed
+            self.position[0] -= self.speed
         if pygame.key.get_pressed()[pygame.K_RIGHT] and x < C.WINDOW_WIDTH - width:
-            self.pos[0] += self.speed
+            self.position[0] += self.speed
 
     def show(self):
-        rect_position = (self.pos, self.size)
+        rect_position = (self.position, self.size)
         # Draws innner rectangle
         pygame.draw.rect(
             self.screen,

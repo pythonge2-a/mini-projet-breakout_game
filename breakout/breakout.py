@@ -7,6 +7,7 @@ from constants import *
 
 from animation import *
 
+
 class Breakout:
     """Defines the breakout game."""
 
@@ -16,14 +17,13 @@ class Breakout:
         self.level = 0
         self.lives = C.GAME_START_LIVES
 
-
         # Define screen object
         self.screen = screen
         self.font = font
         # Define menu
         self.menu = Menu(self, screen, font)
         # Define the field of bricks
-        self.brick_field = Brick_field(screen)
+        self.brick_field = Brick_field(self)
 
         # Define the balls array
         self.balls = []
@@ -34,31 +34,29 @@ class Breakout:
         # Define if game playing
         self.running = True
         # Create one ball
-        self.balls.append(Ball(self, screen))
+        self.balls.append(Ball(self, [None]))
 
         # Create a racket
-        self.racket = Racket(self, screen)
+        self.racket = Racket(self, [None])
 
         # Create bonus list
         self.bonus_malus = []
-        if len(self.bonus_malus) <= 0 :
+        if len(self.bonus_malus) <= 0:
             self.bonus_malus = self.add_bonus_malus()
         self.Animation_Break = []
-
 
     def update(self):
         """Run a \"Game tick\" Update object's position, read player input etc."""
         for b in self.balls:
-            b.move()
-            
-        self.racket.move()
-        #update bonus state
-        for bo_ma in self.bonus_malus :
+            b.update()
+
+        self.racket.update()
+        # update bonus state
+        for bo_ma in self.bonus_malus:
             bo_ma.update_bolus()
-        if self.Animation_Break != [] :
-            for anim in self.Animation_Break :
+        if self.Animation_Break != []:
+            for anim in self.Animation_Break:
                 anim.update()
-        
 
     def show_game(self):
         """Show the breakout game to the screen"""
@@ -68,12 +66,11 @@ class Breakout:
         self.racket.show()
         # Shows infos
         self.display_infos()
-        
-        if self.Animation_Break != [] :
+
+        if self.Animation_Break != []:
             # Dessiner les animations en cours
             for anim in self.Animation_Break:
                 anim.draw(self.screen)
-      
 
     def show_menu(self):
         self.menu.show()
@@ -134,19 +131,21 @@ class Breakout:
         self.screen.blit(lives_txt, lives_rec)
         pass
 
-    def add_bonus_malus(self) :
+    def add_bonus_malus(self):
         """add bonus or malus in bricks"""
 
         # à modifier, plusieurs bonus/malus peuvent être mis dans la même brique (et pas sûr du fonctionnement)
         bonus_malus = []
-        for i in range(C.BONUS_QUANTITY) :
+        for i in range(C.BONUS_QUANTITY):
             brick_bonus_malus = rd.choice(self.brick_field.bricks)
 
-            bonus_malus.append(bolus(screen=self.screen, breakout=self, brick=brick_bonus_malus, racket=self.racket))
+            bonus_malus.append(
+                Bolus(
+                    breakout=self,
+                    sprites=[None],
+                    brick=brick_bonus_malus,
+                    racket=self.racket,
+                )
+            )
 
         return bonus_malus
-
-
-    
-    
-
