@@ -116,15 +116,14 @@ class Ball:
             self.vel[0] = abs(self.vel[0])
             
         if b_y - b_r >= C.WINDOW_HEIGHT:
-           """ if self.breakout.lives  == 0 or len(self.breakout.balls) > 1:
+            if self.breakout.lives  == 0 or len(self.breakout.balls) > 1:
                 self.breakout.balls.remove(self)
             else:
                 self.breakout.lives -= 1
                 self.pos[0] = self.breakout.racket.pos[0] + self.breakout.racket.size[0]/2
                 self.pos[1] = self.breakout.racket.pos[1] - self.radius
                 self.coller = True
-    """     
-           self.vel[1] = -abs(self.vel[1])
+  
            
 
 
