@@ -52,9 +52,12 @@ class Breakout:
 
     def update(self):
         """Run a \"Game tick\" Update object's position, read player input etc."""
-        for b in self.balls:
-            b.update()
-
+        if self.balls == []:
+            self.status = "game_over"
+        else:
+            for b in self.balls:
+                b.update()
+        
         self.racket.update()
         # update bonus state
         for bo_ma in self.bonus_malus:
@@ -91,6 +94,8 @@ class Breakout:
         elif self.status == "playing":
             self.update()
             self.show_game()
+        elif self.status == "game_over":
+            self.show_game_over()    
 
     def display_infos(self):
         """Shows score, lives, level"""
@@ -154,3 +159,19 @@ class Breakout:
             )
 
         return bonus_malus
+    def show_game_over(self):
+        """Show game over screen"""
+        # rambow ball
+        color = (
+            np.sin(pygame.time.get_ticks() * 0.001 + 0) * 127 + 128,
+            np.sin(pygame.time.get_ticks() * 0.001 + 2) * 127 + 128,
+            np.sin(pygame.time.get_ticks() * 0.001 + 4) * 127 + 128,
+        )
+        # Define text
+        game_over_txt = self.font.render("Game Over", True, color)
+
+        # Define rectangle
+        game_over_rec = game_over_txt.get_rect(center=(C.WINDOW_WIDTH / 2, C.WINDOW_HEIGHT / 2))
+        self.screen.blit(game_over_txt, game_over_rec)
+
+        pass
