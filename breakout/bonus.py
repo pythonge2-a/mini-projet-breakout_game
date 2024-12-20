@@ -57,7 +57,7 @@ class Bolus(Game_object):
             self.unbreakable,
         ]
         self.proba_bonus = [100, 50, 75, 75, 100, 5, 50, 25, 10]
-        self.proba_malus = [100, 75, 75, 5000000, 75, 20, 25, 10, 5]
+        self.proba_malus = [100, 75, 75, 50, 75, 20, 25, 10, 5]
 
         if self.bonus and not self.malus:
             self.bolus = self.set_bonus()
@@ -133,7 +133,7 @@ class Bolus(Game_object):
     def update_bolus(self):
         """ "met à jour l'état du bonus/malus"""
 
-        if self.brick is not None:
+        if self.brick is None:
             self.move_bolus()
 
     def kill(self):
@@ -153,12 +153,12 @@ class Bolus(Game_object):
     def grow_ball(self):
         """ "Bonus d'agrandissement de la balle"""
 
-        """if not self.end :
+        if not self.end :
             self.end = True
             for b in self.breakout.balls:
                 b.radius += 5
         else :
-            self.kill()"""
+            self.kill()
 
     def speed_up_racket(self):
         """Bonus d'accélération de la raquette"""
@@ -172,12 +172,12 @@ class Bolus(Game_object):
     def speed_down_ball(self):
         """Bonus de ralentissement de la balle"""
 
-        """if not self.end :
+        if not self.end :
             self.end = True
             for b in self.breakout.balls:
                 b.speed -= 5
         else :
-            self.kill()"""
+            self.kill()
 
     def add_ball(self):
         """Bonus d'ajout d'une balle"""
@@ -214,12 +214,12 @@ class Bolus(Game_object):
     def speed_up_ball(self):
         """Malus d'accélération de la balle"""
         
-        """if not self.end :
+        if not self.end :
             self.end = True
             for b in self.breakout.balls:
                 b.speed += 1
         else :
-            self.kill()"""
+            self.kill()
 
     def speed_down_racket(self):
         """Malus de ralentissement de la raquette"""
@@ -242,12 +242,12 @@ class Bolus(Game_object):
     def shrink_ball(self):
         """Malus de rétrécissement de la balle"""
 
-        """if not self.end :
+        if not self.end :
             self.end = True
             for b in self.breakout.balls:
                 b.radius -= 1
         else :
-            self.kill()"""
+            self.kill()
 
     def reinforce_brick(self):
         """Malus d'ajout d'une vie à une brique"""
