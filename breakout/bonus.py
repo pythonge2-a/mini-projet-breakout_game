@@ -20,7 +20,7 @@ class Bolus(Game_object):
     ):
         super().__init__(
             breakout,
-            brick.position,
+            position = np.array(brick.position),
             size=np.array(
                 [C.BONUS_WIDTH, C.BONUS_HEIGHT],
             ),
@@ -31,6 +31,8 @@ class Bolus(Game_object):
         self.brick = brick
         self.bonus = bonus
         self.malus = malus
+        self.use = False
+        self.end = False
 
         self.list_bonus = [
             self.grow_racket,
@@ -55,7 +57,7 @@ class Bolus(Game_object):
             self.unbreakable,
         ]
         self.proba_bonus = [100, 50, 75, 75, 100, 5, 50, 25, 10]
-        self.proba_malus = [100, 75, 75, 50, 75, 20, 25, 10, 5]
+        self.proba_malus = [100, 75, 75, 5000000, 75, 20, 25, 10, 5]
 
         if self.bonus and not self.malus:
             self.bolus = self.set_bonus()
@@ -87,12 +89,14 @@ class Bolus(Game_object):
     def move_bolus(self):
         """Déplacement du bonus/malus"""
 
-        if self.y <= C.WINDOW_HEIGHT:
+        if self.position[1] <= C.WINDOW_HEIGHT:
             if self.check_take():
+                self.use = True
                 self.bolus[0]()
             else:
-                self.y += self.speed
-                self.show_bolus()
+                self.position[1] += self.speed
+                if not self.use :
+                    self.show_bolus()
         else:
             self.kill()  # est détruit en sortant de l'écran
 
@@ -100,14 +104,14 @@ class Bolus(Game_object):
         """Vérifie si le bonus est pris"""
 
         # position et taille du bonus/malus
-        bm_x = self.x
-        bm_y = self.y
+        bm_x = self.position[0]
+        bm_y = self.position[1]
         bm_h = self.size[1]
         bm_w = self.size[0]
 
         # position et taille de la raquette
-        r_x = self.racket.pos[0]
-        r_y = self.racket.pos[1]
+        r_x = self.racket.position[0]
+        r_y = self.racket.position[1]
         r_h = self.racket.size[1]
         r_w = self.racket.size[0]
 
@@ -122,14 +126,14 @@ class Bolus(Game_object):
     def show_bolus(self):
         """affiche le bonus"""
 
-        bonus_pos = ([self.x, self.y], self.size)
+        bonus_pos = ([self.position[0], self.position[1]], self.size)
         # draw the bonus
         pygame.draw.rect(self.screen, (21, 0, 255), bonus_pos)
 
     def update_bolus(self):
         """ "met à jour l'état du bonus/malus"""
 
-        if self.brick is None:
+        if self.brick is not None:
             self.move_bolus()
 
     def kill(self):
@@ -140,30 +144,45 @@ class Bolus(Game_object):
     def grow_racket(self):
         """Bonus d'agrandissement de la raquette"""
 
-        self.racket.size[0] += 5
-
-        self.kill()
+        if not self.end :
+            self.end = True
+            self.racket.size[0] += 20
+        else :
+            self.kill()
 
     def grow_ball(self):
         """ "Bonus d'agrandissement de la balle"""
 
-        for b in self.breakout.balls:
-            b.radius += 1
-
-        self.kill()
+        if not self.end :
+            self.end = True
+            for b in self.breakout.balls:
+                b.radius += 5
+        else :
+            self.kill()
 
     def speed_up_racket(self):
         """Bonus d'accélération de la raquette"""
 
-        self.racket.speed += 1
-
-        self.kill()
+        if not self.end :
+            self.end = True
+            self.racket.speed += 5
+        else :
+            self.kill()
 
     def speed_down_ball(self):
         """Bonus de ralentissement de la balle"""
 
+        if not self.end :
+            self.end = True
+            for b in self.breakout.balls:
+                b.speed -= 5
+        else :
+            self.kill()
+
     def add_ball(self):
         """Bonus d'ajout d'une balle"""
+
+        pass
 
     def unstoppable(self):
         """Bonus pour que la balle détruise tout sur son passage"""
@@ -178,12 +197,14 @@ class Bolus(Game_object):
     def break_brick(self):
         """Bonus qui casse une brique aléatoire"""
 
-        if len(self.breakout.brick_field.bricks) != 0:
-            brick_to_break = rd.choice(self.breakout.brick_field.bricks)
+        """if not self.end :
+            self.end = True
+            if len(self.breakout.brick_field.bricks) != 0:
+                brick_to_break = rd.choice(self.breakout.brick_field.bricks)
 
-            brick_to_break.lives = 0
-
-        self.kill()
+                brick_to_break.lives = 0
+        else :
+            self.kill()"""
 
     def net(self):
         """Bonus qui empêche de perdre une bille"""
@@ -192,32 +213,53 @@ class Bolus(Game_object):
 
     def speed_up_ball(self):
         """Malus d'accélération de la balle"""
-        pass
+        
+        if not self.end :
+            self.end = True
+            for b in self.breakout.balls:
+                b.speed += 1
+        else :
+            self.kill()
 
     def speed_down_racket(self):
         """Malus de ralentissement de la raquette"""
 
-        self.racket.speed -= 1
-        pass
+        if not self.end :
+            self.end = True
+            self.racket.speed -= 1
+        else :
+            self.kill()
 
     def shrink_racket(self):
         """Malus de rétrécissement de la raquette"""
 
-        self.racket.size[0] -= 5
-        pass
+        if not self.end :
+            self.end = True
+            self.racket.size[0] -= 20
+        else :
+            self.kill()
 
     def shrink_ball(self):
         """Malus de rétrécissement de la balle"""
 
+        if not self.end :
+            self.end = True
+            for b in self.breakout.balls:
+                b.radius -= 1
+        else :
+            self.kill()
+
     def reinforce_brick(self):
         """Malus d'ajout d'une vie à une brique"""
 
-        if len(self.breakout.brick_field.bricks) != 0:
-            brick_to_reinforce = rd.choice(self.breakout.brick_field.bricks)
+        """if self.end :
+            self.end = True
+            if len(self.breakout.brick_field.bricks) != 0:
+                brick_to_reinforce = rd.choice(self.breakout.brick_field.bricks)
 
-            brick_to_reinforce.lives += 1
-
-        self.kill()
+                brick_to_reinforce.lives += 1
+        else :
+            self.kill()"""
 
     def ghost(self):
         """Malus qui empêche la balle de toucher les briques"""
