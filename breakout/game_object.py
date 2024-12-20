@@ -18,6 +18,7 @@ class Game_object(pygame.sprite.Sprite):
         velocity: np.array = np.array([0, 0]),
         acceleration: np.array = np.array([0, 0]),
     ):
+        # Initialize sprite
         super().__init__()
         # Defines references
         self.breakout = breakout
@@ -58,7 +59,3 @@ class Game_object(pygame.sprite.Sprite):
         tileset = pygame.image.load(C.TILESET_PATH).convert_alpha()
         rect = pygame.Rect(pos, size)
         self.image = tileset.subsurface(rect)
-
-    def show(self):
-        """Displays game object on the screen"""
-        self.update()
