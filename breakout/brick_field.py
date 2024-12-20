@@ -12,7 +12,7 @@ class Brick(Game_object):
         super().__init__(
             breakout=breakout,
             position=position,
-            sprites=sprites,
+            images=sprites,
             size=[C.BRICK_WIDTH, C.BRICK_HEIGHT],
         )
         # Screen object
@@ -24,9 +24,12 @@ class Brick(Game_object):
         # Define score as its own lives
         self.reward = lives
 
+        # Generate sprite
+        self.load_sprite(C.TILESET_BRICKS_POS, C.TILESET_BRICKS_SIZE)
+
     def show(self):
         """Commentaire de fonction"""
-        rect_position = (self.position, self.size)
+        """rect_position = (self.position, self.size)
 
         # Draws the inner rectangle
         pygame.draw.rect(self.screen, self.color, rect_position)
@@ -36,7 +39,8 @@ class Brick(Game_object):
             self.darken_color(self.color, C.BRICK_BORDER_COLOR_FACTOR),
             rect_position,
             width=self.brick_border_width,
-        )
+        )"""
+        super().show()
 
     def darken_color(self, color, factor):
         """Return a darker color version"""

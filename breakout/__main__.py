@@ -31,7 +31,6 @@ running = True
 # Create a Breakout object
 breakout = Breakout(screen, font)
 
-print(C.BRICK_WIDTH, C.BRICK_HEIGHT)
 
 # Test d'ajout
 while breakout.running:
