@@ -153,12 +153,12 @@ class Bolus(Game_object):
     def grow_ball(self):
         """ "Bonus d'agrandissement de la balle"""
 
-        if not self.end :
+        """if not self.end :
             self.end = True
             for b in self.breakout.balls:
                 b.radius += 5
         else :
-            self.kill()
+            self.kill()"""
 
     def speed_up_racket(self):
         """Bonus d'accélération de la raquette"""
@@ -172,12 +172,12 @@ class Bolus(Game_object):
     def speed_down_ball(self):
         """Bonus de ralentissement de la balle"""
 
-        if not self.end :
+        """if not self.end :
             self.end = True
             for b in self.breakout.balls:
                 b.speed -= 5
         else :
-            self.kill()
+            self.kill()"""
 
     def add_ball(self):
         """Bonus d'ajout d'une balle"""
@@ -214,12 +214,12 @@ class Bolus(Game_object):
     def speed_up_ball(self):
         """Malus d'accélération de la balle"""
         
-        if not self.end :
+        """if not self.end :
             self.end = True
             for b in self.breakout.balls:
                 b.speed += 1
         else :
-            self.kill()
+            self.kill()"""
 
     def speed_down_racket(self):
         """Malus de ralentissement de la raquette"""
@@ -242,12 +242,12 @@ class Bolus(Game_object):
     def shrink_ball(self):
         """Malus de rétrécissement de la balle"""
 
-        if not self.end :
+        """if not self.end :
             self.end = True
             for b in self.breakout.balls:
                 b.radius -= 1
         else :
-            self.kill()
+            self.kill()"""
 
     def reinforce_brick(self):
         """Malus d'ajout d'une vie à une brique"""
