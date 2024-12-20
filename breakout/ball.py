@@ -64,29 +64,24 @@ class Ball(Game_object):
 
     def check_colls(self, brick_field, racket):
         """Check ball collisions"""
-        # Define ball, racket symbols
-        b_y = self.position[1]
-        b_x = self.position[0]
-        b_r = self.radius
-
-        r_x = racket.position[0]
-        r_y = racket.position[1]
-        r_h = racket.size[1]
-        r_w = racket.size[0]
-
         for other_ball in self.breakout.balls:
             if other_ball is self:
                 continue
             if (
-                np.linalg.norm(self.position - other_ball.position)
+                np.linalg.norm(np.array(self.position) - np.array(other_ball.position))
                 < self.radius + other_ball.radius
             ):
                 # Calculate the normal vector
-                normal = (self.position - other_ball.position) / np.linalg.norm(
-                    self.position - other_ball.position
+                epsilon = 1e-10
+                normal = (np.array(self.position) - np.array(other_ball.position)) / (
+                    np.linalg.norm(
+                        np.array(self.position) - np.array(other_ball.position)
+                    )
+                    + epsilon
                 )
+
                 # Calculate the relative velocity
-                relative_velocity = self.vel - other_ball.velocity
+                relative_velocity = self.velocity - other_ball.velocity
                 # Calculate the velocity along the normal
                 velocity_along_normal = np.dot(relative_velocity, normal)
                 # If the balls are moving apart, do nothing
@@ -101,6 +96,16 @@ class Ball(Game_object):
                 # Apply the impulse to the velocities
                 self.velocity -= impulse * normal / self.radius
                 other_ball.velocity += impulse * normal / other_ball.radius
+
+        # Define ball, racket symbols
+        b_y = self.position[1]
+        b_x = self.position[0]
+        b_r = self.radius
+
+        r_x = racket.position[0]
+        r_y = racket.position[1]
+        r_h = racket.size[1]
+        r_w = racket.size[0]
 
         # Check racket collision
         if (
@@ -219,8 +224,8 @@ class Ball(Game_object):
                             )
                         )
                         #'''je m'ammuse a rajouter des balles quand on casse une brique c'est fun mais pas très utile'''
-                        # self.breakout.racket.size[0] += 50
-                        # self.breakout.balls.append(Ball(self.breakout, self.screen, coller = False, positionX = self.position[0]+2*self.radius, positionY = self.position[1]+2*self.radius))
+                        # self.breakout.racket.size[0] += 500
+                        # self.breakout.balls.append(Ball(self.breakout,self.sprites,coller=False,position=[self.position[0] + 2 * self.radius,self.position[1] + 2 * self.radius,],))
 
                     break
 

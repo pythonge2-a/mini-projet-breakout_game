@@ -35,7 +35,6 @@ class Breakout:
         self.running = True
         # Create one ball
         self.balls.append(Ball(self, [None]))
-
         # Create a racket
         self.racket = Racket(self, [None])
 
