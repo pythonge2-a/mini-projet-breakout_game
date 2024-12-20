@@ -2,7 +2,7 @@ import numpy as np
 import pygame
 
 
-class Game_object:
+class Game_object(pygame.sprite.Sprite):
     """Defines an object that is shown to the screen.
     It has everything that said object MUST contain.
     Nothing Less, nothing more.
@@ -17,6 +17,7 @@ class Game_object:
         velocity: np.array = np.array([0, 0]),
         acceleration: np.array = np.array([0, 0]),
     ):
+        super().__init__()
         # Defines references
         self.breakout = breakout
         self.screen = breakout.screen
@@ -35,20 +36,21 @@ class Game_object:
         self.animation_index = 0
         self.animation_range = len(self.sprites)
 
-    def update(self):
-        """Updates object, it's animation, it's position"""
+    def move(self):
+        """Move object, it's velocity, it's position"""
         self.velocity += self.acceleration
         self.position += self.velocity
 
-    def update_animation(self):
-        """Udpate sprite"""
+    def update(self):
+        """Update sprite"""
         self.animation_index += 1
         # Check animation index
-        if self.animation_index == self.animation_range:
+        if self.animation_index >= self.animation_range:
             self.animation_index = 0
         # Modify sprite
         self.current_sprite = self.sprites[self.animation_index]
 
     def show(self):
         """Displays game object on the screen"""
+        self.update()
         pass
