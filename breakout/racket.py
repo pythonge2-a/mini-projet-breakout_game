@@ -11,7 +11,7 @@ class Racket(Game_object):
             breakout,
             size=[C.RACKET_WIDTH, C.RACKET_HEIGHT],
             position=[C.RACKET_START_X, C.RACKET_START_Y],
-            sprites=[sprite],
+            images=[sprite],
         )
         # Save special attributs
         self.color = C.RACKET_COLOR

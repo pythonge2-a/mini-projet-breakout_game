@@ -1,5 +1,6 @@
 import numpy as np
 import pygame
+import constants as C
 
 
 class Game_object(pygame.sprite.Sprite):
@@ -13,7 +14,7 @@ class Game_object(pygame.sprite.Sprite):
         breakout,
         position: np.array,
         size: np.array,
-        sprites: list,
+        images: list,
         velocity: np.array = np.array([0, 0]),
         acceleration: np.array = np.array([0, 0]),
     ):
@@ -30,11 +31,13 @@ class Game_object(pygame.sprite.Sprite):
 
         # Defines graphical properties (sprites)
         # Defines the different sprites for this object (useful to animate said object)
-        self.sprites = sprites
+        self.sprites = images
         self.current_sprite = self.sprites[0]
         # Defines current sprite to show
         self.animation_index = 0
         self.animation_range = len(self.sprites)
+
+        self.rect = (self.position, self.size)
 
     def move(self):
         """Move object, it's velocity, it's position"""
@@ -48,9 +51,14 @@ class Game_object(pygame.sprite.Sprite):
         if self.animation_index >= self.animation_range:
             self.animation_index = 0
         # Modify sprite
-        self.current_sprite = self.sprites[self.animation_index]
+        self.image = self.sprites[self.animation_index]
+
+    def load_sprite(self, pos, size):
+        """Load a sprite from the tileset"""
+        tileset = pygame.image.load(C.TILESET_PATH).convert_alpha()
+        rect = pygame.Rect(pos, size)
+        self.image = tileset.subsurface(rect)
 
     def show(self):
         """Displays game object on the screen"""
         self.update()
-        pass

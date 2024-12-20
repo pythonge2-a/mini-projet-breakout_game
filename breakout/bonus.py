@@ -24,7 +24,7 @@ class Bolus(Game_object):
             size=np.array(
                 [C.BONUS_WIDTH, C.BONUS_HEIGHT],
             ),
-            sprites=sprites,
+            images=sprites,
         )
         self.racket = racket
         self.speed = speed

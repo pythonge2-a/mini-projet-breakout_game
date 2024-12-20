@@ -19,7 +19,7 @@ class Ball(Game_object):
         position=np.array([C.BALL_START_X, C.BALL_START_Y]),
         coller=True,
     ):
-        super().__init__(breakout, size=[0, 0], position=position, sprites=sprites)
+        super().__init__(breakout, size=[0, 0], position=position, images=sprites)
         # Gemoetrical and graphical attributs
         self.radius = radius
         self.color = color
