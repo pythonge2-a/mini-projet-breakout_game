@@ -38,11 +38,16 @@ class Breakout:
         # Create a racket
         self.racket = Racket(self, [None])
 
+        # Sprite's lists
+        self.all_sprites = pygame.sprite.Group()
+
         # Create bonus list
         self.bonus_malus = []
         if len(self.bonus_malus) <= 0:
             self.bonus_malus = self.add_bonus_malus()
         self.Animation_Break = []
+
+        self.all_sprites.add(self.balls[0])
 
     def update(self):
         """Run a \"Game tick\" Update object's position, read player input etc."""
