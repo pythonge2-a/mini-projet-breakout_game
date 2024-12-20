@@ -47,8 +47,14 @@ class Breakout:
             self.bonus_malus = self.add_bonus_malus()
         self.Animation_Break = []
 
+        # Add bricks to sprites list
         for b in self.brick_field.bricks:
             self.all_sprites.add(b)
+        # Add ball to sprites list
+        self.all_sprites.add(self.balls[0])
+
+        # Add racket
+        self.all_sprites.add(self.racket)
 
     def update(self):
         """Run a \"Game tick\" Update object's position, read player input etc."""
@@ -68,9 +74,6 @@ class Breakout:
 
     def show_game(self):
         """Show the breakout game to the screen"""
-        for b in self.balls:
-            b.show()
-        self.racket.show()
         # Shows infos
         self.display_infos()
 
@@ -78,6 +81,7 @@ class Breakout:
             # Dessiner les animations en cours
             for anim in self.Animation_Break:
                 anim.draw(self.screen)
+
         self.all_sprites.draw(self.screen)
 
     def show_menu(self):
@@ -85,10 +89,6 @@ class Breakout:
 
     def show(self):
         """Displays game on the screen"""
-        # Show bricks
-        # self.brick_field.show()
-        # for b in self.balls:
-        # b.show()
         if self.status == "menu":
             self.show_menu()
         elif self.status == "playing":

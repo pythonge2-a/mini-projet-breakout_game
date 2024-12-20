@@ -37,6 +37,9 @@ class Ball(Game_object):
         # Create the velocity vector
         self.velocity = np.array([x, y])
 
+        # Load sprite
+        self.load_sprite(C.TILESET_BALLS_POS, C.TILESET_BALLS_SIZE)
+
     def update(self):
         """Updates ball"""
         self.move()
@@ -228,6 +231,3 @@ class Ball(Game_object):
                         # self.breakout.balls.append(Ball(self.breakout,self.sprites,coller=False,position=[self.position[0] + 2 * self.radius,self.position[1] + 2 * self.radius,],))
 
                     break
-
-    def show(self):
-        pygame.draw.circle(self.screen, self.color, self.position, self.radius)
