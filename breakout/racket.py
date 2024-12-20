@@ -16,7 +16,7 @@ class Racket(Game_object):
         # Save special attributs
         self.color = C.RACKET_COLOR
         self.border_color = C.RACKET_BORDER_COLOR
-        self.border_width = C.BRICK_BORDER_WIDTH
+        self.border_width = C.RACKET_BORDER_WIDTH
         self.speed = C.RACKET_SPEED
 
         # Load sprite
