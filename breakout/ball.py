@@ -40,9 +40,16 @@ class Ball(Game_object):
         # Load sprite
         self.load_sprite(C.TILESET_BALLS_POS, C.TILESET_BALLS_SIZE)
 
+
     def update(self):
         """Updates ball"""
         self.move()
+
+        # met à jour la taille de la balle, je n'ai pas trouvé comment faire pour que 
+        # l'image suive la position si la fonction pour changer la taille est appelée que
+        # quand la balle change de taille
+        self.change_size(self.position, [self.radius, self.radius]) 
+        
 
     def move(self):
         """Update ball position from velocity vector"""

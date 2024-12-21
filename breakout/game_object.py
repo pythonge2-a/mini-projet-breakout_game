@@ -59,3 +59,15 @@ class Game_object(pygame.sprite.Sprite):
         tileset = pygame.image.load(C.TILESET_PATH).convert_alpha()
         rect = pygame.Rect(pos, size)
         self.image = tileset.subsurface(rect)
+
+    def change_size(self, pos, size):
+        """Change sprite size and adjust position"""
+
+        # fonctionne bien pour la raquette, mais les collisions de la balle sont 
+        # modifiée quand la balle change de taille
+        self.size = size
+        self.rect = pygame.Rect(pos, size)
+        self.image = pygame.transform.scale(self.image, size=size)
+        
+
+

@@ -22,10 +22,19 @@ class Racket(Game_object):
         # Load sprite
         self.load_sprite(C.TILESET_RACKETS_POS, C.TILESET_RACKETS_SIZE)
 
+        # copy size
+        self.previous_width = self.size[0]
+
     def update(self):
         """Move the racket based on given players input"""
         x = self.position[0]
         width = self.size[0]
+
+        # met à jour la taille de la raquette, je n'ai pas trouvé comment faire pour que 
+        # l'image suive la position si la fonction pour changer la taille est appelée que
+        # quand la raquette change de taille
+        self.change_size(self.position, self.size)
+
         # Check player's input, move the racket accordingly
         if pygame.key.get_pressed()[pygame.K_LEFT] and x > 0:
             self.position[0] -= self.speed

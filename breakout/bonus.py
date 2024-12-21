@@ -277,7 +277,7 @@ class Bolus(Game_object):
         elif (self.count > 1000) and not self.end :
             self.end = True
             for b in self.breakout.balls:
-                b.radius -= 1
+                b.radius += 1
             self.use = False          
 
     def reinforce_brick(self):
