@@ -59,7 +59,7 @@ class Bolus(Game_object):
             self.explosion,
             self.unbreakable,
         ]
-        self.proba_bonus = [100, 50, 75, 75, 0, 0, 0, 0, 0]
+        self.proba_bonus = [100, 50, 75, 75, 100, 0, 0, 0, 0]
         self.proba_malus = [100, 75, 75, 50, 0, 0, 0, 0, 0]
 
         if self.bonus and not self.malus:
@@ -134,7 +134,7 @@ class Bolus(Game_object):
     def update_bolus(self):
         """met à jour l'état du bonus/malus"""
 
-        if self.brick is not None:
+        if self.brick is None:
             self.move_bolus()
 
         if self.use :
@@ -207,9 +207,10 @@ class Bolus(Game_object):
     def add_ball(self):
         """Bonus d'ajout d'une balle"""
 
-        """if not self.end :
-            self.end = True
-            self.breakout.balls.append(Ball(self.breakout, [None]))"""
+        if not self.start :
+            self.breakout.balls.append(Ball(self.breakout,self.sprites,coller=False, position=[C.BALL_START_X, C.BALL_START_Y]))
+            self.start = True
+            self.use = False
 
     def unstoppable(self):
         """Bonus pour que la balle détruise tout sur son passage"""
@@ -224,14 +225,7 @@ class Bolus(Game_object):
     def break_brick(self):
         """Bonus qui casse une brique aléatoire"""
 
-        """if not self.end :
-            self.end = True
-            if len(self.breakout.brick_field.bricks) != 0:
-                brick_to_break = rd.choice(self.breakout.brick_field.bricks)
-
-                brick_to_break.lives = 0
-        else :
-            self.kill()"""
+        pass
 
     def net(self):
         """Bonus qui empêche de perdre une bille"""
@@ -289,15 +283,7 @@ class Bolus(Game_object):
     def reinforce_brick(self):
         """Malus d'ajout d'une vie à une brique"""
 
-        """if not self.end :
-            self.end = True
-            if len(self.breakout.brick_field.bricks) != 0:
-                brick_to_reinforce = rd.choice(self.breakout.brick_field.bricks)
-
-                if brick_to_reinforce.lives < 5 :
-                    brick_to_reinforce.lives += 1
-        else :
-            self.kill()"""
+        pass
 
     def ghost(self):
         """Malus qui empêche la balle de toucher les briques"""
@@ -316,11 +302,6 @@ class Bolus(Game_object):
 
     def unbreakable(self):
         """Malus qui rend une brique temporairement incassable"""
-
-        """if not self.end :
-            self.end = True
-            if len(self.breakout.brick_field.bricks) != 0:
-                unbrickable = rd.choice(self.breakout.brick_field.bricks)"""
 
         pass
 
