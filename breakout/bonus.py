@@ -33,6 +33,9 @@ class Bolus(Game_object):
         self.malus = malus
         self.use = False
         self.end = False
+        self.start = False
+        self.count = 0
+
 
         self.list_bonus = [
             self.grow_racket,
@@ -56,8 +59,8 @@ class Bolus(Game_object):
             self.explosion,
             self.unbreakable,
         ]
-        self.proba_bonus = [100, 50, 75, 75, 100, 5, 50, 25, 10]
-        self.proba_malus = [100, 75, 75, 50, 75, 20, 25, 10, 5]
+        self.proba_bonus = [100, 50, 75, 75, 0, 0, 0, 0, 0]
+        self.proba_malus = [100, 75, 75, 50, 0, 0, 0, 0, 0]
 
         if self.bonus and not self.malus:
             self.bolus = self.set_bonus()
@@ -89,14 +92,12 @@ class Bolus(Game_object):
     def move_bolus(self):
         """Déplacement du bonus/malus"""
 
-        if self.position[1] <= C.WINDOW_HEIGHT:
-            if self.check_take():
-                self.use = True
-                self.bolus[0]()
-            else:
+        if (self.position[1] <= C.WINDOW_HEIGHT) and not self.end :
+            if not self.use :
                 self.position[1] += self.speed
-                if not self.use :
-                    self.show_bolus()
+                self.show_bolus()
+                if self.check_take() :
+                    self.use = True
         else:
             self.kill()  # est détruit en sortant de l'écran
 
@@ -131,10 +132,20 @@ class Bolus(Game_object):
         pygame.draw.rect(self.screen, (21, 0, 255), bonus_pos)
 
     def update_bolus(self):
-        """ "met à jour l'état du bonus/malus"""
+        """met à jour l'état du bonus/malus"""
 
-        if self.brick is None:
+        if self.brick is not None:
             self.move_bolus()
+
+        if self.use :
+            self.count_ticks()
+
+    def count_ticks(self) :
+        """Active le bonus et compte le temps où il est actif"""
+
+        self.count += 1
+        self.bolus[0]()
+        
 
     def kill(self):
         """Détruit le bonus/malus"""
@@ -144,45 +155,61 @@ class Bolus(Game_object):
     def grow_racket(self):
         """Bonus d'agrandissement de la raquette"""
 
-        if not self.end :
-            self.end = True
+        if not self.start :
+            self.start = True
             self.racket.size[0] += 20
-        else :
-            self.kill()
+        elif (self.count > 1000) and not self.end :
+            self.end = True
+            self.racket.size[0] -= 20
+            self.use = False
+
 
     def grow_ball(self):
         """ "Bonus d'agrandissement de la balle"""
 
-        if not self.end :
-            self.end = True
+        if not self.start :
+            self.start = True
             for b in self.breakout.balls:
                 b.radius += 5
-        else :
-            self.kill()
+        elif (self.count > 1000) and not self.end :
+            self.end = True
+            for b in self.breakout.balls:
+                b.radius -= 5
+            self.use = False
+
 
     def speed_up_racket(self):
         """Bonus d'accélération de la raquette"""
 
-        if not self.end :
-            self.end = True
+        if not self.start :
+            self.start = True
             self.racket.speed += 5
-        else :
-            self.kill()
+        elif (self.count > 1000) and not self.end :
+            self.racket.speed -= 5
+            self.end = True
+            self.use = False
+
 
     def speed_down_ball(self):
         """Bonus de ralentissement de la balle"""
 
-        if not self.end :
-            self.end = True
+        if not self.start :
+            self.start = True
             for b in self.breakout.balls:
                 b.speed -= 5
-        else :
-            self.kill()
+        elif (self.count > 1000) and not self.end :
+            self.end = True
+            for b in self.breakout.balls:
+                b.speed += 5
+            self.use = False
+
 
     def add_ball(self):
         """Bonus d'ajout d'une balle"""
 
-        pass
+        """if not self.end :
+            self.end = True
+            self.breakout.balls.append(Ball(self.breakout, [None]))"""
 
     def unstoppable(self):
         """Bonus pour que la balle détruise tout sur son passage"""
@@ -214,50 +241,61 @@ class Bolus(Game_object):
     def speed_up_ball(self):
         """Malus d'accélération de la balle"""
         
-        if not self.end :
-            self.end = True
+        if not self.start :
+            self.start = True
             for b in self.breakout.balls:
                 b.speed += 1
-        else :
-            self.kill()
+        elif (self.count > 1000) and not self.end :
+            self.end = True
+            for b in self.breakout.balls:
+                b.speed -= 1
+            self.use = False
 
     def speed_down_racket(self):
         """Malus de ralentissement de la raquette"""
 
-        if not self.end :
-            self.end = True
+        if not self.start :
+            self.start = True
             self.racket.speed -= 1
-        else :
-            self.kill()
+        elif (self.count > 1000) and not self.end :
+            self.end = True
+            self.racket.speed += 1
+            self.use = False
 
     def shrink_racket(self):
         """Malus de rétrécissement de la raquette"""
 
-        if not self.end :
-            self.end = True
+        if not self.start :
+            self.start = True
             self.racket.size[0] -= 20
-        else :
-            self.kill()
+        elif (self.count > 1000) and not self.end :
+            self.end = True
+            self.racket.size[0] += 20
+            self.use = False
 
     def shrink_ball(self):
         """Malus de rétrécissement de la balle"""
 
-        if not self.end :
+        if not self.start :
+            self.start = True
+            for b in self.breakout.balls:
+                b.radius -= 1
+        elif (self.count > 1000) and not self.end :
             self.end = True
             for b in self.breakout.balls:
                 b.radius -= 1
-        else :
-            self.kill()
+            self.use = False          
 
     def reinforce_brick(self):
         """Malus d'ajout d'une vie à une brique"""
 
-        """if self.end :
+        """if not self.end :
             self.end = True
             if len(self.breakout.brick_field.bricks) != 0:
                 brick_to_reinforce = rd.choice(self.breakout.brick_field.bricks)
 
-                brick_to_reinforce.lives += 1
+                if brick_to_reinforce.lives < 5 :
+                    brick_to_reinforce.lives += 1
         else :
             self.kill()"""
 
@@ -279,4 +317,10 @@ class Bolus(Game_object):
     def unbreakable(self):
         """Malus qui rend une brique temporairement incassable"""
 
+        """if not self.end :
+            self.end = True
+            if len(self.breakout.brick_field.bricks) != 0:
+                unbrickable = rd.choice(self.breakout.brick_field.bricks)"""
+
         pass
+
