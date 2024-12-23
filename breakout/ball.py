@@ -5,6 +5,7 @@ import constants as C
 import numpy as np
 import animation
 from game_object import *
+import random
 
 
 class Ball(Game_object):
@@ -221,7 +222,11 @@ class Ball(Game_object):
                         )
                         # Update lives and color
                         brick.lives -= 1
+
                         brick.color = C.BRICK_COLOR_MAP[brick.lives]
+                        # Generate sprite
+                        pos = [C.TILESET_BRICKS_POS[0] + (C.TILESET_BRICKS_SIZE[0] + 1 ) * (5 - brick.lives),  C.TILESET_BRICKS_POS[1] + (C.TILESET_BRICKS_SIZE[1] +1) * random.randint(0, 4)]
+                        brick.load_sprite(pos, C.TILESET_BRICKS_SIZE)
 
                     else:
                         # Update points

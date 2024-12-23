@@ -25,8 +25,10 @@ class Brick(Game_object):
         self.reward = lives
 
         # Generate sprite
-        self.load_sprite(C.TILESET_BRICKS_POS, C.TILESET_BRICKS_SIZE)
-    
+        pos = [C.TILESET_BRICKS_POS[0] + (C.TILESET_BRICKS_SIZE[0]+1) * (5 - (lives)), C.TILESET_BRICKS_POS[1] + (C.TILESET_BRICKS_SIZE[1] +1) * random.randint(0, 4)]
+        self.load_sprite(pos, C.TILESET_BRICKS_SIZE)
+
+   
     def show(self):
         """Commentaire de fonction"""
         """rect_position = (self.position, self.size)

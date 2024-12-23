@@ -32,11 +32,11 @@ BRICK_HEIGHT = (
 # Colors (from lives 0 to lives x)
 BRICK_COLOR_MAP = (
     (0, 0, 0),  # Dead
-    (255, 0, 0),  # Red
-    (168, 92, 50),  # Orange
-    (242, 255, 0),  # Yellow
-    (0, 255, 157),  # Green
-    (0, 153, 255),  # Blue
+    (206, 189, 167),  # sable
+    (148, 80, 66),  # petit cailloux
+    (210, 173, 155),  # moyen cailloux
+    (213, 203, 189),  # gros cailloux
+    (95, 91, 90),  # brique
 )
 
 BRICK_BORDER_WIDTH = 4
