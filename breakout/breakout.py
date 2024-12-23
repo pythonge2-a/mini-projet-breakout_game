@@ -72,6 +72,8 @@ class Breakout:
             for anim in self.Animation_Break:
                 anim.update()
 
+       
+
     def show_game(self):
         """Show the breakout game to the screen"""
         # Shows infos
@@ -96,6 +98,7 @@ class Breakout:
             self.show_game()
         elif self.status == "game_over":
             self.show_game_over()    
+            
 
     def display_infos(self):
         """Shows score, lives, level"""
@@ -173,5 +176,5 @@ class Breakout:
         # Define rectangle
         game_over_rec = game_over_txt.get_rect(center=(C.WINDOW_WIDTH / 2, C.WINDOW_HEIGHT / 2))
         self.screen.blit(game_over_txt, game_over_rec)
-
+        
         pass
