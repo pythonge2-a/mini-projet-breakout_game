@@ -226,9 +226,9 @@ class Ball(Game_object):
                     else:
                         # Update points
                         self.breakout.score += brick.reward
-
-                        brick_field.bricks.remove(brick)
                         
+                        self.breakout.all_sprites.remove(brick)
+                        brick_field.bricks.remove(brick)
                         # add animation
                         self.breakout.Animation_Break.append(
                             animation.Animation_Break(

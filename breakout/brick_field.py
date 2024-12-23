@@ -26,7 +26,7 @@ class Brick(Game_object):
 
         # Generate sprite
         self.load_sprite(C.TILESET_BRICKS_POS, C.TILESET_BRICKS_SIZE)
-
+    
     def show(self):
         """Commentaire de fonction"""
         """rect_position = (self.position, self.size)
