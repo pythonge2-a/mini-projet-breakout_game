@@ -134,7 +134,7 @@ class Bolus(Game_object):
     def update_bolus(self):
         """met à jour l'état du bonus/malus"""
 
-        if self.brick is None:
+        if len(self.brick.groups()) == 0 :
             self.move_bolus()
 
         if self.use :
@@ -209,6 +209,7 @@ class Bolus(Game_object):
 
         if not self.start :
             self.breakout.balls.append(Ball(self.breakout,self.sprites,coller=False, position=[C.BALL_START_X, C.BALL_START_Y]))
+            self.breakout.all_sprites.add(self.breakout.balls[len(self.breakout.balls) - 1]) # ajoute le sprite de la dernière balle de la liste
             self.start = True
             self.use = False
 
