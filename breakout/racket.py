@@ -18,6 +18,7 @@ class Racket(Game_object):
         self.border_color = C.RACKET_BORDER_COLOR
         self.border_width = C.RACKET_BORDER_WIDTH
         self.speed = C.RACKET_SPEED
+        self.reverse = False
 
         # Load sprite
         self.load_sprite(C.TILESET_RACKETS_POS, C.TILESET_RACKETS_SIZE)
@@ -36,7 +37,13 @@ class Racket(Game_object):
         self.change_size(self.position, self.size)
 
         # Check player's input, move the racket accordingly
-        if pygame.key.get_pressed()[pygame.K_LEFT] and x > 0:
-            self.position[0] -= self.speed
-        if pygame.key.get_pressed()[pygame.K_RIGHT] and x < C.WINDOW_WIDTH - width:
-            self.position[0] += self.speed
+        if self.reverse :
+            if pygame.key.get_pressed()[pygame.K_RIGHT] and x > 0:
+               self.position[0] -= self.speed
+            if pygame.key.get_pressed()[pygame.K_LEFT] and x < C.WINDOW_WIDTH - width:
+               self.position[0] += self.speed
+        else :
+            if pygame.key.get_pressed()[pygame.K_LEFT] and x > 0:
+               self.position[0] -= self.speed
+            if pygame.key.get_pressed()[pygame.K_RIGHT] and x < C.WINDOW_WIDTH - width:
+               self.position[0] += self.speed

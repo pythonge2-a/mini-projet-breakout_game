@@ -60,7 +60,7 @@ class Bolus(Game_object):
             self.unbreakable,
         ]
         self.proba_bonus = [100, 50, 75, 75, 100, 0, 0, 30, 0]
-        self.proba_malus = [100, 75, 75, 50, 1000000, 0, 0, 0, 0]
+        self.proba_malus = [100, 75, 75, 50, 100, 0, 100, 0, 0]
 
         if self.bonus and not self.malus:
             self.bolus = self.set_bonus()
@@ -326,7 +326,13 @@ class Bolus(Game_object):
     def reverse(self):
         """Malus qui change les sens des contrôles"""
 
-        pass
+        if not self.start :
+            self.start = True
+            self.racket.reverse = True
+        elif (self.count > 1000) and not self.end :
+            self.racket.reverse = False
+            self.end = True
+            self.use = False
 
     def explosion(self):
         """Malus qui rend des briques ou la balle explosive (vitesse de la bille augmente, angle change)"""
