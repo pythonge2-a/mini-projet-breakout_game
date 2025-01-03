@@ -41,6 +41,13 @@ class Ball(Game_object):
         # Load sprite
         self.load_sprite(C.TILESET_BALLS_POS, C.TILESET_BALLS_SIZE)
 
+        # Bonus et malus
+        self.unstoppable = False
+        self.ghost = False
+        self.explosion = False
+        self.count_unstop = 0
+        self.count_ghost = 0
+
 
     def update(self):
         """Updates ball"""
@@ -132,6 +139,21 @@ class Ball(Game_object):
             # Normalize the velocity
             self.velocity = (self.velocity / np.linalg.norm(self.velocity)) * self.speed
 
+            # Stop "unstoppable" bonus and "ghost" malus after 2 bounce
+            if self.unstoppable :
+                self.count_unstop += 1
+                if self.count_unstop >= 2 :
+                    self.unstoppable = False
+                    self.count_unstop = 0
+
+            if self.ghost :
+                self.count_ghost += 1
+                if self.count_ghost >= 2 :
+                    self.ghost = False
+                    self.count_ghost = 0
+
+
+
         # Check walls collision
         if b_y - b_r <= 0:
             self.velocity[1] = abs(self.velocity[1])
@@ -175,42 +197,50 @@ class Ball(Game_object):
                     and b_y + b_r > brick_y
                     and b_y - b_r < brick_y + brick_h
                 ):
-                    # Calcul des distances pour déterminer le côté de la collision
-                    overlap_top = abs(b_y + b_r - brick_y)
-                    overlap_bottom = abs(b_y - b_r - (brick_y + brick_h))
-                    overlap_left = abs(b_x + b_r - brick_x)
-                    overlap_right = abs(b_x - b_r - (brick_x + brick_w))
+                    # Vérifie qu'il n'y a pas de bonus/malus actif
+                    if not self.unstoppable and not self.ghost :
 
-                    # Trouver le côté avec la plus petite distance d'overlap
-                    overlaps = {
-                        "top": overlap_top,
-                        "bottom": overlap_bottom,
-                        "left": overlap_left,
-                        "right": overlap_right,
-                    }
-                    min_overlap = min(overlaps.values())
-                    min_sides = [
-                        side
-                        for side, overlap in overlaps.items()
-                        if overlap == min_overlap
-                    ]
+                        # Calcul des distances pour déterminer le côté de la collision
+                        overlap_top = abs(b_y + b_r - brick_y)
+                        overlap_bottom = abs(b_y - b_r - (brick_y + brick_h))
+                        overlap_left = abs(b_x + b_r - brick_x)
+                        overlap_right = abs(b_x - b_r - (brick_x + brick_w))
 
-                    # Ajuster la vitesse en fonction du côté
-                    if "top" in min_sides:
-                        self.velocity[1] *= -1  # Collision avec le haut de la brique
-                    if "bottom" in min_sides:
-                        self.velocity[1] *= -1  # Collision avec le bas de la brique
-                    if "left" in min_sides:
-                        self.velocity[
-                            0
-                        ] *= -1  # Collision avec le côté gauche de la brique
-                    if "right" in min_sides:
-                        self.velocity[
-                            0
-                        ] *= -1  # Collision avec le côté droit de la brique
+                        # Trouver le côté avec la plus petite distance d'overlap
+                        overlaps = {
+                            "top": overlap_top,
+                            "bottom": overlap_bottom,
+                            "left": overlap_left,
+                            "right": overlap_right,
+                        }
+                        min_overlap = min(overlaps.values())
+                        min_sides = [
+                            side
+                            for side, overlap in overlaps.items()
+                            if overlap == min_overlap
+                        ]
+
+                        # Ajuster la vitesse en fonction du côté
+                        if "top" in min_sides:
+                            self.velocity[1] *= -1  # Collision avec le haut de la brique
+                        if "bottom" in min_sides:
+                            self.velocity[1] *= -1  # Collision avec le bas de la brique
+                        if "left" in min_sides:
+                            self.velocity[
+                                0
+                            ] *= -1  # Collision avec le côté gauche de la brique
+                        if "right" in min_sides:
+                            self.velocity[
+                                0
+                            ] *= -1  # Collision avec le côté droit de la brique
+
+                    elif self.unstoppable and not self.ghost :
+                        for life in range(brick.lives) :
+                            brick.lives -= 1
+
 
                     # If the brick still has 1 life left at least
-                    if brick.lives > 1:
+                    if (brick.lives > 1) and not self.ghost:
                         # add animation
                         self.breakout.Animation_Break.append(
                             animation.Animation_Break(
@@ -228,7 +258,7 @@ class Ball(Game_object):
                         pos = [C.TILESET_BRICKS_POS[0] + (C.TILESET_BRICKS_SIZE[0] + 1 ) * (5 - brick.lives),  C.TILESET_BRICKS_POS[1] + (C.TILESET_BRICKS_SIZE[1] +1) * random.randint(0, 4)]
                         brick.load_sprite(pos, C.TILESET_BRICKS_SIZE)
 
-                    else:
+                    elif not self.ghost :
                         # Update points
                         self.breakout.score += brick.reward
                         

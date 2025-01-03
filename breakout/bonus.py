@@ -59,8 +59,8 @@ class Bolus(Game_object):
             self.explosion,
             self.unbreakable,
         ]
-        self.proba_bonus = [100, 50, 75, 75, 100, 0, 0, 30, 0]
-        self.proba_malus = [100, 75, 75, 50, 100, 0, 100, 0, 0]
+        self.proba_bonus = [100, 50, 75, 75, 100, 5, 0, 30, 0]
+        self.proba_malus = [100, 75, 75, 50, 100, 10, 100, 0, 0]
 
         if self.bonus and not self.malus:
             self.bolus = self.set_bonus()
@@ -217,7 +217,12 @@ class Bolus(Game_object):
     def unstoppable(self):
         """Bonus pour que la balle détruise tout sur son passage"""
 
-        pass
+        if not self.start :
+            self.start = True
+            # le bonus ne fonctionne que sur une balle, la première de la liste
+            self.breakout.balls[0].unstoppable = True
+            self.end = True
+            self.use = False
 
     def glu(self):
         """Bonus qui arrête la balle sur la raquette (lâche avec un bouton)"""
@@ -230,7 +235,7 @@ class Bolus(Game_object):
         if not self.start :
             brick_to_break = rd.choice(self.breakout.brick_field.bricks)
             if brick_to_break.lives >= 1:        
-                for live in range(brick_to_break.lives) :
+                for life in range(brick_to_break.lives) :
                     # add animation
                     self.breakout.Animation_Break.append(
                         animation.Animation_Break(
@@ -321,7 +326,12 @@ class Bolus(Game_object):
     def ghost(self):
         """Malus qui empêche la balle de toucher les briques"""
 
-        pass
+        if not self.start :
+            self.start = True
+            # le malus ne fonctionne que sur une balle, la première de la liste
+            self.breakout.balls[0].ghost = True
+            self.end = True
+            self.use = False
 
     def reverse(self):
         """Malus qui change les sens des contrôles"""
