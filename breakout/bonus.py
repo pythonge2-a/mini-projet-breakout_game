@@ -20,7 +20,7 @@ class Bolus(Game_object):
     ):
         super().__init__(
             breakout,
-            position = np.array(brick.position),
+            position=np.array(brick.position),
             size=np.array(
                 [C.BONUS_WIDTH, C.BONUS_HEIGHT],
             ),
@@ -35,7 +35,7 @@ class Bolus(Game_object):
         self.end = False
         self.start = False
         self.count = 0
-
+        self.unbrickable = None
 
         self.list_bonus = [
             self.grow_racket,
@@ -60,7 +60,7 @@ class Bolus(Game_object):
             self.unbreakable,
         ]
         self.proba_bonus = [100, 50, 75, 75, 100, 5, 0, 30, 20]
-        self.proba_malus = [100, 75, 75, 50, 100, 10, 100, 0, 0]
+        self.proba_malus = [100, 75, 75, 50, 100, 10, 100, 0, 10]
 
         if self.bonus and not self.malus:
             self.bolus = self.set_bonus()
@@ -92,11 +92,11 @@ class Bolus(Game_object):
     def move_bolus(self):
         """Déplacement du bonus/malus"""
 
-        if (self.position[1] <= C.WINDOW_HEIGHT) and not self.end :
-            if not self.use :
+        if (self.position[1] <= C.WINDOW_HEIGHT) and not self.end:
+            if not self.use:
                 self.position[1] += self.speed
                 self.show_bolus()
-                if self.check_take() :
+                if self.check_take():
                     self.use = True
         else:
             self.kill()  # est détruit en sortant de l'écran
@@ -118,7 +118,7 @@ class Bolus(Game_object):
 
         # vérifie si le bonus/malus est pris
         if (((bm_x) < (r_x + r_w)) and ((bm_x + bm_w) > (r_x))) and (
-            ((bm_y + bm_h) < (r_y + r_h)) and ((bm_y + bm_h) > (r_y ))
+            ((bm_y + bm_h) < (r_y + r_h)) and ((bm_y + bm_h) > (r_y))
         ):
             return True
         else:
@@ -134,18 +134,19 @@ class Bolus(Game_object):
     def update_bolus(self):
         """met à jour l'état du bonus/malus"""
 
-        if len(self.brick.groups()) == 0 :
+        if len(self.brick.groups()) == 0:
             self.move_bolus()
 
-        if self.use :
+        if self.use:
             self.count_ticks()
+        else:
+            self.count = 0
 
-    def count_ticks(self) :
+    def count_ticks(self):
         """Active le bonus et compte le temps où il est actif"""
 
         self.count += 1
         self.bolus[0]()
-        
 
     def kill(self):
         """Détruit le bonus/malus"""
@@ -155,61 +156,66 @@ class Bolus(Game_object):
     def grow_racket(self):
         """Bonus d'agrandissement de la raquette"""
 
-        if not self.start :
+        if not self.start:
             self.start = True
             self.racket.size[0] += 20
-        elif (self.count > 1000) and not self.end :
+        elif (self.count > 1000) and not self.end:
             self.end = True
             self.racket.size[0] -= 20
             self.use = False
 
-
     def grow_ball(self):
         """ "Bonus d'agrandissement de la balle"""
 
-        if not self.start :
+        if not self.start:
             self.start = True
             for b in self.breakout.balls:
                 b.radius += 5
-        elif (self.count > 1000) and not self.end :
+        elif (self.count > 1000) and not self.end:
             self.end = True
             for b in self.breakout.balls:
                 b.radius -= 5
             self.use = False
 
-
     def speed_up_racket(self):
         """Bonus d'accélération de la raquette"""
 
-        if not self.start :
+        if not self.start:
             self.start = True
             self.racket.speed += 5
-        elif (self.count > 1000) and not self.end :
+        elif (self.count > 1000) and not self.end:
             self.racket.speed -= 5
             self.end = True
             self.use = False
 
-
     def speed_down_ball(self):
         """Bonus de ralentissement de la balle"""
 
-        if not self.start :
+        if not self.start:
             self.start = True
             for b in self.breakout.balls:
                 b.speed -= 5
-        elif (self.count > 1000) and not self.end :
+        elif (self.count > 1000) and not self.end:
             self.end = True
             for b in self.breakout.balls:
                 b.speed += 5
             self.use = False
 
-
     def add_ball(self):
         """Bonus d'ajout d'une balle"""
 
-        if not self.start :
-            self.breakout.balls.append(Ball(self.breakout,self.sprites,coller=False, position=[C.BALL_START_X, C.BALL_START_Y]))
-            self.breakout.all_sprites.add(self.breakout.balls[len(self.breakout.balls) - 1]) # ajoute le sprite de la dernière balle de la liste
+        if not self.start:
+            self.breakout.balls.append(
+                Ball(
+                    self.breakout,
+                    self.sprites,
+                    coller=False,
+                    position=[C.BALL_START_X, C.BALL_START_Y],
+                )
+            )
+            self.breakout.all_sprites.add(
+                self.breakout.balls[len(self.breakout.balls) - 1]
+            )  # ajoute le sprite de la dernière balle de la liste
             self.start = True
             self.use = False
             self.end = True
@@ -217,7 +223,7 @@ class Bolus(Game_object):
     def unstoppable(self):
         """Bonus pour que la balle détruise tout sur son passage"""
 
-        if not self.start :
+        if not self.start:
             self.start = True
             # le bonus ne fonctionne que sur une balle, la première de la liste
             self.breakout.balls[0].unstoppable = True
@@ -232,25 +238,18 @@ class Bolus(Game_object):
     def break_brick(self):
         """Bonus qui casse une brique aléatoire"""
 
-        if not self.start :
+        if not self.start:
             brick_to_break = rd.choice(self.breakout.brick_field.bricks)
-            if brick_to_break.lives >= 1:        
-                for life in range(brick_to_break.lives) :
-                    # add animation
-                    self.breakout.Animation_Break.append(
-                        animation.Animation_Break(
-                            brick_to_break.position,
-                            brick_to_break.size,
-                            brick_to_break.color,
-                            number_of_fragments=30,
-                        )
-                    )
-                    brick_to_break.lives -= 1
-                    pos = [C.TILESET_BRICKS_POS[0] + (C.TILESET_BRICKS_SIZE[0] + 1 ) * (5 - brick_to_break.lives),  C.TILESET_BRICKS_POS[1] + (C.TILESET_BRICKS_SIZE[1] +1) * random.randint(0, 4)]
-                    brick_to_break.load_sprite(pos, C.TILESET_BRICKS_SIZE)
 
-                self.breakout.score += brick_to_break.reward
-                self.breakout.brick_field.bricks.remove(brick_to_break)
+            self.breakout.score += brick_to_break.reward
+            self.breakout.all_sprites.remove(brick_to_break)
+            self.breakout.brick_field.bricks.remove(brick_to_break)
+            # add animation
+            self.breakout.Animation_Break.append(
+                animation.Animation_Break(
+                    brick_to_break.position, brick_to_break.size, brick_to_break.color
+                )
+            )
 
             self.start = True
             self.use = False
@@ -259,11 +258,11 @@ class Bolus(Game_object):
     def net(self):
         """Bonus qui empêche de perdre une bille"""
 
-        if not self.start :
+        if not self.start:
             self.start = True
             for b in self.breakout.balls:
                 b.net = True
-        elif (self.count > 800) and not self.end :
+        elif (self.count > 800) and not self.end:
             self.end = True
             for b in self.breakout.balls:
                 b.net = False
@@ -271,12 +270,12 @@ class Bolus(Game_object):
 
     def speed_up_ball(self):
         """Malus d'accélération de la balle"""
-        
-        if not self.start :
+
+        if not self.start:
             self.start = True
             for b in self.breakout.balls:
                 b.speed += 1
-        elif (self.count > 1000) and not self.end :
+        elif (self.count > 1000) and not self.end:
             self.end = True
             for b in self.breakout.balls:
                 b.speed -= 1
@@ -285,10 +284,10 @@ class Bolus(Game_object):
     def speed_down_racket(self):
         """Malus de ralentissement de la raquette"""
 
-        if not self.start :
+        if not self.start:
             self.start = True
             self.racket.speed -= 1
-        elif (self.count > 1000) and not self.end :
+        elif (self.count > 1000) and not self.end:
             self.end = True
             self.racket.speed += 1
             self.use = False
@@ -296,10 +295,10 @@ class Bolus(Game_object):
     def shrink_racket(self):
         """Malus de rétrécissement de la raquette"""
 
-        if not self.start :
+        if not self.start:
             self.start = True
             self.racket.size[0] -= 20
-        elif (self.count > 1000) and not self.end :
+        elif (self.count > 1000) and not self.end:
             self.end = True
             self.racket.size[0] += 20
             self.use = False
@@ -307,24 +306,29 @@ class Bolus(Game_object):
     def shrink_ball(self):
         """Malus de rétrécissement de la balle"""
 
-        if not self.start :
+        if not self.start:
             self.start = True
             for b in self.breakout.balls:
                 b.radius -= 1
-        elif (self.count > 1000) and not self.end :
+        elif (self.count > 1000) and not self.end:
             self.end = True
             for b in self.breakout.balls:
                 b.radius += 1
-            self.use = False          
+            self.use = False
 
     def reinforce_brick(self):
         """Malus d'ajout d'une vie à une brique"""
 
-        if not self.start :
+        if not self.start:
             brick_to_reinforce = rd.choice(self.breakout.brick_field.bricks)
-            if brick_to_reinforce.lives < C.BRICK_MAX_LIVES:        
+            if brick_to_reinforce.lives < C.BRICK_MAX_LIVES:
                 brick_to_reinforce.lives += 1
-                pos = [C.TILESET_BRICKS_POS[0] + (C.TILESET_BRICKS_SIZE[0] + 1 ) * (5 - brick_to_reinforce.lives),  C.TILESET_BRICKS_POS[1] + (C.TILESET_BRICKS_SIZE[1] +1) * random.randint(0, 4)]
+                pos = [
+                    C.TILESET_BRICKS_POS[0]
+                    + (C.TILESET_BRICKS_SIZE[0] + 1) * (5 - brick_to_reinforce.lives),
+                    C.TILESET_BRICKS_POS[1]
+                    + (C.TILESET_BRICKS_SIZE[1] + 1) * random.randint(0, 4),
+                ]
                 brick_to_reinforce.load_sprite(pos, C.TILESET_BRICKS_SIZE)
 
             self.start = True
@@ -334,7 +338,7 @@ class Bolus(Game_object):
     def ghost(self):
         """Malus qui empêche la balle de toucher les briques"""
 
-        if not self.start :
+        if not self.start:
             self.start = True
             # le malus ne fonctionne que sur une balle, la première de la liste
             self.breakout.balls[0].ghost = True
@@ -344,10 +348,10 @@ class Bolus(Game_object):
     def reverse(self):
         """Malus qui change les sens des contrôles"""
 
-        if not self.start :
+        if not self.start:
             self.start = True
             self.racket.reverse = True
-        elif (self.count > 1000) and not self.end :
+        elif (self.count > 1000) and not self.end:
             self.racket.reverse = False
             self.end = True
             self.use = False
@@ -360,5 +364,28 @@ class Bolus(Game_object):
     def unbreakable(self):
         """Malus qui rend une brique temporairement incassable"""
 
-        pass
+        if not self.start:
+            self.start = True
+            self.unbrickable = rd.choice(self.breakout.brick_field.bricks)
+            self.unbrickable.unbreakable = True
 
+            # change le tileset, met une image entre plusieurs briques (à changer)
+            pos = [
+                C.TILESET_BRICKS_POS[0] + (C.TILESET_BRICKS_SIZE[0] + 1) + 100,
+                C.TILESET_BRICKS_POS[1] + (C.TILESET_BRICKS_SIZE[1] + 1) + 100,
+            ]
+            self.unbrickable.load_sprite(pos, C.TILESET_BRICKS_SIZE)
+            print(self.unbrickable)
+
+        elif (self.count > 1000) and not self.end:
+            if self.unbrickable is not None:
+                self.unbrickable.unbreakable = False
+                pos = [
+                    C.TILESET_BRICKS_POS[0]
+                    + (C.TILESET_BRICKS_SIZE[0] + 1) * (5 - self.unbrickable.lives),
+                    C.TILESET_BRICKS_POS[1]
+                    + (C.TILESET_BRICKS_SIZE[1] + 1) * random.randint(0, 4),
+                ]
+                self.unbrickable.load_sprite(pos, C.TILESET_BRICKS_SIZE)
+            self.end = True
+            self.use = False

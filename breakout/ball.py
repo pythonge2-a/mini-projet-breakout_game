@@ -49,16 +49,14 @@ class Ball(Game_object):
         self.count_unstop = 0
         self.count_ghost = 0
 
-
     def update(self):
         """Updates ball"""
         self.move()
 
-        # met à jour la taille de la balle, je n'ai pas trouvé comment faire pour que 
+        # met à jour la taille de la balle, je n'ai pas trouvé comment faire pour que
         # l'image suive la position si la fonction pour changer la taille est appelée que
         # quand la balle change de taille
-        self.change_size(self.position, [self.radius, self.radius]) 
-        
+        self.change_size(self.position, [self.radius, self.radius])
 
     def move(self):
         """Update ball position from velocity vector"""
@@ -141,19 +139,17 @@ class Ball(Game_object):
             self.velocity = (self.velocity / np.linalg.norm(self.velocity)) * self.speed
 
             # Stop "unstoppable" bonus and "ghost" malus after 2 bounce
-            if self.unstoppable :
+            if self.unstoppable:
                 self.count_unstop += 1
-                if self.count_unstop >= 2 :
+                if self.count_unstop >= 2:
                     self.unstoppable = False
                     self.count_unstop = 0
 
-            if self.ghost :
+            if self.ghost:
                 self.count_ghost += 1
-                if self.count_ghost >= 2 :
+                if self.count_ghost >= 2:
                     self.ghost = False
                     self.count_ghost = 0
-
-
 
         # Check walls collision
         if b_y - b_r <= 0:
@@ -163,7 +159,7 @@ class Ball(Game_object):
         if b_x - b_r <= 0:
             self.velocity[0] = abs(self.velocity[0])
 
-        if b_y - b_r >= C.WINDOW_HEIGHT and not self.net :
+        if b_y - b_r >= C.WINDOW_HEIGHT and not self.net:
             self.breakout.Animation_Break.append(
                 animation.Animation_Break(
                     self.position,
@@ -182,9 +178,8 @@ class Ball(Game_object):
                 self.position[1] = self.breakout.racket.position[1] - self.radius
                 self.coller = True
 
-        elif b_y - b_r >= C.WINDOW_HEIGHT and self.net :
+        elif b_y - b_r >= C.WINDOW_HEIGHT and self.net:
             self.velocity[1] = -abs(self.velocity[1])
-
 
         if brick_field != None:
             # Goes through each brick of the field
@@ -203,7 +198,7 @@ class Ball(Game_object):
                     and b_y - b_r < brick_y + brick_h
                 ):
                     # Vérifie qu'il n'y a pas de bonus/malus actif
-                    if not self.unstoppable and not self.ghost :
+                    if not self.unstoppable and not self.ghost:
 
                         # Calcul des distances pour déterminer le côté de la collision
                         overlap_top = abs(b_y + b_r - brick_y)
@@ -227,7 +222,9 @@ class Ball(Game_object):
 
                         # Ajuster la vitesse en fonction du côté
                         if "top" in min_sides:
-                            self.velocity[1] *= -1  # Collision avec le haut de la brique
+                            self.velocity[
+                                1
+                            ] *= -1  # Collision avec le haut de la brique
                         if "bottom" in min_sides:
                             self.velocity[1] *= -1  # Collision avec le bas de la brique
                         if "left" in min_sides:
@@ -239,13 +236,12 @@ class Ball(Game_object):
                                 0
                             ] *= -1  # Collision avec le côté droit de la brique
 
-                    elif self.unstoppable and not self.ghost :
-                        for life in range(brick.lives) :
+                    elif self.unstoppable and not self.ghost:
+                        for life in range(brick.lives):
                             brick.lives -= 1
 
-
                     # If the brick still has 1 life left at least
-                    if (brick.lives > 1) and not self.ghost:
+                    if (brick.lives > 1) and not self.ghost and not brick.unbreakable:
                         # add animation
                         self.breakout.Animation_Break.append(
                             animation.Animation_Break(
@@ -260,13 +256,18 @@ class Ball(Game_object):
 
                         brick.color = C.BRICK_COLOR_MAP[brick.lives]
                         # Generate sprite
-                        pos = [C.TILESET_BRICKS_POS[0] + (C.TILESET_BRICKS_SIZE[0] + 1 ) * (5 - brick.lives),  C.TILESET_BRICKS_POS[1] + (C.TILESET_BRICKS_SIZE[1] +1) * random.randint(0, 4)]
+                        pos = [
+                            C.TILESET_BRICKS_POS[0]
+                            + (C.TILESET_BRICKS_SIZE[0] + 1) * (5 - brick.lives),
+                            C.TILESET_BRICKS_POS[1]
+                            + (C.TILESET_BRICKS_SIZE[1] + 1) * random.randint(0, 4),
+                        ]
                         brick.load_sprite(pos, C.TILESET_BRICKS_SIZE)
 
-                    elif not self.ghost :
+                    elif not self.ghost and not brick.unbreakable:
                         # Update points
                         self.breakout.score += brick.reward
-                        
+
                         self.breakout.all_sprites.remove(brick)
                         brick_field.bricks.remove(brick)
                         # add animation

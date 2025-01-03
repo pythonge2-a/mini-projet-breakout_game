@@ -25,10 +25,16 @@ class Brick(Game_object):
         self.reward = lives
 
         # Generate sprite
-        pos = [C.TILESET_BRICKS_POS[0] + (C.TILESET_BRICKS_SIZE[0]+1) * (5 - (lives)), C.TILESET_BRICKS_POS[1] + (C.TILESET_BRICKS_SIZE[1] +1) * random.randint(0, 4)]
+        pos = [
+            C.TILESET_BRICKS_POS[0] + (C.TILESET_BRICKS_SIZE[0] + 1) * (5 - (lives)),
+            C.TILESET_BRICKS_POS[1]
+            + (C.TILESET_BRICKS_SIZE[1] + 1) * random.randint(0, 4),
+        ]
         self.load_sprite(pos, C.TILESET_BRICKS_SIZE)
 
-   
+        # Bonus "unbreakable"
+        self.unbreakable = False
+
     def show(self):
         """Commentaire de fonction"""
         """rect_position = (self.position, self.size)
