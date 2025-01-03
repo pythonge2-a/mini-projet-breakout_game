@@ -45,6 +45,7 @@ class Ball(Game_object):
         self.unstoppable = False
         self.ghost = False
         self.explosion = False
+        self.net = False
         self.count_unstop = 0
         self.count_ghost = 0
 
@@ -162,7 +163,7 @@ class Ball(Game_object):
         if b_x - b_r <= 0:
             self.velocity[0] = abs(self.velocity[0])
 
-        if b_y - b_r >= C.WINDOW_HEIGHT:
+        if b_y - b_r >= C.WINDOW_HEIGHT and not self.net :
             self.breakout.Animation_Break.append(
                 animation.Animation_Break(
                     self.position,
@@ -180,6 +181,10 @@ class Ball(Game_object):
                 )
                 self.position[1] = self.breakout.racket.position[1] - self.radius
                 self.coller = True
+
+        elif b_y - b_r >= C.WINDOW_HEIGHT and self.net :
+            self.velocity[1] = -abs(self.velocity[1])
+
 
         if brick_field != None:
             # Goes through each brick of the field

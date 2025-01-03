@@ -59,7 +59,7 @@ class Bolus(Game_object):
             self.explosion,
             self.unbreakable,
         ]
-        self.proba_bonus = [100, 50, 75, 75, 100, 5, 0, 30, 0]
+        self.proba_bonus = [100, 50, 75, 75, 100, 5, 0, 30, 20]
         self.proba_malus = [100, 75, 75, 50, 100, 10, 100, 0, 0]
 
         if self.bonus and not self.malus:
@@ -259,7 +259,15 @@ class Bolus(Game_object):
     def net(self):
         """Bonus qui empêche de perdre une bille"""
 
-        pass
+        if not self.start :
+            self.start = True
+            for b in self.breakout.balls:
+                b.net = True
+        elif (self.count > 800) and not self.end :
+            self.end = True
+            for b in self.breakout.balls:
+                b.net = False
+            self.use = False
 
     def speed_up_ball(self):
         """Malus d'accélération de la balle"""
