@@ -63,7 +63,7 @@ class Breakout:
         else:
             for b in self.balls:
                 b.update()
-        
+
         self.racket.update()
         # update bonus state
         for bo_ma in self.bonus_malus:
@@ -71,8 +71,6 @@ class Breakout:
         if self.Animation_Break != []:
             for anim in self.Animation_Break:
                 anim.update()
-
-       
 
     def show_game(self):
         """Show the breakout game to the screen"""
@@ -97,8 +95,7 @@ class Breakout:
             self.update()
             self.show_game()
         elif self.status == "game_over":
-            self.show_game_over()    
-            
+            self.show_game_over()
 
     def display_infos(self):
         """Shows score, lives, level"""
@@ -147,21 +144,28 @@ class Breakout:
     def add_bonus_malus(self):
         """add bonus or malus in bricks"""
 
-        # à modifier, plusieurs bonus/malus peuvent être mis dans la même brique (et pas sûr du fonctionnement)
+        # si le nombre de bonus/malus ne dépasse pas le nombre de briques, il n'y aura qu'un bonus/malus par brique
         bonus_malus = []
-        for i in range(C.BONUS_QUANTITY):
-            brick_bonus_malus = rd.choice(self.brick_field.bricks)
+        if len(self.brick_field.bricks) >= C.BONUS_QUANTITY:
+            brick_bonus_malus = rd.sample(self.brick_field.bricks, C.BONUS_QUANTITY)
+        else:
+            brick_bonus_malus = [
+                rd.choice(self.brick_field.bricks) for x in range(C.BONUS_QUANTITY)
+            ]
+
+        for brick in brick_bonus_malus:
 
             bonus_malus.append(
                 Bolus(
                     breakout=self,
                     sprites=[None],
-                    brick=brick_bonus_malus,
+                    brick=brick,
                     racket=self.racket,
                 )
             )
 
         return bonus_malus
+
     def show_game_over(self):
         """Show game over screen"""
         # rambow ball
@@ -174,7 +178,9 @@ class Breakout:
         game_over_txt = self.font.render("Game Over", True, color)
 
         # Define rectangle
-        game_over_rec = game_over_txt.get_rect(center=(C.WINDOW_WIDTH / 2, C.WINDOW_HEIGHT / 2))
+        game_over_rec = game_over_txt.get_rect(
+            center=(C.WINDOW_WIDTH / 2, C.WINDOW_HEIGHT / 2)
+        )
         self.screen.blit(game_over_txt, game_over_rec)
-        
+
         pass

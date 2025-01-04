@@ -20,7 +20,7 @@ class Bolus(Game_object):
     ):
         super().__init__(
             breakout,
-            position=np.array(brick.position),
+            position=np.array([brick.position[0] + 30, brick.position[1] + 10]),
             size=np.array(
                 [C.BONUS_WIDTH, C.BONUS_HEIGHT],
             ),
@@ -194,11 +194,11 @@ class Bolus(Game_object):
         if not self.start:
             self.start = True
             for b in self.breakout.balls:
-                b.speed -= 5
+                b.speed -= 2
         elif (self.count > 1000) and not self.end:
             self.end = True
             for b in self.breakout.balls:
-                b.speed += 5
+                b.speed += 2
             self.use = False
 
     def add_ball(self):
@@ -375,7 +375,6 @@ class Bolus(Game_object):
                 C.TILESET_BRICKS_POS[1] + (C.TILESET_BRICKS_SIZE[1] + 1) + 100,
             ]
             self.unbrickable.load_sprite(pos, C.TILESET_BRICKS_SIZE)
-            print(self.unbrickable)
 
         elif (self.count > 1000) and not self.end:
             if self.unbrickable is not None:
