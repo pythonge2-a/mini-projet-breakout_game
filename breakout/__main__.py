@@ -47,17 +47,16 @@ while breakout.running:
     pygame.display.flip()
 
     if breakout.status == "game_over":
-        if i >= 2000/60:
+        if i >= 2000 / 60:
             i = 0
             # Reset the game
             del breakout
             # Create a Breakout object
-            breakout = Breakout(screen, font)    
+            breakout = Breakout(screen, font)
         else:
             i += 1
     # Cap the frame rate to 60 frames per second
     clock.tick(60)
-
 
 
 # Quit pygame
