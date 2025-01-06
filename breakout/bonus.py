@@ -161,7 +161,8 @@ class Bolus(Game_object):
             self.racket.size[0] += 20
         elif (self.count > 1000) and not self.end:
             self.end = True
-            self.racket.size[0] -= 20
+            if self.racket.size[0] > 20:
+                self.racket.size[0] -= 20
             self.use = False
 
     def grow_ball(self):
@@ -174,7 +175,8 @@ class Bolus(Game_object):
         elif (self.count > 1000) and not self.end:
             self.end = True
             for b in self.breakout.balls:
-                b.radius -= 5
+                if b.radius > C.BALL_RADIUS:
+                    b.radius -= 5
             self.use = False
 
     def speed_up_racket(self):
@@ -184,7 +186,8 @@ class Bolus(Game_object):
             self.start = True
             self.racket.speed += 5
         elif (self.count > 1000) and not self.end:
-            self.racket.speed -= 5
+            if self.racket.speed > 5:
+                self.racket.speed -= 5
             self.end = True
             self.use = False
 
@@ -194,11 +197,13 @@ class Bolus(Game_object):
         if not self.start:
             self.start = True
             for b in self.breakout.balls:
-                b.speed -= 2
+                if b.speed > 2:
+                    b.speed -= 2
         elif (self.count > 1000) and not self.end:
             self.end = True
             for b in self.breakout.balls:
-                b.speed += 2
+                if b.speed < C.BALL_SPEED:
+                    b.speed += 2
             self.use = False
 
     def add_ball(self):
@@ -278,7 +283,8 @@ class Bolus(Game_object):
         elif (self.count > 1000) and not self.end:
             self.end = True
             for b in self.breakout.balls:
-                b.speed -= 1
+                if b.speed > C.BALL_SPEED:
+                    b.speed -= 1
             self.use = False
 
     def speed_down_racket(self):
@@ -286,7 +292,8 @@ class Bolus(Game_object):
 
         if not self.start:
             self.start = True
-            self.racket.speed -= 1
+            if self.racket.speed > 1:
+                self.racket.speed -= 1
         elif (self.count > 1000) and not self.end:
             self.end = True
             self.racket.speed += 1
@@ -297,7 +304,8 @@ class Bolus(Game_object):
 
         if not self.start:
             self.start = True
-            self.racket.size[0] -= 20
+            if self.racket.size[0] > 20:
+                self.racket.size[0] -= 20
         elif (self.count > 1000) and not self.end:
             self.end = True
             self.racket.size[0] += 20
@@ -309,11 +317,13 @@ class Bolus(Game_object):
         if not self.start:
             self.start = True
             for b in self.breakout.balls:
-                b.radius -= 1
+                if b.radius > 1:
+                    b.radius -= 1
         elif (self.count > 1000) and not self.end:
             self.end = True
             for b in self.breakout.balls:
-                b.radius += 1
+                if b.radius < C.BALL_RADIUS:
+                    b.radius += 1
             self.use = False
 
     def reinforce_brick(self):
@@ -326,8 +336,7 @@ class Bolus(Game_object):
                 pos = [
                     C.TILESET_BRICKS_POS[0]
                     + (C.TILESET_BRICKS_SIZE[0] + 1) * (5 - brick_to_reinforce.lives),
-                    C.TILESET_BRICKS_POS[1]
-                    + (C.TILESET_BRICKS_SIZE[1] + 1) * random.randint(0, 4),
+                    C.TILESET_BRICKS_POS[1] + (C.TILESET_BRICKS_SIZE[1] + 1),
                 ]
                 brick_to_reinforce.load_sprite(pos, C.TILESET_BRICKS_SIZE)
 
@@ -371,8 +380,8 @@ class Bolus(Game_object):
 
             # change le tileset, met une image entre plusieurs briques (à changer)
             pos = [
-                C.TILESET_BRICKS_POS[0] + (C.TILESET_BRICKS_SIZE[0] + 1) + 100,
-                C.TILESET_BRICKS_POS[1] + (C.TILESET_BRICKS_SIZE[1] + 1) + 100,
+                C.TILESET_BRICKS_POS[0] + (C.TILESET_BRICKS_SIZE[0] + 1) * 1,
+                C.TILESET_BRICKS_POS[1] + (C.TILESET_BRICKS_SIZE[1] + 1) * 1,
             ]
             self.unbrickable.load_sprite(pos, C.TILESET_BRICKS_SIZE)
 
@@ -382,8 +391,7 @@ class Bolus(Game_object):
                 pos = [
                     C.TILESET_BRICKS_POS[0]
                     + (C.TILESET_BRICKS_SIZE[0] + 1) * (5 - self.unbrickable.lives),
-                    C.TILESET_BRICKS_POS[1]
-                    + (C.TILESET_BRICKS_SIZE[1] + 1) * random.randint(0, 4),
+                    C.TILESET_BRICKS_POS[1] + (C.TILESET_BRICKS_SIZE[1] + 1),
                 ]
                 self.unbrickable.load_sprite(pos, C.TILESET_BRICKS_SIZE)
             self.end = True

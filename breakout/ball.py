@@ -260,7 +260,7 @@ class Ball(Game_object):
                             C.TILESET_BRICKS_POS[0]
                             + (C.TILESET_BRICKS_SIZE[0] + 1) * (5 - brick.lives),
                             C.TILESET_BRICKS_POS[1]
-                            + (C.TILESET_BRICKS_SIZE[1] + 1) * random.randint(0, 4),
+                            + (C.TILESET_BRICKS_SIZE[1] + 1),
                         ]
                         brick.load_sprite(pos, C.TILESET_BRICKS_SIZE)
 
