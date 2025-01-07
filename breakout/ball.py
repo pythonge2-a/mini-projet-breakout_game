@@ -79,7 +79,43 @@ class Ball(Game_object):
             np.sin(pygame.time.get_ticks() * 0.001 + 4) * 127 + 128,
         )
 
-    def check_colls(self, brick_field, racket):
+    def coll_Mur(self):
+        # Define ball, racket symbols
+        b_y = self.position[1]
+        b_x = self.position[0]
+        b_r = self.radius
+        # Check walls collision
+        if b_y - b_r <= 0:
+            self.velocity[1] = abs(self.velocity[1])
+        if b_x + b_r >= C.WINDOW_WIDTH:
+            self.velocity[0] = -abs(self.velocity[0])
+        if b_x - b_r <= 0:
+            self.velocity[0] = abs(self.velocity[0])
+
+        if b_y - b_r >= C.WINDOW_HEIGHT and not self.net:
+            self.breakout.Animation_Break.append(
+                animation.Animation_Break(
+                    self.position,
+                    (self.radius, self.radius),
+                    self.color,
+                    number_of_fragments=300,
+                )
+            )
+            if self.breakout.lives == 0 or len(self.breakout.balls) > 1:
+                self.breakout.balls.remove(self)
+            else:
+                self.breakout.lives -= 1
+                self.position[0] = (
+                    self.breakout.racket.position[0] + self.breakout.racket.size[0] / 2
+                )
+                self.position[1] = self.breakout.racket.position[1] - self.radius
+                self.coller = True
+
+        elif b_y - b_r >= C.WINDOW_HEIGHT and self.net:
+            self.velocity[1] = -abs(self.velocity[1])   
+
+
+    def coll_balle(self):
         """Check ball collisions"""
         for other_ball in self.breakout.balls:
             if other_ball is self:
@@ -105,16 +141,13 @@ class Ball(Game_object):
                 if velocity_along_normal > 0:
                     continue
                 # Calculate the impulse scalar
-                impulse = (
-                    2
-                    * velocity_along_normal
-                    / (1 / self.radius + 1 / other_ball.radius)
-                )
+                impulse = (2* velocity_along_normal/ (1 / self.radius + 1 / other_ball.radius))
                 # Apply the impulse to the velocities
                 self.velocity -= impulse * normal / self.radius
                 other_ball.velocity += impulse * normal / other_ball.radius
 
-        # Define ball, racket symbols
+    def coll_racket(self, racket):
+    #   Define ball, racket symbols
         b_y = self.position[1]
         b_x = self.position[0]
         b_r = self.radius
@@ -151,36 +184,11 @@ class Ball(Game_object):
                     self.ghost = False
                     self.count_ghost = 0
 
-        # Check walls collision
-        if b_y - b_r <= 0:
-            self.velocity[1] = abs(self.velocity[1])
-        if b_x + b_r >= C.WINDOW_WIDTH:
-            self.velocity[0] = -abs(self.velocity[0])
-        if b_x - b_r <= 0:
-            self.velocity[0] = abs(self.velocity[0])
-
-        if b_y - b_r >= C.WINDOW_HEIGHT and not self.net:
-            self.breakout.Animation_Break.append(
-                animation.Animation_Break(
-                    self.position,
-                    (self.radius, self.radius),
-                    self.color,
-                    number_of_fragments=300,
-                )
-            )
-            if self.breakout.lives == 0 or len(self.breakout.balls) > 1:
-                self.breakout.balls.remove(self)
-            else:
-                self.breakout.lives -= 1
-                self.position[0] = (
-                    self.breakout.racket.position[0] + self.breakout.racket.size[0] / 2
-                )
-                self.position[1] = self.breakout.racket.position[1] - self.radius
-                self.coller = True
-
-        elif b_y - b_r >= C.WINDOW_HEIGHT and self.net:
-            self.velocity[1] = -abs(self.velocity[1])
-
+    def coll_bricks(self,brick_field):
+        #   Define ball, racket symbols
+        b_y = self.position[1]
+        b_x = self.position[0]
+        b_r = self.radius
         if brick_field != None:
             # Goes through each brick of the field
             for brick in brick_field.bricks:
@@ -281,3 +289,12 @@ class Ball(Game_object):
                         # self.breakout.balls.append(Ball(self.breakout,self.sprites,coller=False,position=[self.position[0] + 2 * self.radius,self.position[1] + 2 * self.radius,],))
 
                     break
+    def check_colls(self, brick_field, racket):
+        self.coll_Mur()
+        self.coll_racket(racket)
+        self.coll_bricks(brick_field)
+        self.coll_balle()
+
+        
+
+        
