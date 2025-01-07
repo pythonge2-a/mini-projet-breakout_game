@@ -146,6 +146,7 @@ class Breakout:
 
         # si le nombre de bonus/malus ne dépasse pas le nombre de briques, il n'y aura qu'un bonus/malus par brique
         bonus_malus = []
+        i = 0
         if len(self.brick_field.bricks) >= C.BONUS_QUANTITY:
             brick_bonus_malus = rd.sample(self.brick_field.bricks, C.BONUS_QUANTITY)
         else:
@@ -161,8 +162,10 @@ class Breakout:
                     sprites=[None],
                     brick=brick,
                     racket=self.racket,
-                )
+                )  
             )
+            self.all_sprites.add(bonus_malus[i])
+            i += 1
 
         return bonus_malus
 

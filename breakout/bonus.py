@@ -69,6 +69,8 @@ class Bolus(Game_object):
         else:
             self.bolus = self.set_bolus()
 
+        self.load_sprite(C.TILESET_BONUSES_POS, C.TILESET_BONUSES_SIZE)
+
     def set_bonus(self):
         """Créé un bonus aléatoire"""
 
@@ -95,7 +97,7 @@ class Bolus(Game_object):
         if (self.position[1] <= C.WINDOW_HEIGHT) and not self.end:
             if not self.use:
                 self.position[1] += self.speed
-                self.show_bolus()
+                # vérifie si le bonus est pris
                 if self.check_take():
                     self.use = True
         else:
@@ -124,20 +126,16 @@ class Bolus(Game_object):
         else:
             return False
 
-    def show_bolus(self):
-        """affiche le bonus"""
-
-        bonus_pos = ([self.position[0], self.position[1]], self.size)
-        # draw the bonus
-        pygame.draw.rect(self.screen, (21, 0, 255), bonus_pos)
-
     def update_bolus(self):
         """met à jour l'état du bonus/malus"""
 
+        # déplacement du bonus/malus quand une brique est détruite
         if len(self.brick.groups()) == 0:
             self.move_bolus()
 
+        # quand un bonus est pris, son affichage disparaît
         if self.use:
+            self.breakout.all_sprites.remove(self)
             self.count_ticks()
         else:
             self.count = 0
@@ -146,70 +144,82 @@ class Bolus(Game_object):
         """Active le bonus et compte le temps où il est actif"""
 
         self.count += 1
+        # active le bonus
         self.bolus[0]()
 
     def kill(self):
         """Détruit le bonus/malus"""
 
+        # enlève l'affichage du bonus/malus
+        self.breakout.all_sprites.remove(self)
         del self
 
     def grow_racket(self):
         """Bonus d'agrandissement de la raquette"""
 
+        # quand le bonus est pris la raquette est agrandie
         if not self.start:
             self.start = True
-            self.racket.size[0] += 20
-        elif (self.count > 1000) and not self.end:
+            self.racket.size[0] += C.RACKET_GROW_SIZE
+        # au bout d'un temps donné, la raquette reprend sa taille précédente
+        elif (self.count > C.ACTIVATION_TIME) and not self.end:
             self.end = True
-            if self.racket.size[0] > 20:
-                self.racket.size[0] -= 20
+            if self.racket.size[0] > C.RACKET_GROW_SIZE:
+                self.racket.size[0] -= C.RACKET_GROW_SIZE
             self.use = False
 
     def grow_ball(self):
         """ "Bonus d'agrandissement de la balle"""
 
+        # quand le bonus est pris toutes les balles affichées grandissent
         if not self.start:
             self.start = True
             for b in self.breakout.balls:
-                b.radius += 5
-        elif (self.count > 1000) and not self.end:
+                b.radius += C.BALL_GROW_SIZE
+        # après le temps d'activation, les balles qui ont été agrandie rétrécissent
+        elif (self.count > C.ACTIVATION_TIME) and not self.end:
             self.end = True
             for b in self.breakout.balls:
                 if b.radius > C.BALL_RADIUS:
-                    b.radius -= 5
+                    b.radius -= C.BALL_GROW_SIZE
             self.use = False
 
     def speed_up_racket(self):
         """Bonus d'accélération de la raquette"""
 
+        # la vitesse de la raquette augmente quand le bonus est pris
         if not self.start:
             self.start = True
-            self.racket.speed += 5
-        elif (self.count > 1000) and not self.end:
-            if self.racket.speed > 5:
-                self.racket.speed -= 5
+            self.racket.speed += C.RACKET_SPEED_UP
+        # après le temps d'activation la raquette ralenti
+        elif (self.count > C.ACTIVATION_TIME) and not self.end:
+            if self.racket.speed > C.RACKET_SPEED_UP:
+                self.racket.speed -= C.RACKET_SPEED_UP
             self.end = True
             self.use = False
 
     def speed_down_ball(self):
         """Bonus de ralentissement de la balle"""
 
+        # quand le bonus est récupéré, les balles affichées ralentissent
         if not self.start:
             self.start = True
             for b in self.breakout.balls:
-                if b.speed > 2:
-                    b.speed -= 2
-        elif (self.count > 1000) and not self.end:
+                if b.speed > C.BALL_SPEED_DOWN:
+                    b.speed -= C.BALL_SPEED_DOWN
+        # au bout d'un temps donné, les balles qui ont été ralentie accélèrent
+        elif (self.count > C.ACTIVATION_TIME) and not self.end:
             self.end = True
             for b in self.breakout.balls:
                 if b.speed < C.BALL_SPEED:
-                    b.speed += 2
+                    b.speed += C.BALL_SPEED_DOWN
             self.use = False
 
     def add_ball(self):
         """Bonus d'ajout d'une balle"""
 
         if not self.start:
+            # une balle est créé
             self.breakout.balls.append(
                 Ball(
                     self.breakout,
@@ -244,8 +254,10 @@ class Bolus(Game_object):
         """Bonus qui casse une brique aléatoire"""
 
         if not self.start:
+            # choisi une brique aléatoire
             brick_to_break = rd.choice(self.breakout.brick_field.bricks)
 
+            # détruit la brique et ajoute les points de sa destruction
             self.breakout.score += brick_to_break.reward
             self.breakout.all_sprites.remove(brick_to_break)
             self.breakout.brick_field.bricks.remove(brick_to_break)
@@ -263,11 +275,13 @@ class Bolus(Game_object):
     def net(self):
         """Bonus qui empêche de perdre une bille"""
 
+        # toutes les balles affichées ne peuvent plus disparaître
         if not self.start:
             self.start = True
             for b in self.breakout.balls:
                 b.net = True
-        elif (self.count > 800) and not self.end:
+        # après un temps d'activation, le bonus est désactivé sur toutes les balles
+        elif (self.count > C.ACTIVATION_TIME) and not self.end:
             self.end = True
             for b in self.breakout.balls:
                 b.net = False
@@ -276,68 +290,80 @@ class Bolus(Game_object):
     def speed_up_ball(self):
         """Malus d'accélération de la balle"""
 
+        # quand le malus est récupéré, toutes les balles affichées accélèrent
         if not self.start:
             self.start = True
             for b in self.breakout.balls:
-                b.speed += 1
-        elif (self.count > 1000) and not self.end:
+                b.speed += C.BALL_SPEED_UP
+        # au bout d'un temps d'activation, toutes les balles accélérées sont ralenties
+        elif (self.count > C.ACTIVATION_TIME) and not self.end:
             self.end = True
             for b in self.breakout.balls:
                 if b.speed > C.BALL_SPEED:
-                    b.speed -= 1
+                    b.speed -= C.BALL_SPEED_UP
             self.use = False
 
     def speed_down_racket(self):
         """Malus de ralentissement de la raquette"""
 
+        # quand le malus est récupéré, la raquette ralenti
         if not self.start:
             self.start = True
-            if self.racket.speed > 1:
-                self.racket.speed -= 1
-        elif (self.count > 1000) and not self.end:
+            if self.racket.speed > C.RACKET_SPEED_DOWN:
+                self.racket.speed -= C.RACKET_SPEED_DOWN
+        # après un temps d'activation la raquette accélère
+        elif (self.count > C.ACTIVATION_TIME) and not self.end:
             self.end = True
-            self.racket.speed += 1
+            self.racket.speed += C.RACKET_SPEED_DOWN
             self.use = False
 
     def shrink_racket(self):
         """Malus de rétrécissement de la raquette"""
 
+        # la raquette est rétrécie quand le malus est pris
         if not self.start:
             self.start = True
-            if self.racket.size[0] > 20:
-                self.racket.size[0] -= 20
-        elif (self.count > 1000) and not self.end:
+            if self.racket.size[0] > C.RACKET_SHRINK_SIZE:
+                self.racket.size[0] -= C.RACKET_SHRINK_SIZE
+        # après un temps donné, la raquette grandis
+        elif (self.count > C.ACTIVATION_TIME) and not self.end:
             self.end = True
-            self.racket.size[0] += 20
+            self.racket.size[0] += C.RACKET_SHRINK_SIZE
             self.use = False
 
     def shrink_ball(self):
         """Malus de rétrécissement de la balle"""
 
+        # toutes les balles affichées sont rétrécie
         if not self.start:
             self.start = True
             for b in self.breakout.balls:
-                if b.radius > 1:
-                    b.radius -= 1
-        elif (self.count > 1000) and not self.end:
+                if b.radius > C.BALL_SHRINK_SIZE:
+                    b.radius -= C.BALL_SHRINK_SIZE
+        # après un temps d'activation, les balles rétrécies sont agrandie
+        elif (self.count > C.ACTIVATION_TIME) and not self.end:
             self.end = True
             for b in self.breakout.balls:
                 if b.radius < C.BALL_RADIUS:
-                    b.radius += 1
+                    b.radius += C.BALL_SHRINK_SIZE
             self.use = False
 
     def reinforce_brick(self):
         """Malus d'ajout d'une vie à une brique"""
 
+        # une brique aléatoire est renforcée si le malus est pris
         if not self.start:
+            # choisi une brique aléatoire
             brick_to_reinforce = rd.choice(self.breakout.brick_field.bricks)
+            # ajoute une vie a la brique choisie
             if brick_to_reinforce.lives < C.BRICK_MAX_LIVES:
-                brick_to_reinforce.lives += 1
+                brick_to_reinforce.lives += C.BRICK_ADD_LIFE
                 pos = [
                     C.TILESET_BRICKS_POS[0]
                     + (C.TILESET_BRICKS_SIZE[0] + 1) * (5 - brick_to_reinforce.lives),
                     C.TILESET_BRICKS_POS[1] + (C.TILESET_BRICKS_SIZE[1] + 1),
                 ]
+                # met à jour le sprite
                 brick_to_reinforce.load_sprite(pos, C.TILESET_BRICKS_SIZE)
 
             self.start = True
@@ -347,6 +373,7 @@ class Bolus(Game_object):
     def ghost(self):
         """Malus qui empêche la balle de toucher les briques"""
 
+        # la balle passe par dessus les briques sans les casser si le malus est pris
         if not self.start:
             self.start = True
             # le malus ne fonctionne que sur une balle, la première de la liste
@@ -357,10 +384,12 @@ class Bolus(Game_object):
     def reverse(self):
         """Malus qui change les sens des contrôles"""
 
+        # inverse les commande si le malus est pris
         if not self.start:
             self.start = True
             self.racket.reverse = True
-        elif (self.count > 1000) and not self.end:
+        # après un temps donné, les contrôles reviennent à la normale
+        elif (self.count > C.ACTIVATION_TIME) and not self.end:
             self.racket.reverse = False
             self.end = True
             self.use = False
@@ -373,8 +402,10 @@ class Bolus(Game_object):
     def unbreakable(self):
         """Malus qui rend une brique temporairement incassable"""
 
+        # une brique est rendue incassable quand le malus est pris
         if not self.start:
             self.start = True
+            # une brique aléatoire est rendue incassable
             self.unbrickable = rd.choice(self.breakout.brick_field.bricks)
             self.unbrickable.unbreakable = True
 
@@ -385,9 +416,11 @@ class Bolus(Game_object):
             ]
             self.unbrickable.load_sprite(pos, C.TILESET_BRICKS_SIZE)
 
-        elif (self.count > 1000) and not self.end:
+        # au bout d'un temps donné, la brique peut à nouveau être détruite
+        elif (self.count > C.ACTIVATION_TIME) and not self.end:
             if self.unbrickable is not None:
                 self.unbrickable.unbreakable = False
+                # le tileset de la brique est rechargé
                 pos = [
                     C.TILESET_BRICKS_POS[0]
                     + (C.TILESET_BRICKS_SIZE[0] + 1) * (5 - self.unbrickable.lives),
