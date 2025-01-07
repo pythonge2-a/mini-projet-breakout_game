@@ -26,9 +26,8 @@ class Brick(Game_object):
 
         # Generate sprite
         pos = [
-            C.TILESET_BRICKS_POS[0] + (C.TILESET_BRICKS_SIZE[0] + 1) * (5 - (lives)),
-            C.TILESET_BRICKS_POS[1]
-            + (C.TILESET_BRICKS_SIZE[1] + 1),
+            C.TILESET_BRICKS_POS[0],
+            C.TILESET_BRICKS_POS[1] + (C.TILESET_BRICKS_SIZE[1] + 1) * (5 - (lives)),
         ]
         self.load_sprite(pos, C.TILESET_BRICKS_SIZE)
 

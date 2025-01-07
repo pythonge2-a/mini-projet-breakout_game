@@ -37,7 +37,7 @@ class Ball(Game_object):
         y = -self.speed * np.sin(angle)
         # Create the velocity vector
         self.velocity = np.array([x, y])
-
+    
         # Load sprite
         self.load_sprite(C.TILESET_BALLS_POS, C.TILESET_BALLS_SIZE)
 
@@ -79,7 +79,7 @@ class Ball(Game_object):
             np.sin(pygame.time.get_ticks() * 0.001 + 4) * 127 + 128,
         )
 
-    def coll_Mur(self):
+    def coll_mur(self):
         # Define ball, racket symbols
         b_y = self.position[1]
         b_x = self.position[0]
@@ -112,8 +112,7 @@ class Ball(Game_object):
                 self.coller = True
 
         elif b_y - b_r >= C.WINDOW_HEIGHT and self.net:
-            self.velocity[1] = -abs(self.velocity[1])   
-
+            self.velocity[1] = -abs(self.velocity[1])
 
     def coll_balle(self):
         """Check ball collisions"""
@@ -141,13 +140,17 @@ class Ball(Game_object):
                 if velocity_along_normal > 0:
                     continue
                 # Calculate the impulse scalar
-                impulse = (2* velocity_along_normal/ (1 / self.radius + 1 / other_ball.radius))
+                impulse = (
+                    2
+                    * velocity_along_normal
+                    / (1 / self.radius + 1 / other_ball.radius)
+                )
                 # Apply the impulse to the velocities
                 self.velocity -= impulse * normal / self.radius
                 other_ball.velocity += impulse * normal / other_ball.radius
 
     def coll_racket(self, racket):
-    #   Define ball, racket symbols
+        #   Define ball, racket symbols
         b_y = self.position[1]
         b_x = self.position[0]
         b_r = self.radius
@@ -184,7 +187,7 @@ class Ball(Game_object):
                     self.ghost = False
                     self.count_ghost = 0
 
-    def coll_bricks(self,brick_field):
+    def coll_bricks(self, brick_field):
         #   Define ball, racket symbols
         b_y = self.position[1]
         b_x = self.position[0]
@@ -265,10 +268,8 @@ class Ball(Game_object):
                         brick.color = C.BRICK_COLOR_MAP[brick.lives]
                         # Generate sprite
                         pos = [
-                            C.TILESET_BRICKS_POS[0]
-                            + (C.TILESET_BRICKS_SIZE[0] + 1) * (5 - brick.lives),
-                            C.TILESET_BRICKS_POS[1]
-                            + (C.TILESET_BRICKS_SIZE[1] + 1),
+                            C.TILESET_BRICKS_POS[0],
+                            C.TILESET_BRICKS_POS[1] + (C.TILESET_BRICKS_SIZE[1] + 1) * (5 - (brick.lives)),
                         ]
                         brick.load_sprite(pos, C.TILESET_BRICKS_SIZE)
 
@@ -284,17 +285,11 @@ class Ball(Game_object):
                                 brick.position, brick.size, brick.color
                             )
                         )
-                        #'''je m'ammuse a rajouter des balles quand on casse une brique c'est fun mais pas très utile'''
-                        # self.breakout.racket.size[0] += 500
-                        # self.breakout.balls.append(Ball(self.breakout,self.sprites,coller=False,position=[self.position[0] + 2 * self.radius,self.position[1] + 2 * self.radius,],))
-
+                        
                     break
+
     def check_colls(self, brick_field, racket):
-        self.coll_Mur()
+        self.coll_mur()
         self.coll_racket(racket)
         self.coll_bricks(brick_field)
         self.coll_balle()
-
-        
-
-        

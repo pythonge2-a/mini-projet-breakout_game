@@ -358,10 +358,12 @@ class Bolus(Game_object):
             # ajoute une vie a la brique choisie
             if brick_to_reinforce.lives < C.BRICK_MAX_LIVES:
                 brick_to_reinforce.lives += C.BRICK_ADD_LIFE
+                brick_to_reinforce.lives += 1
+                # Generate sprite
                 pos = [
-                    C.TILESET_BRICKS_POS[0]
-                    + (C.TILESET_BRICKS_SIZE[0] + 1) * (5 - brick_to_reinforce.lives),
-                    C.TILESET_BRICKS_POS[1] + (C.TILESET_BRICKS_SIZE[1] + 1),
+                    C.TILESET_BRICKS_POS[0],
+                    C.TILESET_BRICKS_POS[1]
+                    + (C.TILESET_BRICKS_SIZE[1] + 1) * (5 - (brick_to_reinforce.lives)),
                 ]
                 # met à jour le sprite
                 brick_to_reinforce.load_sprite(pos, C.TILESET_BRICKS_SIZE)
@@ -422,9 +424,8 @@ class Bolus(Game_object):
                 self.unbrickable.unbreakable = False
                 # le tileset de la brique est rechargé
                 pos = [
-                    C.TILESET_BRICKS_POS[0]
-                    + (C.TILESET_BRICKS_SIZE[0] + 1) * (5 - self.unbrickable.lives),
-                    C.TILESET_BRICKS_POS[1] + (C.TILESET_BRICKS_SIZE[1] + 1),
+                    C.TILESET_BRICKS_POS[0],
+                    C.TILESET_BRICKS_POS[1] + (C.TILESET_BRICKS_SIZE[1] + 1) * (5 - (self.unbrickable.lives)),
                 ]
                 self.unbrickable.load_sprite(pos, C.TILESET_BRICKS_SIZE)
             self.end = True
