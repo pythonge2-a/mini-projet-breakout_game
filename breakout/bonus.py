@@ -333,10 +333,10 @@ class Bolus(Game_object):
             brick_to_reinforce = rd.choice(self.breakout.brick_field.bricks)
             if brick_to_reinforce.lives < C.BRICK_MAX_LIVES:
                 brick_to_reinforce.lives += 1
+               # Generate sprite
                 pos = [
-                    C.TILESET_BRICKS_POS[0]
-                    + (C.TILESET_BRICKS_SIZE[0] + 1) * (5 - brick_to_reinforce.lives),
-                    C.TILESET_BRICKS_POS[1] + (C.TILESET_BRICKS_SIZE[1] + 1),
+                    C.TILESET_BRICKS_POS[0],
+                    C.TILESET_BRICKS_POS[1] + (C.TILESET_BRICKS_SIZE[1] + 1) * (5 - (brick_to_reinforce.lives)),
                 ]
                 brick_to_reinforce.load_sprite(pos, C.TILESET_BRICKS_SIZE)
 
@@ -389,9 +389,8 @@ class Bolus(Game_object):
             if self.unbrickable is not None:
                 self.unbrickable.unbreakable = False
                 pos = [
-                    C.TILESET_BRICKS_POS[0]
-                    + (C.TILESET_BRICKS_SIZE[0] + 1) * (5 - self.unbrickable.lives),
-                    C.TILESET_BRICKS_POS[1] + (C.TILESET_BRICKS_SIZE[1] + 1),
+                    C.TILESET_BRICKS_POS[0],
+                    C.TILESET_BRICKS_POS[1] + (C.TILESET_BRICKS_SIZE[1] + 1) * (5 - (self.unbrickable.lives)),
                 ]
                 self.unbrickable.load_sprite(pos, C.TILESET_BRICKS_SIZE)
             self.end = True
