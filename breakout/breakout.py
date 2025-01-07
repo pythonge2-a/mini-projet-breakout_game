@@ -85,7 +85,7 @@ class Breakout:
         # Shows infos
         self.display_infos()
 
-        if self.Animation_Break != []:
+        if not self.Animation_Break:
             # Dessiner les animations en cours
             for anim in self.Animation_Break:
                 anim.draw(self.screen)
