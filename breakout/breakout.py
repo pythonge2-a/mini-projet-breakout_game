@@ -19,9 +19,13 @@ class Breakout:
 
         # Define screen object
         self.screen = screen
+
+        # Text font
         self.font = font
+
         # Define menu
         self.menu = Menu(self, screen, font)
+
         # Define the field of bricks
         self.brick_field = Brick_field(self)
 
@@ -45,6 +49,8 @@ class Breakout:
         self.bonus_malus = []
         if len(self.bonus_malus) <= 0:
             self.bonus_malus = self.add_bonus_malus()
+
+        # Defines animation array (for particles)
         self.Animation_Break = []
 
         # Add bricks to sprites list
@@ -58,12 +64,14 @@ class Breakout:
 
     def update(self):
         """Run a \"Game tick\" Update object's position, read player input etc."""
+        # If no more balls are at play
         if self.balls == []:
             self.status = "game_over"
         else:
             for b in self.balls:
                 b.update()
 
+        # Move the racket according to player inputs
         self.racket.update()
         # update bonus state
         for bo_ma in self.bonus_malus:
@@ -85,6 +93,7 @@ class Breakout:
         self.all_sprites.draw(self.screen)
 
     def show_menu(self):
+        """Displays the game menu"""
         self.menu.show()
 
     def show(self):
