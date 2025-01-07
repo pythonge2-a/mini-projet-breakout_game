@@ -138,7 +138,7 @@ ANIMATION_LIFETIME = 50
 ANIMATION_NUMBER_OF_FRAGMENTS = 100
 
 # TILESET #
-TILESET_PATH = "breakout/tileset/Tileset couleur.png"
+TILESET_PATH = "breakout/tileset/Tileset couleurV2.1.png"
 TILESET_BRICKS_POS = [1, 1]
 TILESET_BRICKS_SIZE = [78, 30]
 
