@@ -178,14 +178,20 @@ class Ball(Game_object):
             if self.unstoppable:
                 self.count_unstop += 1
                 if self.count_unstop >= 2:
+                    # stop bonus
                     self.unstoppable = False
                     self.count_unstop = 0
+                    # reload ball sprite
+                    self.load_sprite(C.TILESET_BALLS_POS, C.TILESET_BALLS_SIZE)
 
             if self.ghost:
                 self.count_ghost += 1
                 if self.count_ghost >= 2:
+                    # stop malus
                     self.ghost = False
                     self.count_ghost = 0
+                    # reload ball sprite
+                    self.load_sprite(C.TILESET_BALLS_POS, C.TILESET_BALLS_SIZE)
 
     def coll_bricks(self, brick_field):
         #   Define ball, racket symbols

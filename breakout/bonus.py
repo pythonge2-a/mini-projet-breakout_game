@@ -20,7 +20,9 @@ class Bolus(Game_object):
     ):
         super().__init__(
             breakout,
-            position=np.array([brick.position[0] + 30, brick.position[1] + 10]),
+            position=np.array(
+                [brick.position[0] + C.BONUS_POS_X, brick.position[1] + C.BONUS_POS_Y]
+            ),
             size=np.array(
                 [C.BONUS_WIDTH, C.BONUS_HEIGHT],
             ),
@@ -60,7 +62,7 @@ class Bolus(Game_object):
             self.unbreakable,
         ]
         self.proba_bonus = [100, 50, 75, 75, 100, 5, 0, 30, 20]
-        self.proba_malus = [100, 75, 75, 50, 100, 10, 100, 0, 10]
+        self.proba_malus = [100, 75, 75, 50, 100, 100000000, 100, 0, 10]
 
         if self.bonus and not self.malus:
             self.bolus = self.set_bonus()
@@ -242,6 +244,10 @@ class Bolus(Game_object):
             self.start = True
             # le bonus ne fonctionne que sur une balle, la première de la liste
             self.breakout.balls[0].unstoppable = True
+            # change le sprite de la balle
+            self.breakout.balls[0].load_sprite(
+                C.TILESET_UNSTOPPABLE_POS, C.TILESET_BALLS_SIZE
+            )
             self.end = True
             self.use = False
 
@@ -380,6 +386,10 @@ class Bolus(Game_object):
             self.start = True
             # le malus ne fonctionne que sur une balle, la première de la liste
             self.breakout.balls[0].ghost = True
+            # change le sprite de la balle quand le bonus est activé
+            self.breakout.balls[0].load_sprite(
+                C.TILESET_GHOST_POS, C.TILESET_BALLS_SIZE
+            )
             self.end = True
             self.use = False
 
@@ -411,10 +421,11 @@ class Bolus(Game_object):
             self.unbrickable = rd.choice(self.breakout.brick_field.bricks)
             self.unbrickable.unbreakable = True
 
-            # change le tileset, met une image entre plusieurs briques (à changer)
+            # change le tileset, met l'image à la suite de la brique qui a le plus de vie
             pos = [
-                C.TILESET_BRICKS_POS[0] + (C.TILESET_BRICKS_SIZE[0] + 1) * 1,
-                C.TILESET_BRICKS_POS[1] + (C.TILESET_BRICKS_SIZE[1] + 1) * 1,
+                C.TILESET_BRICKS_POS[0],
+                C.TILESET_BRICKS_POS[1]
+                + (C.TILESET_BRICKS_SIZE[1] + 1) * (C.BRICK_MAX_LIVES + 1),
             ]
             self.unbrickable.load_sprite(pos, C.TILESET_BRICKS_SIZE)
 
@@ -425,7 +436,8 @@ class Bolus(Game_object):
                 # le tileset de la brique est rechargé
                 pos = [
                     C.TILESET_BRICKS_POS[0],
-                    C.TILESET_BRICKS_POS[1] + (C.TILESET_BRICKS_SIZE[1] + 1) * (5 - (self.unbrickable.lives)),
+                    C.TILESET_BRICKS_POS[1]
+                    + (C.TILESET_BRICKS_SIZE[1] + 1) * (5 - (self.unbrickable.lives)),
                 ]
                 self.unbrickable.load_sprite(pos, C.TILESET_BRICKS_SIZE)
             self.end = True
