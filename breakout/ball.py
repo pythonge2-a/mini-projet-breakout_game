@@ -48,6 +48,7 @@ class Ball(Game_object):
         self.net = False
         self.count_unstop = 0
         self.count_ghost = 0
+        self.count_net = 0
 
     def update(self):
         """Updates ball"""
@@ -111,8 +112,11 @@ class Ball(Game_object):
                 self.position[1] = self.breakout.racket.position[1] - self.radius
                 self.coller = True
 
-        elif b_y - b_r >= C.WINDOW_HEIGHT and self.net:
+        elif b_y + b_r >= C.WINDOW_HEIGHT - 5 and self.net:
+            # la balle rebondi sur le sol
             self.velocity[1] = -abs(self.velocity[1])
+            # le nombre de rebond est compté
+            self.count_net += 1
 
     def coll_balle(self):
         """Check ball collisions"""

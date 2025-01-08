@@ -38,31 +38,32 @@ class Bolus(Game_object):
         self.start = False
         self.count = 0
         self.unbrickable = None
+        self.net_sprite = None
 
         self.list_bonus = [
-            self.grow_racket,
-            self.grow_ball,
-            self.speed_up_racket,
-            self.speed_down_ball,
-            self.add_ball,
-            self.unstoppable,
-            self.glu,
-            self.break_brick,
-            self.net,
+            [self.grow_racket, 1],
+            [self.grow_ball, 2],
+            [self.speed_up_racket, 3],
+            [self.speed_down_ball, 4],
+            [self.add_ball, 5],
+            [self.unstoppable, 6],
+            [self.glu, 7],
+            [self.break_brick, 8],
+            [self.net, 9],
         ]
         self.list_malus = [
-            self.speed_up_ball,
-            self.speed_down_racket,
-            self.shrink_racket,
-            self.shrink_ball,
-            self.reinforce_brick,
-            self.ghost,
-            self.reverse,
-            self.explosion,
-            self.unbreakable,
+            [self.speed_up_ball, 10],
+            [self.speed_down_racket, 11],
+            [self.shrink_racket, 12],
+            [self.shrink_ball, 13],
+            [self.reinforce_brick, 14],
+            [self.ghost, 15],
+            [self.reverse, 16],
+            [self.explosion, 17],
+            [self.unbreakable, 18],
         ]
-        self.proba_bonus = [100, 50, 75, 75, 100, 5, 0, 30, 20]
-        self.proba_malus = [100, 75, 75, 50, 100, 100000000, 100, 0, 10]
+        self.proba_bonus = [100, 50, 75, 75, 100, 5, 0, 30, 1000000]
+        self.proba_malus = [100, 75, 75, 50, 75, 10, 50, 0, 10]
 
         if self.bonus and not self.malus:
             self.bolus = self.set_bonus()
@@ -71,7 +72,12 @@ class Bolus(Game_object):
         else:
             self.bolus = self.set_bolus()
 
-        self.load_sprite(C.TILESET_BONUSES_POS, C.TILESET_BONUSES_SIZE)
+        pos = [
+            C.TILESET_BONUSES_POS[0],
+            C.TILESET_BONUSES_POS[1] + C.TILESET_BONUSES_SIZE[1] * self.bolus[0][1],
+        ]
+
+        self.load_sprite(pos, C.TILESET_BONUSES_SIZE)
 
     def set_bonus(self):
         """Créé un bonus aléatoire"""
@@ -147,7 +153,7 @@ class Bolus(Game_object):
 
         self.count += 1
         # active le bonus
-        self.bolus[0]()
+        self.bolus[0][0]()
 
     def kill(self):
         """Détruit le bonus/malus"""
@@ -281,16 +287,25 @@ class Bolus(Game_object):
     def net(self):
         """Bonus qui empêche de perdre une bille"""
 
+        rebounds = 0
         # toutes les balles affichées ne peuvent plus disparaître
-        if not self.start:
-            self.start = True
-            for b in self.breakout.balls:
+        for b in self.breakout.balls:
+            if not b.net:
                 b.net = True
-        # après un temps d'activation, le bonus est désactivé sur toutes les balles
-        elif (self.count > C.ACTIVATION_TIME) and not self.end:
+            else:
+                # le nombre de rebonds est compté
+                rebounds += b.count_net
+        # affiche l'image du filet
+        if self.net_sprite is None:
+            self.net_sprite = Net(breakout=self.breakout, sprites=[None])
+            self.breakout.all_sprites.add(self.net_sprite)
+        # après un nombre de rebond donné, le filet disparaît
+        if (rebounds >= C.NET_REBOUNDS) and not self.end:
             self.end = True
+            self.net_sprite.kill()
             for b in self.breakout.balls:
                 b.net = False
+                b.count_net = 0
             self.use = False
 
     def speed_up_ball(self):
@@ -442,3 +457,19 @@ class Bolus(Game_object):
                 self.unbrickable.load_sprite(pos, C.TILESET_BRICKS_SIZE)
             self.end = True
             self.use = False
+
+
+class Net(Game_object):
+    """Permet d'afficher le filet"""
+
+    def __init__(self, breakout, sprites):
+        super().__init__(breakout, position=C.NET_POS, size=C.NET_SIZE, images=sprites)
+        # charge l'image du filet
+        self.load_sprite(C.TILESET_NET_POS, C.TILESET_NET_SIZE)
+
+    def kill(self):
+        """Destruction de l'objet"""
+
+        # enlève l'image du filet
+        self.breakout.all_sprites.remove(self)
+        del self
