@@ -62,7 +62,7 @@ class Bolus(Game_object):
             [self.explosion, 17],
             [self.unbreakable, 18],
         ]
-        self.proba_bonus = [100, 50, 75, 75, 100, 5, 0, 30, 1000000]
+        self.proba_bonus = [100, 50, 75, 75, 100, 5, 100, 30, 10]
         self.proba_malus = [100, 75, 75, 50, 75, 10, 50, 0, 10]
 
         if self.bonus and not self.malus:
@@ -260,7 +260,15 @@ class Bolus(Game_object):
     def glu(self):
         """Bonus qui arrête la balle sur la raquette (lâche avec un bouton)"""
 
-        pass
+        # quand le bonus est récupéré, la balle se colle à la raquette quand elle la touche
+        if not self.start:
+            self.start = True
+            for b in self.breakout.balls:
+                b.glu = True
+                # charge le sprite de la balle collante
+                b.load_sprite(C.TILESET_GLU_POS, C.TILESET_BALLS_SIZE)
+            self.end = True
+            self.use = False
 
     def break_brick(self):
         """Bonus qui casse une brique aléatoire"""

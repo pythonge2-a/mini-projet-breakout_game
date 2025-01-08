@@ -37,7 +37,7 @@ class Ball(Game_object):
         y = -self.speed * np.sin(angle)
         # Create the velocity vector
         self.velocity = np.array([x, y])
-    
+
         # Load sprite
         self.load_sprite(C.TILESET_BALLS_POS, C.TILESET_BALLS_SIZE)
 
@@ -46,9 +46,11 @@ class Ball(Game_object):
         self.ghost = False
         self.explosion = False
         self.net = False
+        self.glu = False
         self.count_unstop = 0
         self.count_ghost = 0
         self.count_net = 0
+        self.pos_glu = 0
 
     def update(self):
         """Updates ball"""
@@ -61,13 +63,22 @@ class Ball(Game_object):
 
     def move(self):
         """Update ball position from velocity vector"""
-        if self.coller == True:
-            self.position[0] = (
-                self.breakout.racket.position[0] + self.breakout.racket.size[0] / 2
-            )
+        if self.coller:
+            if self.glu:
+                self.position[0] = abs(
+                    self.breakout.racket.position[0] - self.pos_glu
+                )
+            else:
+                self.position[0] = (
+                    self.breakout.racket.position[0] + self.breakout.racket.size[0] / 2
+                )
             self.position[1] = self.breakout.racket.position[1] - self.radius
             if pygame.key.get_pressed()[pygame.K_UP]:
                 self.coller = False
+                # remet le sprite de la balle si glu était actif
+                if self.glu:
+                    self.load_sprite(C.TILESET_BALLS_POS, C.TILESET_BALLS_SIZE)
+                self.glu = False
         else:
             # Check collisions
             self.check_colls(self.breakout.brick_field, self.breakout.racket)
@@ -111,6 +122,11 @@ class Ball(Game_object):
                 )
                 self.position[1] = self.breakout.racket.position[1] - self.radius
                 self.coller = True
+
+            # si le bonus glu est actif, il se désactive
+            if self.glu:
+                self.load_sprite(C.TILESET_BALLS_POS, C.TILESET_BALLS_SIZE)
+                self.glu = False
 
         elif b_y + b_r >= C.WINDOW_HEIGHT - 5 and self.net:
             # la balle rebondi sur le sol
@@ -177,6 +193,12 @@ class Ball(Game_object):
             self.velocity[0] += (b_x - r_x - r_w / 2) / (r_w / 2)
             # Normalize the velocity
             self.velocity = (self.velocity / np.linalg.norm(self.velocity)) * self.speed
+
+            # Glu bonus is active
+            if self.glu:
+                self.coller = True
+                # récupère la position où la raquette est touchée
+                self.pos_glu = self.breakout.racket.position[0] - self.position[0]
 
             # Stop "unstoppable" bonus and "ghost" malus after 2 bounce
             if self.unstoppable:
@@ -279,7 +301,8 @@ class Ball(Game_object):
                         # Generate sprite
                         pos = [
                             C.TILESET_BRICKS_POS[0],
-                            C.TILESET_BRICKS_POS[1] + (C.TILESET_BRICKS_SIZE[1] + 1) * (5 - (brick.lives)),
+                            C.TILESET_BRICKS_POS[1]
+                            + (C.TILESET_BRICKS_SIZE[1] + 1) * (5 - (brick.lives)),
                         ]
                         brick.load_sprite(pos, C.TILESET_BRICKS_SIZE)
 
@@ -295,7 +318,7 @@ class Ball(Game_object):
                                 brick.position, brick.size, brick.color
                             )
                         )
-                        
+
                     break
 
     def check_colls(self, brick_field, racket):
