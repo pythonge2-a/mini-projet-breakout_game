@@ -63,7 +63,7 @@ class Bolus(Game_object):
             [self.unbreakable, 18],
         ]
         self.proba_bonus = [100, 50, 75, 75, 100, 5, 100, 30, 10]
-        self.proba_malus = [100, 75, 75, 50, 75, 10, 50, 0, 10]
+        self.proba_malus = [100, 75, 75, 50, 75, 10, 50, 50, 10]
 
         if self.bonus and not self.malus:
             self.bolus = self.set_bonus()
@@ -430,9 +430,26 @@ class Bolus(Game_object):
             self.use = False
 
     def explosion(self):
-        """Malus qui rend des briques ou la balle explosive (vitesse de la bille augmente, angle change)"""
+        """Malus qui rend des briques ou la balle explosive (vitesse de la bille augmente, angle change)
+        quand les balles touchent les briques, la vitesse change"""
 
-        pass
+        # quand le malus est récupéré, toutes les balles deviennent explosive
+        if not self.start:
+            self.start = True
+            for b in self.breakout.balls:
+                if not b.explosion:
+                    b.explosion = True
+                    # change le sprite de la balle quand le bonus est activé
+                    b.load_sprite(C.TILESET_EXPL_POS, C.TILESET_BALLS_SIZE)
+        # au bout d'un temps donné, les balles redeviennent normale
+        elif (self.count > C.ACTIVATION_TIME) and not self.end:
+            self.end = True
+            for b in self.breakout.balls:
+                if b.explosion:
+                    b.explosion = False
+                    # remet le sprite de la balle
+                    b.load_sprite(C.TILESET_BALLS_POS, C.TILESET_BALLS_SIZE)
+            self.use = False
 
     def unbreakable(self):
         """Malus qui rend une brique temporairement incassable"""

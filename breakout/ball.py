@@ -51,6 +51,7 @@ class Ball(Game_object):
         self.count_ghost = 0
         self.count_net = 0
         self.pos_glu = 0
+        self.change_speed = [0, 0]
 
     def update(self):
         """Updates ball"""
@@ -65,9 +66,7 @@ class Ball(Game_object):
         """Update ball position from velocity vector"""
         if self.coller:
             if self.glu:
-                self.position[0] = abs(
-                    self.breakout.racket.position[0] - self.pos_glu
-                )
+                self.position[0] = abs(self.breakout.racket.position[0] - self.pos_glu)
             else:
                 self.position[0] = (
                     self.breakout.racket.position[0] + self.breakout.racket.size[0] / 2
@@ -82,7 +81,14 @@ class Ball(Game_object):
         else:
             # Check collisions
             self.check_colls(self.breakout.brick_field, self.breakout.racket)
+
+            # si le bonus explosion est actif, la vitesse change
+            if self.explosion:
+                self.velocity += self.change_speed
+
             self.position += self.velocity
+
+            self.change_speed = [0, 0]
 
         # rambow ball
         self.color = (
@@ -249,6 +255,12 @@ class Ball(Game_object):
                         overlap_left = abs(b_x + b_r - brick_x)
                         overlap_right = abs(b_x - b_r - (brick_x + brick_w))
 
+                        # si le bonus explosion est actif, la vitesse reprend sa valeur avant d'être modifiée (empêche une trop grand augmentation de la vitesse)
+                        if self.explosion:
+                            self.velocity = (
+                                self.velocity / np.linalg.norm(self.velocity)
+                            ) * self.speed
+
                         # Trouver le côté avec la plus petite distance d'overlap
                         overlaps = {
                             "top": overlap_top,
@@ -278,6 +290,19 @@ class Ball(Game_object):
                             self.velocity[
                                 0
                             ] *= -1  # Collision avec le côté droit de la brique
+
+                        # la distance entre le centre de la brique et la collision est calculée
+                        impact_y = b_y - (brick_y + brick_h / 2)
+                        impact_x = b_x - (brick_x + brick_w / 2)
+                        # pourcentage de la position du choc (signé pour savoir le sens)
+                        impact = [
+                            impact_x / (abs(impact_x) + abs(impact_y)),
+                            impact_y / (abs(impact_x) + abs(impact_y)),
+                        ]
+
+                        if self.explosion:
+                            self.change_speed[0] = 5 * impact[0]
+                            self.change_speed[1] = 5 * impact[1]
 
                     elif self.unstoppable and not self.ghost:
                         for life in range(brick.lives):
