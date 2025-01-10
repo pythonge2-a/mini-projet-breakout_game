@@ -417,9 +417,11 @@ class Bolus(Game_object):
         if not self.start:
             self.start = True
             self.racket.reverse = True
+            self.racket.load_sprite(C.TILESET_REVERSE_POS, C.TILESET_RACKETS_SIZE)
         # après un temps donné, les contrôles reviennent à la normale
         elif (self.count > C.ACTIVATION_TIME) and not self.end:
             self.racket.reverse = False
+            self.racket.load_sprite(C.TILESET_RACKETS_POS, C.TILESET_RACKETS_SIZE)
             self.end = True
             self.use = False
 
