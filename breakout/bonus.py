@@ -250,10 +250,6 @@ class Bolus(Game_object):
             self.start = True
             # le bonus ne fonctionne que sur une balle, la première de la liste
             self.breakout.balls[0].unstoppable = True
-            # change le sprite de la balle
-            self.breakout.balls[0].load_sprite(
-                C.TILESET_UNSTOPPABLE_POS, C.TILESET_BALLS_SIZE
-            )
             self.end = True
             self.use = False
 
@@ -264,9 +260,11 @@ class Bolus(Game_object):
         if not self.start:
             self.start = True
             for b in self.breakout.balls:
-                b.glu = True
-                # charge le sprite de la balle collante
-                b.load_sprite(C.TILESET_GLU_POS, C.TILESET_BALLS_SIZE)
+                # si une modification de la balle est active, le bonus ne s'active pas
+                if not b.unstoppable and not b.ghost:
+                    b.glu = True
+                    # charge le sprite de la balle collante
+                    b.load_sprite(C.TILESET_GLU_POS, C.TILESET_BALLS_SIZE)
             self.end = True
             self.use = False
 
@@ -275,7 +273,8 @@ class Bolus(Game_object):
 
         if not self.start:
             # choisi une brique aléatoire
-            brick_to_break = rd.choice(self.breakout.brick_field.bricks)
+            if len(self.breakout.brick_field.bricks) != 0:
+                brick_to_break = rd.choice(self.breakout.brick_field.bricks)
 
             # détruit la brique et ajoute les points de sa destruction
             self.breakout.score += brick_to_break.reward
@@ -408,10 +407,6 @@ class Bolus(Game_object):
             self.start = True
             # le malus ne fonctionne que sur une balle, la première de la liste
             self.breakout.balls[0].ghost = True
-            # change le sprite de la balle quand le bonus est activé
-            self.breakout.balls[0].load_sprite(
-                C.TILESET_GHOST_POS, C.TILESET_BALLS_SIZE
-            )
             self.end = True
             self.use = False
 
