@@ -18,6 +18,8 @@ font = pygame.font.Font("breakout/fonts/bedstead.otf", C.TXT_FONT_SIZE)
 
 # Set up the screen dimensions and create a window
 screen_width, screen_height = C.WINDOW_WIDTH, C.WINDOW_HEIGHT
+background_image = pygame.image.load("breakout/tileset/backguound.png")
+background_image = pygame.transform.scale(background_image, (screen_width, screen_height))
 
 screen = pygame.display.set_mode((screen_width, screen_height))
 pygame.display.set_caption("Breakout Game")
@@ -39,7 +41,9 @@ while breakout.running:
         if event.type == pygame.QUIT:
             breakout.running = False
     # Draws background
-    screen.fill(C.WINDOW_BACKGROUND_COLOR)
+    screen.blit(background_image, (0, 0))
+
+    #screen.fill(C.WINDOW_BACKGROUND_COLOR)
     # Draws game
     breakout.show()
 

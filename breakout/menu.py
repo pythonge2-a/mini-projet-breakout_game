@@ -23,11 +23,11 @@ class Menu:
         # Set default cursor
         pygame.mouse.set_cursor(pygame.SYSTEM_CURSOR_ARROW)
         # Play button
-        play_txt = self.font.render("Play", True, "White")
+        play_txt = self.font.render("Play", True, "Black")
         play_rec = play_txt.get_rect(center=(400, 200))
 
         # Quit button
-        quit_txt = self.font.render("Quit", True, "White")
+        quit_txt = self.font.render("Quit", True, "Black")
         quit_rec = quit_txt.get_rect(center=(400, 400))
 
         # Check for mouse hover

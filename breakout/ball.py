@@ -62,6 +62,17 @@ class Ball(Game_object):
         # quand la balle change de taille
         self.change_size(self.position, [self.radius, self.radius])
 
+        if self.unstoppable and not self.ghost:
+            # change le sprite de la balle quand unstoppable est actif
+            self.load_sprite(
+                C.TILESET_UNSTOPPABLE_POS, C.TILESET_BALLS_SIZE
+            )
+        elif self.ghost:
+            # change le sprite de la balle quand le malus ghost est activé
+            self.load_sprite(
+                C.TILESET_GHOST_POS, C.TILESET_BALLS_SIZE
+            )
+
     def move(self):
         """Update ball position from velocity vector"""
         if self.coller:

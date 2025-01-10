@@ -42,20 +42,20 @@ class Bolus(Game_object):
 
         self.list_bonus = [
             [self.grow_racket, 1],
-            [self.grow_ball, 2],
-            [self.speed_up_racket, 3],
-            [self.speed_down_ball, 4],
-            [self.add_ball, 5],
-            [self.unstoppable, 6],
-            [self.glu, 7],
-            [self.break_brick, 8],
-            [self.net, 9],
+            [self.grow_ball, 0],
+            [self.speed_up_racket, 6],
+            [self.speed_down_ball, 7],
+            [self.add_ball, 2],
+            [self.unstoppable, 3],
+            [self.glu, 4],
+            [self.break_brick, 5],
+            [self.net, 8],
         ]
         self.list_malus = [
-            [self.speed_up_ball, 10],
-            [self.speed_down_racket, 11],
-            [self.shrink_racket, 12],
-            [self.shrink_ball, 13],
+            [self.speed_up_ball, 12],
+            [self.speed_down_racket, 13],
+            [self.shrink_racket, 11],
+            [self.shrink_ball, 10],
             [self.reinforce_brick, 14],
             [self.ghost, 15],
             [self.reverse, 16],
@@ -250,10 +250,6 @@ class Bolus(Game_object):
             self.start = True
             # le bonus ne fonctionne que sur une balle, la première de la liste
             self.breakout.balls[0].unstoppable = True
-            # change le sprite de la balle
-            self.breakout.balls[0].load_sprite(
-                C.TILESET_UNSTOPPABLE_POS, C.TILESET_BALLS_SIZE
-            )
             self.end = True
             self.use = False
 
@@ -264,9 +260,11 @@ class Bolus(Game_object):
         if not self.start:
             self.start = True
             for b in self.breakout.balls:
-                b.glu = True
-                # charge le sprite de la balle collante
-                b.load_sprite(C.TILESET_GLU_POS, C.TILESET_BALLS_SIZE)
+                # si une modification de la balle est active, le bonus ne s'active pas
+                if not b.unstoppable and not b.ghost:
+                    b.glu = True
+                    # charge le sprite de la balle collante
+                    b.load_sprite(C.TILESET_GLU_POS, C.TILESET_BALLS_SIZE)
             self.end = True
             self.use = False
 
@@ -275,7 +273,8 @@ class Bolus(Game_object):
 
         if not self.start:
             # choisi une brique aléatoire
-            brick_to_break = rd.choice(self.breakout.brick_field.bricks)
+            if len(self.breakout.brick_field.bricks) != 0:
+                brick_to_break = rd.choice(self.breakout.brick_field.bricks)
 
             # détruit la brique et ajoute les points de sa destruction
             self.breakout.score += brick_to_break.reward
@@ -387,7 +386,6 @@ class Bolus(Game_object):
             # ajoute une vie a la brique choisie
             if brick_to_reinforce.lives < C.BRICK_MAX_LIVES:
                 brick_to_reinforce.lives += C.BRICK_ADD_LIFE
-                brick_to_reinforce.lives += 1
                 # Generate sprite
                 pos = [
                     C.TILESET_BRICKS_POS[0],
@@ -409,10 +407,6 @@ class Bolus(Game_object):
             self.start = True
             # le malus ne fonctionne que sur une balle, la première de la liste
             self.breakout.balls[0].ghost = True
-            # change le sprite de la balle quand le bonus est activé
-            self.breakout.balls[0].load_sprite(
-                C.TILESET_GHOST_POS, C.TILESET_BALLS_SIZE
-            )
             self.end = True
             self.use = False
 
