@@ -74,7 +74,7 @@ class Bolus(Game_object):
 
         pos = [
             C.TILESET_BONUSES_POS[0],
-            C.TILESET_BONUSES_POS[1] + C.TILESET_BONUSES_SIZE[1] * self.bolus[0][1],
+            C.TILESET_BONUSES_POS[1] + (C.TILESET_BONUSES_SIZE[1] + 1) * self.bolus[0][1],
         ]
 
         self.load_sprite(pos, C.TILESET_BONUSES_SIZE)
