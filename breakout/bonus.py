@@ -42,20 +42,20 @@ class Bolus(Game_object):
 
         self.list_bonus = [
             [self.grow_racket, 1],
-            [self.grow_ball, 2],
-            [self.speed_up_racket, 3],
-            [self.speed_down_ball, 4],
-            [self.add_ball, 5],
-            [self.unstoppable, 6],
-            [self.glu, 7],
-            [self.break_brick, 8],
-            [self.net, 9],
+            [self.grow_ball, 0],
+            [self.speed_up_racket, 6],
+            [self.speed_down_ball, 7],
+            [self.add_ball, 2],
+            [self.unstoppable, 3],
+            [self.glu, 4],
+            [self.break_brick, 5],
+            [self.net, 8],
         ]
         self.list_malus = [
-            [self.speed_up_ball, 10],
-            [self.speed_down_racket, 11],
-            [self.shrink_racket, 12],
-            [self.shrink_ball, 13],
+            [self.speed_up_ball, 12],
+            [self.speed_down_racket, 13],
+            [self.shrink_racket, 11],
+            [self.shrink_ball, 10],
             [self.reinforce_brick, 14],
             [self.ghost, 15],
             [self.reverse, 16],
@@ -387,7 +387,6 @@ class Bolus(Game_object):
             # ajoute une vie a la brique choisie
             if brick_to_reinforce.lives < C.BRICK_MAX_LIVES:
                 brick_to_reinforce.lives += C.BRICK_ADD_LIFE
-                brick_to_reinforce.lives += 1
                 # Generate sprite
                 pos = [
                     C.TILESET_BRICKS_POS[0],
