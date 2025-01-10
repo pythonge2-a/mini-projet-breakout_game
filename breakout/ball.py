@@ -50,28 +50,31 @@ class Ball(Game_object):
         self.count_unstop = 0
         self.count_ghost = 0
         self.count_net = 0
+        self.count_explosion = 0
         self.pos_glu = 0
         self.change_speed = [0, 0]
+        self.ghost_load = False
+        self.unstop_load = False
 
     def update(self):
         """Updates ball"""
         self.move()
 
+        if self.unstoppable and not self.ghost:
+            # change le sprite de la balle quand unstoppable est actif
+            if not self.unstop_load:
+                self.load_sprite(C.TILESET_UNSTOPPABLE_POS, C.TILESET_BALLS_SIZE)
+                self.unstop_load = True
+        elif self.ghost:
+            # change le sprite de la balle quand le malus ghost est activé
+            if not self.ghost_load:
+                self.load_sprite(C.TILESET_GHOST_POS, C.TILESET_BALLS_SIZE)
+                self.ghost_load = True
+
         # met à jour la taille de la balle, je n'ai pas trouvé comment faire pour que
         # l'image suive la position si la fonction pour changer la taille est appelée que
         # quand la balle change de taille
         self.change_size(self.position, [self.radius, self.radius])
-
-        if self.unstoppable and not self.ghost:
-            # change le sprite de la balle quand unstoppable est actif
-            self.load_sprite(
-                C.TILESET_UNSTOPPABLE_POS, C.TILESET_BALLS_SIZE
-            )
-        elif self.ghost:
-            # change le sprite de la balle quand le malus ghost est activé
-            self.load_sprite(
-                C.TILESET_GHOST_POS, C.TILESET_BALLS_SIZE
-            )
 
     def move(self):
         """Update ball position from velocity vector"""
@@ -97,7 +100,8 @@ class Ball(Game_object):
             if self.explosion:
                 self.velocity += self.change_speed
 
-            self.position += self.velocity
+            if not pygame.key.get_pressed()[pygame.K_DOWN]:
+                self.position += self.velocity
 
             self.change_speed = [0, 0]
 
@@ -122,6 +126,7 @@ class Ball(Game_object):
             self.velocity[0] = abs(self.velocity[0])
 
         if b_y - b_r >= C.WINDOW_HEIGHT and not self.net:
+
             self.breakout.Animation_Break.append(
                 animation.Animation_Break(
                     self.position,
@@ -140,10 +145,18 @@ class Ball(Game_object):
                 self.position[1] = self.breakout.racket.position[1] - self.radius
                 self.coller = True
 
-            # si le bonus glu est actif, il se désactive
-            if self.glu:
+            # si un bonus/malus de la balle est actif, il se désactive et ses variables sont réinitialisées
+            if self.glu or self.ghost or self.unstoppable or self.explosion:
                 self.load_sprite(C.TILESET_BALLS_POS, C.TILESET_BALLS_SIZE)
                 self.glu = False
+                self.ghost = False
+                self.ghost_load = False
+                self.count_ghost = 0
+                self.unstoppable = False
+                self.unstop_load = False
+                self.count_unstop = 0
+                self.explosion = False
+                self.count_explosion = 0
 
         elif b_y + b_r >= C.WINDOW_HEIGHT - 5 and self.net:
             # la balle rebondi sur le sol
@@ -217,24 +230,27 @@ class Ball(Game_object):
                 # récupère la position où la raquette est touchée
                 self.pos_glu = self.breakout.racket.position[0] - self.position[0]
 
-            # Stop "unstoppable" bonus and "ghost" malus after 2 bounce
+            # Stop "unstoppable" bonus after 2 bounce
             if self.unstoppable:
-                self.count_unstop += 1
-                if self.count_unstop >= 2:
-                    # stop bonus
-                    self.unstoppable = False
-                    self.count_unstop = 0
-                    # reload ball sprite
-                    self.load_sprite(C.TILESET_BALLS_POS, C.TILESET_BALLS_SIZE)
+                self.count_unstop, self.unstoppable = self.max_bounces(
+                    self.count_unstop, self.unstoppable, C.UNSTOP_BOUNCES
+                )
+            else:
+                self.unstop_load = False
 
+            # Stop "ghost" malus after 2 bounce
             if self.ghost:
-                self.count_ghost += 1
-                if self.count_ghost >= 2:
-                    # stop malus
-                    self.ghost = False
-                    self.count_ghost = 0
-                    # reload ball sprite
-                    self.load_sprite(C.TILESET_BALLS_POS, C.TILESET_BALLS_SIZE)
+                self.count_ghost, self.ghost = self.max_bounces(
+                    self.count_ghost, self.ghost, C.GHOST_BOUNCES
+                )
+            else:
+                self.ghost_load = False
+
+            # Stop explosion malus after 5 bounce
+            if self.explosion:
+                self.count_explosion, self.explosion = self.max_bounces(
+                    self.count_explosion, self.explosion, C.MAX_EXPLOSION
+                )
 
     def coll_bricks(self, brick_field):
         #   Define ball, racket symbols
@@ -312,8 +328,8 @@ class Ball(Game_object):
                         ]
 
                         if self.explosion:
-                            self.change_speed[0] = 5 * impact[0]
-                            self.change_speed[1] = 5 * impact[1]
+                            self.change_speed[0] = C.SPEED_EXPLOSION * impact[0]
+                            self.change_speed[1] = C.SPEED_EXPLOSION * impact[1]
 
                     elif self.unstoppable and not self.ghost:
                         for life in range(brick.lives):
@@ -362,3 +378,15 @@ class Ball(Game_object):
         self.coll_racket(racket)
         self.coll_bricks(brick_field)
         self.coll_balle()
+
+    def max_bounces(self, count, bolus, max_bounces):
+        # fonction pour compter les rebonds sur la raquette pour la désactivation de bonus/malus
+        if count >= max_bounces:
+            bolus = False
+            count = 0
+            # reload ball sprite
+            self.load_sprite(C.TILESET_BALLS_POS, C.TILESET_BALLS_SIZE)
+        else:
+            count += 1
+
+        return count, bolus

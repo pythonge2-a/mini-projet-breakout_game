@@ -74,7 +74,8 @@ class Bolus(Game_object):
 
         pos = [
             C.TILESET_BONUSES_POS[0],
-            C.TILESET_BONUSES_POS[1] + (C.TILESET_BONUSES_SIZE[1] + 1) * self.bolus[0][1],
+            C.TILESET_BONUSES_POS[1]
+            + (C.TILESET_BONUSES_SIZE[1] + 1) * self.bolus[0][1],
         ]
 
         self.load_sprite(pos, C.TILESET_BONUSES_SIZE)
@@ -427,7 +428,8 @@ class Bolus(Game_object):
 
     def explosion(self):
         """Malus qui rend des briques ou la balle explosive (vitesse de la bille augmente, angle change)
-        quand les balles touchent les briques, la vitesse change"""
+        quand les balles touchent les briques, la vitesse change, le malus se désactive si la balle est
+        perdue ou si elle touche la raquette 5 fois"""
 
         # quand le malus est récupéré, toutes les balles deviennent explosive
         if not self.start:
@@ -437,15 +439,6 @@ class Bolus(Game_object):
                     b.explosion = True
                     # change le sprite de la balle quand le bonus est activé
                     b.load_sprite(C.TILESET_EXPL_POS, C.TILESET_BALLS_SIZE)
-        # au bout d'un temps donné, les balles redeviennent normale
-        elif (self.count > C.ACTIVATION_TIME) and not self.end:
-            self.end = True
-            for b in self.breakout.balls:
-                if b.explosion:
-                    b.explosion = False
-                    # remet le sprite de la balle
-                    b.load_sprite(C.TILESET_BALLS_POS, C.TILESET_BALLS_SIZE)
-            self.use = False
 
     def unbreakable(self):
         """Malus qui rend une brique temporairement incassable"""
