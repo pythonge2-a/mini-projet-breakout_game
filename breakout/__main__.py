@@ -8,6 +8,7 @@ import pygame
 import sys
 import constants as C
 from breakout import Breakout
+import random
 
 
 
@@ -87,7 +88,7 @@ while waiting:
     pygame.draw.rect(screen, (255, 255, 255), (loading_bar_x, loading_bar_y, loading_bar_length, loading_bar_height), 2)
     pygame.display.flip()
 
-    progress += 1
+    progress += random.randint(0, 1)
     if progress > loading_bar_length:
         progress = loading_bar_length
         waiting = False
