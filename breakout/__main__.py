@@ -7,8 +7,10 @@
 import pygame
 import sys
 import constants as C
-
 from breakout import Breakout
+
+
+
 
 # Initialize pygame
 pygame.init()
@@ -48,25 +50,32 @@ clock = pygame.time.Clock()
 # Main loop
 running = True
 
-# Create a Breakout object
-breakout = Breakout(screen, font)
-
-i = 0
-
 # Initialiser le mixer
 pygame.mixer.init()
  # Charger un fichier MP3
 next_song = "breakout/son/menu.mp3"
 pygame.mixer.music.load(next_song)
 pygame.mixer.music.play()
+# Create a Breakout object
+breakout = Breakout(screen, font)
+
+i = 0
+
 
  # Draws background
 screen.blit(background_start, (0, 0))
 
 # Update the display
 pygame.display.flip()
-# Pause for 2 seconds
-pygame.time.wait(4000)
+# Pause for 2 seconds or until a key is pressed
+start_ticks = pygame.time.get_ticks()
+waiting = True
+while waiting:
+    for event in pygame.event.get():
+        if event.type == pygame.KEYDOWN:
+            waiting = False
+    if pygame.time.get_ticks() - start_ticks > 4000:
+        waiting = False
 
 # Test d'ajout
 while breakout.running:
