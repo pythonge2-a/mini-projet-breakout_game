@@ -11,7 +11,6 @@ from breakout import Breakout
 
 
 
-
 # Initialize pygame
 pygame.init()
 
@@ -67,15 +66,35 @@ screen.blit(background_start, (0, 0))
 
 # Update the display
 pygame.display.flip()
+
 # Pause for 2 seconds or until a key is pressed
 start_ticks = pygame.time.get_ticks()
 waiting = True
+progress = 0
+loading_bar_length = 300
+loading_bar_height = 30
+loading_bar_x = (screen_width - loading_bar_length) // 2
+loading_bar_y = screen_height - 50
+
 while waiting:
     for event in pygame.event.get():
         if event.type == pygame.KEYDOWN:
             waiting = False
-    if pygame.time.get_ticks() - start_ticks > 4000:
+        
+    # Loading bar animation
+    screen.blit(background_start, (0, 0))
+    pygame.draw.rect(screen, (140, 0, 140), (loading_bar_x, loading_bar_y, progress, loading_bar_height))
+    pygame.draw.rect(screen, (255, 255, 255), (loading_bar_x, loading_bar_y, loading_bar_length, loading_bar_height), 2)
+    pygame.display.flip()
+
+    progress += 1
+    if progress > loading_bar_length:
+        progress = loading_bar_length
         waiting = False
+
+
+    pygame.time.delay(40)
+
 
 # Test d'ajout
 while breakout.running:
