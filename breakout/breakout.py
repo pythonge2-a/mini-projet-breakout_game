@@ -17,6 +17,10 @@ class Breakout:
         self.level = 0
         self.lives = C.GAME_START_LIVES
 
+        self.Son_brique = pygame.mixer.Sound("breakout/son/Brique.wav")
+        self.Son_rackette = pygame.mixer.Sound("breakout/son/Raquette.wav")
+        self.Son_bonus = pygame.mixer.Sound("breakout/son/Bonus.wav")
+
         # Define screen object
         self.screen = screen
 
@@ -70,6 +74,10 @@ class Breakout:
         else:
             for b in self.balls:
                 b.update()
+        if not pygame.mixer.music.get_busy():
+            next_song = "breakout/son/Whispers_of_Eternia.mp3"
+            pygame.mixer.music.load(next_song)
+            pygame.mixer.music.play()
 
         # Move the racket according to player inputs
         self.racket.update()

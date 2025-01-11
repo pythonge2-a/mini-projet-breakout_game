@@ -35,6 +35,11 @@ breakout = Breakout(screen, font)
 
 i = 0
 
+# Initialiser le mixer
+pygame.mixer.init()
+ # Charger un fichier MP3
+pygame.mixer.music.load("breakout/son/Whispers_of_Eternia.mp3")
+
 # Test d'ajout
 while breakout.running:
     for event in pygame.event.get():

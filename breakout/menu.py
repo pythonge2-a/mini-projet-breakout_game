@@ -48,8 +48,13 @@ class Menu:
         # Check for a mouse press
         if play_rec.collidepoint(mouse_pos) and mouse_click[0]:
             self.breakout.status = "playing"
+            
             # Set default cursor
             pygame.mouse.set_cursor(pygame.SYSTEM_CURSOR_ARROW)
+
+            # Jouer le fichier
+            pygame.mixer.music.play()
+
         if quit_rec.collidepoint(mouse_pos) and mouse_click[0]:
             self.breakout.running = False
 

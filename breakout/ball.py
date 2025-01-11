@@ -217,6 +217,7 @@ class Ball(Game_object):
             and b_x + b_r > r_x
             and b_x < r_x + r_w
         ):
+            self.breakout.Son_rackette.play()
             # Adjust the ball's velocity based on where it hit the racket
             self.velocity[1] = -abs(self.velocity[1])
             # Simplify the complex expression
@@ -275,7 +276,7 @@ class Ball(Game_object):
                 ):
                     # Vérifie qu'il n'y a pas de bonus/malus actif
                     if not self.unstoppable and not self.ghost:
-
+                        self.breakout.Son_brique.play()
                         # Calcul des distances pour déterminer le côté de la collision
                         overlap_top = abs(b_y + b_r - brick_y)
                         overlap_bottom = abs(b_y - b_r - (brick_y + brick_h))

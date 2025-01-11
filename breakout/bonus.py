@@ -108,6 +108,7 @@ class Bolus(Game_object):
                 self.position[1] += self.speed
                 # vérifie si le bonus est pris
                 if self.check_take():
+                    self.breakout.Son_bonus.play()
                     self.use = True
         else:
             self.kill()  # est détruit en sortant de l'écran
