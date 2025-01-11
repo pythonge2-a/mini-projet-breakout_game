@@ -3,6 +3,7 @@
 # date:     04.12.2024
 #
 import pygame
+import constants as C
 
 
 class Menu:
@@ -23,12 +24,16 @@ class Menu:
         # Set default cursor
         pygame.mouse.set_cursor(pygame.SYSTEM_CURSOR_ARROW)
         # Play button
-        play_txt = self.font.render("Play", True, "Black")
+        play_txt = self.font.render("Play", True, "white")
         play_rec = play_txt.get_rect(center=(400, 200))
 
         # Quit button
-        quit_txt = self.font.render("Quit", True, "Black")
+        quit_txt = self.font.render("Quit", True, "white")
         quit_rec = quit_txt.get_rect(center=(400, 400))
+
+        # Histoire button
+        histoire_txt = self.font.render("Histoire", True, "white")
+        histoire_rec = histoire_txt.get_rect(center=(400, 300))
 
         # Check for mouse hover
         if play_rec.collidepoint(mouse_pos):  # Hover effect for "Play"
@@ -45,13 +50,35 @@ class Menu:
             pygame.draw.rect(self.screen, quit_bg_color, quit_rec.inflate(20, 10))
             pygame.mouse.set_cursor(pygame.SYSTEM_CURSOR_HAND)  # Set cursor to hand
 
+        if histoire_rec.collidepoint(mouse_pos):  # Hover effect for "Histoire"
+            histoire_bg_color = (100, 100, 100)
+            histoire_txt_color = "Blue"
+            histoire_txt = self.font.render("Histoire", True, histoire_txt_color)
+            pygame.draw.rect(self.screen, histoire_bg_color, histoire_rec.inflate(20, 10))
+            pygame.mouse.set_cursor(pygame.SYSTEM_CURSOR_HAND)  # Set cursor to hand
+
         # Check for a mouse press
         if play_rec.collidepoint(mouse_pos) and mouse_click[0]:
             self.breakout.status = "playing"
             # Set default cursor
             pygame.mouse.set_cursor(pygame.SYSTEM_CURSOR_ARROW)
+            # Charger un fichier MP3
+            pygame.mixer.music.load("breakout/son/Whispers_of_Eternia.mp3")
+            # Jouer le fichier
+            pygame.mixer.music.play()
+
         if quit_rec.collidepoint(mouse_pos) and mouse_click[0]:
             self.breakout.running = False
 
+        if histoire_rec.collidepoint(mouse_pos) and mouse_click[0]:
+            self.breakout.status = "histoire"
+            # Set default cursor
+            pygame.mouse.set_cursor(pygame.SYSTEM_CURSOR_ARROW)
+            # Charger un fichier MP3
+            pygame.mixer.music.load("breakout/son/Histoire.mp3")
+            # Jouer le fichier
+            pygame.mixer.music.play()
+
         s.blit(play_txt, play_rec)
         s.blit(quit_txt, quit_rec)
+        s.blit(histoire_txt, histoire_rec)
