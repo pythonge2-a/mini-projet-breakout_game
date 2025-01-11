@@ -111,11 +111,13 @@ while breakout.running:
         next_song = "breakout/son/Whispers_of_Eternia.mp3"
     elif breakout.status == "game_over":
         background_image = background_gameover
+        next_song = "breakout/son/game_over.mp3"
+
     elif breakout.status == "histoire":
         background_image = background_histoire
         next_song = "breakout/son/Histoire.mp3"
        
-         
+
 
     if not pygame.mixer.music.get_busy():
             pygame.mixer.music.load(next_song)

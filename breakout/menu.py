@@ -74,6 +74,8 @@ class Menu:
             self.breakout.status = "histoire"
             # Set default cursor
             pygame.mouse.set_cursor(pygame.SYSTEM_CURSOR_ARROW)
+            self.breakout.histoire_offset = C.WINDOW_HEIGHT
+
             # Charger un fichier MP3
             pygame.mixer.music.load("breakout/son/Histoire.mp3")
             # Jouer le fichier

@@ -76,6 +76,9 @@ class Breakout:
         # If no more balls are at play
         if self.balls == []:
             self.status = "game_over"
+            pygame.mixer.music.load("breakout/son/game_over.mp3")
+            pygame.mixer.music.play()
+
         else:
             for b in self.balls:
                 b.update()
