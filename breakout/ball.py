@@ -274,6 +274,7 @@ class Ball(Game_object):
                     and b_y + b_r > brick_y
                     and b_y - b_r < brick_y + brick_h
                 ):
+
                     # Vérifie qu'il n'y a pas de bonus/malus actif
                     if not self.unstoppable and not self.ghost:
                         self.breakout.Son_brique.play()
@@ -362,7 +363,7 @@ class Ball(Game_object):
                     elif not self.ghost and not brick.unbreakable:
                         # Update points
                         self.breakout.score += brick.reward
-
+                    
                         self.breakout.all_sprites.remove(brick)
                         brick_field.bricks.remove(brick)
                         # add animation
@@ -378,7 +379,7 @@ class Ball(Game_object):
         self.coll_mur()
         self.coll_racket(racket)
         self.coll_bricks(brick_field)
-        self.coll_balle()
+        #self.coll_balle()
 
     def max_bounces(self, count, bolus, max_bounces):
         # fonction pour compter les rebonds sur la raquette pour la désactivation de bonus/malus
@@ -391,3 +392,5 @@ class Ball(Game_object):
             count += 1
 
         return count, bolus
+
+        

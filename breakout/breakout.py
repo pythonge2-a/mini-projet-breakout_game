@@ -78,6 +78,69 @@ class Breakout:
             self.status = "game_over"
             pygame.mixer.music.load("breakout/son/game_over.mp3")
             pygame.mixer.music.play()
+        elif self.brick_field.bricks == []:
+            # If no more bricks, go to next level
+            self.level += 1
+            if self.level == C.LEVELS_NUMBER:
+                self.status = "win"
+                pygame.mixer.music.load("breakout/son/Lumière Éternelle.mp3")
+                pygame.mixer.music.play()
+            else:
+                # Reset the game
+                self.score += self.lives * 100
+                self.lives = C.GAME_START_LIVES
+
+                self.all_sprites.remove(self.bonus_malus)
+                self.bonus_malus = []
+                self.all_sprites.remove(self.balls)
+                self.balls.clear()
+                self.balls.append(Ball(self, [None]))
+                self.brick_field.load_map(self.level)
+                self.bonus_malus = self.add_bonus_malus()
+                self.all_sprites.add(self.balls[0])
+                self.all_sprites.add(self.brick_field.bricks)
+                self.all_sprites.add(self.bonus_malus)
+                if self.level == 0:
+                    next_song = "breakout/son/Whispers_of_Eternia.mp3"
+                elif self.level == 1:
+                    next_song = "breakout/son/Les Murmures du vide .mp3"
+                elif self.level == 2:
+                    next_song = "breakout/son/Au Bout des Étoiles.mp3"
+                elif self.level == 3:
+                    if random.randint(0, 1) == 0:
+                        next_song = "breakout/son/Le Cœur Brisé des Mondes.mp3"
+                    else:
+                        next_song = "breakout/son/Le Cœur Brisé des Mondes2.mp3"
+                elif self.level == 4:
+                    if random.randint(0, 1) == 0:
+                        next_song = "breakout/son/Les Liens des Étoiles.mp3"
+                    else:
+                        next_song = "breakout/son/Les Liens des Étoiles2.mp3"
+                elif self.level == 5:
+                    if random.randint(0, 1) == 0:
+                        next_song = "breakout/son/Le Monde Caché.mp3"
+                    else:
+                        next_song = "breakout/son/Le Monde Caché2.mp3"
+                elif self.level == 6:
+                    if random.randint(0, 1) == 0:
+                        next_song = "breakout/son/Le Dernier Saut.mp3"
+                    else:
+                        next_song = "breakout/son/Le Dernier Saut2.mp3"
+                elif self.level == 7:
+                    if random.randint(0, 1) == 0:
+                        next_song = "breakout/son/Les Légions du Néant.mp3"
+                    else:
+                        next_song = "breakout/son/Les Légions du Néant2.mp3"
+                elif self.level == 8:
+                    next_song = "breakout/son/Le_chant_du_Vide.mp3"   
+                elif self.level == 9:
+                    if random.randint(0, 1) == 0:
+                        next_song = "breakout/son/L'Éclat des Survivants.mp3"
+                    else:
+                        next_song = "breakout/son/L'Éclat des Survivants2.mp3"    
+                pygame.mixer.music.load(next_song)
+                pygame.mixer.music.play()
+
 
         else:
             for b in self.balls:
@@ -118,8 +181,11 @@ class Breakout:
         elif self.status == "game_over":
             self.show_game_over()
         elif self.status == "histoire":
-            self.show_histoire()
-
+            self.show_histoire(1)
+        elif self.status == "histoire_summary":
+            self.show_histoire(25)
+        elif self.status == "win":
+            self.show_win()
     def display_infos(self):
         """Shows score, lives, level"""
         self.display_score()
@@ -211,6 +277,24 @@ class Breakout:
 
         pass
 
+    def show_win(self):
+        """Show win screen"""
+        color = (
+            np.sin(pygame.time.get_ticks() * 0.001 + 0) * 127 + 128,
+            np.sin(pygame.time.get_ticks() * 0.001 + 2) * 127 + 128,
+            np.sin(pygame.time.get_ticks() * 0.001 + 4) * 127 + 128,
+        )
+        # Define text
+        win_txt = self.font.render("You Win", True, color)
+
+        # Define rectangle
+        win_rec = win_txt.get_rect(
+            center=(C.WINDOW_WIDTH / 2, C.WINDOW_HEIGHT / 2 + C.WINDOW_HEIGHT / 4)
+        )
+        self.screen.blit(win_txt, win_rec)
+
+        pass
+
     def load_histoire(self, filepath):
         """
         Lit le fichier et renvoie une liste de lignes,
@@ -288,7 +372,7 @@ class Breakout:
 
         return all_lines
         
-    def show_histoire(self):
+    def show_histoire(self, speed):
 
         y = self.histoire_offset
         
@@ -333,7 +417,7 @@ class Breakout:
             for (word, is_bold) in line_tokens:
                 if is_bold:
                     font_used = self.font_bold
-                    color_texte = (255, 255, 30)
+                    color_texte = (255, 0, 0)
                 else:
                     font_used = self.font
                     color_texte = (255, 255, 0)
@@ -353,7 +437,7 @@ class Breakout:
             y += (line_height + 5)
         
         # Défilement vers le haut
-        self.histoire_offset -= 1
+        self.histoire_offset -= speed
 
         # Si tout est sorti de l'écran, on revient au menu
         if y < 0:

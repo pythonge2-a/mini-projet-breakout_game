@@ -92,5 +92,6 @@ class Brick_field:
 
                 # Get corresponding brick lives (map)
                 lives = int(map[i * C.BRICK_NB_BRICKS_X + j])
-                # Add brick
-                self.bricks.append(Brick(self.breakout, [None], pos, lives))
+                if lives != 0:
+                    # Add brick
+                    self.bricks.append(Brick(self.breakout, [None], pos, lives))
