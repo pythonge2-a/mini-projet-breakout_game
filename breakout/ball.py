@@ -136,14 +136,18 @@ class Ball(Game_object):
                 )
             )
             if self.breakout.lives == 0 or len(self.breakout.balls) > 1:
-                self.breakout.balls.remove(self)
+                """self.breakout.balls.remove(self)"""
+                self.velocity[1] = -abs(self.velocity[1])
+
             else:
+                self.velocity[1] = -abs(self.velocity[1])
+                """
                 self.breakout.lives -= 1
                 self.position[0] = (
                     self.breakout.racket.position[0] + self.breakout.racket.size[0] / 2
                 )
                 self.position[1] = self.breakout.racket.position[1] - self.radius
-                self.coller = True
+                self.coller = True"""
 
             # si un bonus/malus de la balle est actif, il se désactive et ses variables sont réinitialisées
             if self.glu or self.ghost or self.unstoppable or self.explosion:

@@ -24,19 +24,24 @@ background_menu = pygame.transform.scale(background_menu, (screen_width, screen_
 
 background_histoire = pygame.image.load("breakout/tileset/backguound_Histoire.png")
 background_histoire = pygame.transform.scale(
-    background_histoire, (screen_width, screen_height))
+    background_histoire, (screen_width, screen_height)
+)
 
 backgrounds_levels = []
 for i in range(C.LEVELS_NUMBER):
-    background = pygame.image.load(f"breakout/tileset/backguound_level{i+1}.png")
+    background = pygame.image.load(f"breakout/tileset/backguound_level{i}.png")
     background = pygame.transform.scale(background, (screen_width, screen_height))
     backgrounds_levels.append(background)
 
 background_gameover = pygame.image.load("breakout/tileset/backguound_Gameover.png")
-background_gameover = pygame.transform.scale(background_gameover, (screen_width, screen_height))
+background_gameover = pygame.transform.scale(
+    background_gameover, (screen_width, screen_height)
+)
 
 background_start = pygame.image.load("breakout/tileset/logo.png")
-background_start = pygame.transform.scale(background_start, (screen_width, screen_height))
+background_start = pygame.transform.scale(
+    background_start, (screen_width, screen_height)
+)
 
 background_win = pygame.image.load("breakout/tileset/backguound_win.png")
 background_win = pygame.transform.scale(background_win, (screen_width, screen_height))
@@ -119,41 +124,46 @@ def gest_song_bg():
         if breakout.level == 0:
             next_song = "breakout/son/Whispers_of_Eternia.mp3"
         elif breakout.level == 1:
-            next_song = "breakout/son/Les Murmures du vide .mp3"
+            if random.randint(0, 1) == 0:
+                next_song = "breakout/son/Les Lueurs du Mystère.mp3"
+            else:
+                next_song = "breakout/son/Les Lueurs du Mystère2.mp3"
         elif breakout.level == 2:
-            next_song = "breakout/son/Au Bout des Étoiles.mp3"
+            next_song = "breakout/son/Les Murmures du vide .mp3"
         elif breakout.level == 3:
+            next_song = "breakout/son/Au Bout des Étoiles.mp3"
+        elif breakout.level == 4:
             if random.randint(0, 1) == 0:
                 next_song = "breakout/son/Le Cœur Brisé des Mondes.mp3"
             else:
                 next_song = "breakout/son/Le Cœur Brisé des Mondes2.mp3"
-        elif breakout.level == 4:
+        elif breakout.level == 5:
             if random.randint(0, 1) == 0:
                 next_song = "breakout/son/Les Liens des Étoiles.mp3"
             else:
                 next_song = "breakout/son/Les Liens des Étoiles2.mp3"
-        elif breakout.level == 5:
+        elif breakout.level == 6:
             if random.randint(0, 1) == 0:
                 next_song = "breakout/son/Le Monde Caché.mp3"
             else:
                 next_song = "breakout/son/Le Monde Caché2.mp3"
-        elif breakout.level == 6:
+        elif breakout.level == 7:
             if random.randint(0, 1) == 0:
                 next_song = "breakout/son/Le Dernier Saut.mp3"
             else:
                 next_song = "breakout/son/Le Dernier Saut2.mp3"
-        elif breakout.level == 7:
+        elif breakout.level == 8:
             if random.randint(0, 1) == 0:
                 next_song = "breakout/son/Les Légions du Néant.mp3"
             else:
                 next_song = "breakout/son/Les Légions du Néant2.mp3"
-        elif breakout.level == 8:
-            next_song = "breakout/son/Le_chant_du_Vide.mp3"   
         elif breakout.level == 9:
+            next_song = "breakout/son/Le_chant_du_Vide.mp3"
+        elif breakout.level == 10:
             if random.randint(0, 1) == 0:
                 next_song = "breakout/son/L'Éclat des Survivants.mp3"
             else:
-                next_song = "breakout/son/L'Éclat des Survivants2.mp3"    
+                next_song = "breakout/son/L'Éclat des Survivants2.mp3"
 
         background_image = backgrounds_levels[breakout.level]
     elif breakout.status == "game_over":
@@ -178,8 +188,6 @@ while breakout.running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             breakout.running = False
-
- 
 
     gest_song_bg()
 
@@ -208,4 +216,3 @@ while breakout.running:
 # Quit pygame
 pygame.quit()
 sys.exit()
-
