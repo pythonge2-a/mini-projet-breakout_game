@@ -29,11 +29,15 @@ class Menu:
 
         # Quit button
         quit_txt = self.font.render("Quit", True, "white")
-        quit_rec = quit_txt.get_rect(center=(400, 400))
+        quit_rec = quit_txt.get_rect(center=(400, 500))
 
-        # Histoire button
-        histoire_txt = self.font.render("Histoire", True, "white")
+        # History button
+        histoire_txt = self.font.render("History", True, "white")
         histoire_rec = histoire_txt.get_rect(center=(400, 300))
+
+        # History Summary button
+        histoire_summary_txt = self.font.render("History Summary", True, "white")
+        histoire_summary_rec = histoire_summary_txt.get_rect(center=(400, 400))
 
         # Check for mouse hover
         if play_rec.collidepoint(mouse_pos):  # Hover effect for "Play"
@@ -50,11 +54,18 @@ class Menu:
             pygame.draw.rect(self.screen, quit_bg_color, quit_rec.inflate(20, 10))
             pygame.mouse.set_cursor(pygame.SYSTEM_CURSOR_HAND)  # Set cursor to hand
 
-        if histoire_rec.collidepoint(mouse_pos):  # Hover effect for "Histoire"
+        if histoire_rec.collidepoint(mouse_pos):  # Hover effect for "History"
             histoire_bg_color = (100, 100, 100)
             histoire_txt_color = "Blue"
-            histoire_txt = self.font.render("Histoire", True, histoire_txt_color)
+            histoire_txt = self.font.render("History", True, histoire_txt_color)
             pygame.draw.rect(self.screen, histoire_bg_color, histoire_rec.inflate(20, 10))
+            pygame.mouse.set_cursor(pygame.SYSTEM_CURSOR_HAND)  # Set cursor to hand
+
+        if histoire_summary_rec.collidepoint(mouse_pos):  # Hover effect for "History Summary"
+            histoire_summary_bg_color = (100, 100, 100)
+            histoire_summary_txt_color = "Green"
+            histoire_summary_txt = self.font.render("History Summary", True, histoire_summary_txt_color)
+            pygame.draw.rect(self.screen, histoire_summary_bg_color, histoire_summary_rec.inflate(20, 10))
             pygame.mouse.set_cursor(pygame.SYSTEM_CURSOR_HAND)  # Set cursor to hand
 
         # Check for a mouse press
@@ -62,9 +73,8 @@ class Menu:
             self.breakout.status = "playing"
             # Set default cursor
             pygame.mouse.set_cursor(pygame.SYSTEM_CURSOR_ARROW)
-            # Charger un fichier MP3
+            # Load and play a music file
             pygame.mixer.music.load("breakout/son/Whispers_of_Eternia.mp3")
-            # Jouer le fichier
             pygame.mixer.music.play()
 
         if quit_rec.collidepoint(mouse_pos) and mouse_click[0]:
@@ -74,11 +84,20 @@ class Menu:
             self.breakout.status = "histoire"
             # Set default cursor
             pygame.mouse.set_cursor(pygame.SYSTEM_CURSOR_ARROW)
-            # Charger un fichier MP3
+            self.breakout.histoire_offset = C.WINDOW_HEIGHT
+            # Load and play a music file
             pygame.mixer.music.load("breakout/son/Histoire.mp3")
-            # Jouer le fichier
+            pygame.mixer.music.play()
+
+        if histoire_summary_rec.collidepoint(mouse_pos) and mouse_click[0]:
+            self.breakout.status = "histoire_summary"
+            # Set default cursor
+            pygame.mouse.set_cursor(pygame.SYSTEM_CURSOR_ARROW)
+            # Load and play a music file
+            pygame.mixer.music.load("breakout/son/Histoire_speed.mp3")
             pygame.mixer.music.play()
 
         s.blit(play_txt, play_rec)
         s.blit(quit_txt, quit_rec)
         s.blit(histoire_txt, histoire_rec)
+        s.blit(histoire_summary_txt, histoire_summary_rec)
