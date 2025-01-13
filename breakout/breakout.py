@@ -20,7 +20,7 @@ class Breakout:
         self.Son_brique = pygame.mixer.Sound("breakout/son/Brique.wav")
         self.Son_rackette = pygame.mixer.Sound("breakout/son/Raquette.wav")
         self.Son_bonus = pygame.mixer.Sound("breakout/son/Bonus.wav")
-
+        self.num_song = 0
         # Define screen object
         self.screen = screen
 
@@ -101,7 +101,7 @@ class Breakout:
                 self.all_sprites.add(self.brick_field.bricks)
                 self.all_sprites.add(self.bonus_malus)
                 if self.level == 1:
-                    if random.randint(0, 1) == 0:
+                    if self.num_song == 0:
                         next_song = "breakout/son/Les Lueurs du Mystère.mp3"
                     else:
                         next_song = "breakout/son/Les Lueurs du Mystère2.mp3"                
@@ -110,34 +110,34 @@ class Breakout:
                 elif self.level == 3:
                     next_song = "breakout/son/Au Bout des Étoiles.mp3"
                 elif self.level == 4:
-                    if random.randint(0, 1) == 0:
+                    if self.num_song == 0:
                         next_song = "breakout/son/Le Cœur Brisé des Mondes.mp3"
                     else:
                         next_song = "breakout/son/Le Cœur Brisé des Mondes2.mp3"
                 elif self.level == 5:
-                    if random.randint(0, 1) == 0:
+                    if self.num_song == 0:
                         next_song = "breakout/son/Les Liens des Étoiles.mp3"
                     else:
                         next_song = "breakout/son/Les Liens des Étoiles2.mp3"
                 elif self.level == 6:
-                    if random.randint(0, 1) == 0:
+                    if self.num_song == 0:
                         next_song = "breakout/son/Le Monde Caché.mp3"
                     else:
                         next_song = "breakout/son/Le Monde Caché2.mp3"
                 elif self.level == 7:
-                    if random.randint(0, 1) == 0:
+                    if self.num_song == 0:
                         next_song = "breakout/son/Le Dernier Saut.mp3"
                     else:
                         next_song = "breakout/son/Le Dernier Saut2.mp3"
                 elif self.level == 8:
-                    if random.randint(0, 1) == 0:
+                    if self.num_song == 0:
                         next_song = "breakout/son/Les Légions du Néant.mp3"
                     else:
                         next_song = "breakout/son/Les Légions du Néant2.mp3"
                 elif self.level == 9:
                     next_song = "breakout/son/Le_chant_du_Vide.mp3"   
                 elif self.level == 10:
-                    if random.randint(0, 1) == 0:
+                    if self.num_song == 0:
                         next_song = "breakout/son/L'Éclat des Survivants.mp3"
                     else:
                         next_song = "breakout/son/L'Éclat des Survivants2.mp3"    

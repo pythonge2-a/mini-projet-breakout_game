@@ -124,7 +124,7 @@ def gest_song_bg():
         if breakout.level == 0:
             next_song = "breakout/son/Whispers_of_Eternia.mp3"
         elif breakout.level == 1:
-            if random.randint(0, 1) == 0:
+            if breakout.num_song == 0:
                 next_song = "breakout/son/Les Lueurs du Mystère.mp3"
             else:
                 next_song = "breakout/son/Les Lueurs du Mystère2.mp3"
@@ -133,34 +133,34 @@ def gest_song_bg():
         elif breakout.level == 3:
             next_song = "breakout/son/Au Bout des Étoiles.mp3"
         elif breakout.level == 4:
-            if random.randint(0, 1) == 0:
+            if breakout.num_song == 0:
                 next_song = "breakout/son/Le Cœur Brisé des Mondes.mp3"
             else:
                 next_song = "breakout/son/Le Cœur Brisé des Mondes2.mp3"
         elif breakout.level == 5:
-            if random.randint(0, 1) == 0:
+            if breakout.num_song == 0:
                 next_song = "breakout/son/Les Liens des Étoiles.mp3"
             else:
                 next_song = "breakout/son/Les Liens des Étoiles2.mp3"
         elif breakout.level == 6:
-            if random.randint(0, 1) == 0:
+            if breakout.num_song == 0:
                 next_song = "breakout/son/Le Monde Caché.mp3"
             else:
                 next_song = "breakout/son/Le Monde Caché2.mp3"
         elif breakout.level == 7:
-            if random.randint(0, 1) == 0:
+            if breakout.num_song == 0:
                 next_song = "breakout/son/Le Dernier Saut.mp3"
             else:
                 next_song = "breakout/son/Le Dernier Saut2.mp3"
         elif breakout.level == 8:
-            if random.randint(0, 1) == 0:
+            if breakout.num_song == 0:
                 next_song = "breakout/son/Les Légions du Néant.mp3"
             else:
                 next_song = "breakout/son/Les Légions du Néant2.mp3"
         elif breakout.level == 9:
             next_song = "breakout/son/Le_chant_du_Vide.mp3"
         elif breakout.level == 10:
-            if random.randint(0, 1) == 0:
+            if breakout.num_song == 0:
                 next_song = "breakout/son/L'Éclat des Survivants.mp3"
             else:
                 next_song = "breakout/son/L'Éclat des Survivants2.mp3"
@@ -177,6 +177,10 @@ def gest_song_bg():
         next_song = "breakout/son/Lumière Éternelle.mp3"
 
     if not pygame.mixer.music.get_busy():
+        if breakout.num_song == 0:
+            breakout.num_song = 1
+        else:
+            breakout.num_song = 0    
         pygame.mixer.music.load(next_song)
         pygame.mixer.music.play()
         # Draws background
