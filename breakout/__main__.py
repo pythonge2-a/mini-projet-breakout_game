@@ -116,7 +116,6 @@ while waiting:
 
 
 def gest_song_bg():
-
     if breakout.status == "menu":
         background_image = background_menu
         next_song = "breakout/son/menu.mp3"
@@ -129,7 +128,10 @@ def gest_song_bg():
             else:
                 next_song = "breakout/son/Les Lueurs du Mystère2.mp3"
         elif breakout.level == 2:
-            next_song = "breakout/son/Les Murmures du vide .mp3"
+            if breakout.num_song == 0:
+                next_song = "breakout/son/Les Murmures du Vide.mp3"
+            else:
+                next_song = "breakout/son/Les Questions Sans Réponses.mp3"
         elif breakout.level == 3:
             next_song = "breakout/son/Au Bout des Étoiles.mp3"
         elif breakout.level == 4:
@@ -164,6 +166,54 @@ def gest_song_bg():
                 next_song = "breakout/son/L'Éclat des Survivants.mp3"
             else:
                 next_song = "breakout/son/L'Éclat des Survivants2.mp3"
+        elif breakout.level == 11:
+            next_song = "breakout/son/L'Appel de Myrthos.mp3"
+        elif breakout.level == 12:
+            if breakout.num_song == 0:
+                next_song = "breakout/son/L'Éveil des Failles.mp3"
+            else:
+                next_song = "breakout/son/L'Éveil des Failles2.mp3"
+        elif breakout.level == 13:
+            if breakout.num_song == 0:
+                next_song = "breakout/son/Le Reflet d Ombros.mp3"
+            else:
+                next_song = "breakout/son/Le Reflet d Ombros2.mp3"
+        elif breakout.level == 14:
+            if breakout.num_song == 0:
+                next_song = "breakout/son/La Chute des Gardiens.mp3"
+            else:
+                next_song = "breakout/son/La Chute des Gardiens2.mp3"
+        elif breakout.level == 15:
+            if breakout.num_song == 0:
+                next_song = "breakout/son/Le Cœur Brisé.mp3"
+            else:
+                next_song = "breakout/son/Le Cœur Brisé2.mp3"
+        elif breakout.level == 16:
+            next_song = "breakout/son/Les Forges du Néant.mp3"
+        elif breakout.level == 17:
+            if breakout.num_song == 0:
+                next_song = "breakout/son/Les Mondes Éclipsés.mp3"
+            else:
+                next_song = "breakout/son/Les Mondes Éclipsés2.mp3"
+        elif breakout.level == 18:
+            if breakout.num_song == 0:
+                next_song = "breakout/son/Le Conclave des Gardiens.mp3"
+            else:
+                next_song = "breakout/son/Le Conclave des Gardiens2.mp3"
+        elif breakout.level == 19:
+            next_song = "breakout/son/L'Avatar du Vide.mp3"
+        elif breakout.level == 20:
+            next_song = "breakout/son/Le Sacrifice des Mondes.mp3"
+        elif breakout.level == 21:
+            if breakout.num_song == 0:
+                next_song = "breakout/son/Le Jugement des Étoiles.mp3"
+            else:
+                next_song = "breakout/son/Le Jugement des Étoiles2.mp3"
+        elif breakout.level == 22:
+            if breakout.num_song == 0:
+                next_song = "breakout/son/La Fin du Mal.mp3"
+            else:
+                next_song = "breakout/son/La Fin du Mal2.mp3"
 
         background_image = backgrounds_levels[breakout.level]
     elif breakout.status == "game_over":
@@ -175,12 +225,21 @@ def gest_song_bg():
     elif breakout.status == "win":
         background_image = background_win
         next_song = "breakout/son/Lumière Éternelle.mp3"
-
+    elif breakout.status == "win1":
+        background_image = background_win
+        next_song = "breakout/son/Lumière Éternelle.mp3"
+    elif breakout.status == "win2":
+        background_image = background_win
+        next_song = "breakout/son/Lumière Éternelle.mp3"
+    elif breakout.status == "win3":
+        background_image = background_win
+        next_song = "breakout/son/Lumière Éternelle.mp3"    
     if not pygame.mixer.music.get_busy():
+
         if breakout.num_song == 0:
             breakout.num_song = 1
         else:
-            breakout.num_song = 0    
+            breakout.num_song = 0
         pygame.mixer.music.load(next_song)
         pygame.mixer.music.play()
         # Draws background
@@ -200,7 +259,7 @@ while breakout.running:
     # Update the display
     pygame.display.flip()
 
-    if breakout.status == "game_over" or breakout.status == "win":
+    if breakout.status == "game_over" or breakout.status == "win1" or breakout.status == "win2" or breakout.status == "win3":
         keys = pygame.key.get_pressed()
         if keys[pygame.K_RETURN] or keys[pygame.K_SPACE] or keys[pygame.K_ESCAPE]:
             # Reset the game
@@ -208,7 +267,7 @@ while breakout.running:
             # Create a Breakout object
             breakout = Breakout(screen, font)
 
-    if breakout.status == "histoire":
+    if breakout.status == "histoire" or breakout.status == "histoire_summary":
         keys = pygame.key.get_pressed()
         if keys[pygame.K_RETURN] or keys[pygame.K_SPACE] or keys[pygame.K_ESCAPE]:
             breakout.status = "menu"
