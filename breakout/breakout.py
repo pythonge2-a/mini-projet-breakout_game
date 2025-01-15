@@ -211,9 +211,9 @@ class Breakout:
                         next_song = "breakout/son/Le Jugement des Étoiles2.mp3"    
                 elif self.level == 22:
                     if self.num_song == 0:
-                        next_song = "breakout/son/La Fin du Mal.mp3"
+                        next_song = "breakout/son/Le Dernier Éclat.mp3"
                     else:
-                        next_song = "breakout/son/La Fin du Mal2.mp3"    
+                        next_song = "breakout/son/Le Dernier Éclat2.mp3"    
 
                 pygame.mixer.music.load(next_song)
                 pygame.mixer.music.play()

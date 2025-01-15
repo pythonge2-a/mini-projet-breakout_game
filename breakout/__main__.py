@@ -46,6 +46,12 @@ background_start = pygame.transform.scale(
 background_win = pygame.image.load("breakout/tileset/backguound_win.png")
 background_win = pygame.transform.scale(background_win, (screen_width, screen_height))
 
+background_win2 = pygame.image.load("breakout/tileset/backguound_win2.png")
+background_win2 = pygame.transform.scale(background_win2, (screen_width, screen_height))
+
+background_win3 = pygame.image.load("breakout/tileset/backguound_win3.png")
+background_win3 = pygame.transform.scale(background_win3, (screen_width, screen_height))
+
 screen = pygame.display.set_mode((screen_width, screen_height))
 
 pygame.display.set_caption("Fragments of Eternity")
@@ -211,9 +217,9 @@ def gest_song_bg():
                 next_song = "breakout/son/Le Jugement des Étoiles2.mp3"
         elif breakout.level == 22:
             if breakout.num_song == 0:
-                next_song = "breakout/son/La Fin du Mal.mp3"
+                next_song = "breakout/son/Le Dernier Éclat.mp3"
             else:
-                next_song = "breakout/son/La Fin du Mal2.mp3"
+                next_song = "breakout/son/Le Dernier Éclat2.mp3"
 
         background_image = backgrounds_levels[breakout.level]
     elif breakout.status == "game_over":
@@ -229,11 +235,11 @@ def gest_song_bg():
         background_image = background_win
         next_song = "breakout/son/Lumière Éternelle.mp3"
     elif breakout.status == "win2":
-        background_image = background_win
-        next_song = "breakout/son/Lumière Éternelle.mp3"
+        background_image = background_win2
+        next_song = "breakout/son/Le Cycle Éternel.mp3"
     elif breakout.status == "win3":
-        background_image = background_win
-        next_song = "breakout/son/Lumière Éternelle.mp3"    
+        background_image = background_win3
+        next_song = "breakout/son/L'Étoile Qui S'Éteint.mp3"    
     if not pygame.mixer.music.get_busy():
 
         if breakout.num_song == 0:
