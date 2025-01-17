@@ -113,6 +113,11 @@ class Breakout:
                 self.all_sprites.remove(self.bonus_malus)
                 self.all_sprites.remove(self.balls)
 
+                # remove net sprite
+                for bonus in self.bonus_malus:
+                    if bonus.net_sprite is not None:
+                        bonus.net_sprite.kill()
+
                 # remove bricks, balls and bonus
                 self.brick_field.bricks.clear()
                 self.bonus_malus.clear()
@@ -123,7 +128,7 @@ class Breakout:
                 self.brick_field.load_map(self.level)
 
                 # Create bonus and malus for level
-                self.bonus_malus = self.add_bonus_malus()                
+                self.bonus_malus = self.add_bonus_malus()
 
                 # reload bricks and balls sprites
                 self.all_sprites.add(self.balls[0])
@@ -238,6 +243,12 @@ class Breakout:
             for b in self.balls:
                 b.update()
 
+        # Active le mode auto avec espace, le désactive avec escape
+        if pygame.key.get_pressed()[pygame.K_SPACE] and not self.racket.auto_mode:
+            self.racket.auto_mode = True
+        elif pygame.key.get_pressed()[pygame.K_ESCAPE] and self.racket.auto_mode:
+            self.racket.auto_mode = False
+
         # Move the racket according to player inputs
         self.racket.update()
         # update bonus state
@@ -345,6 +356,9 @@ class Breakout:
                 len(self.brick_field.bricks) * (self.level - 6) / 20
             )
             malus = len(self.brick_field.bricks) - bonus
+        elif self.level <= 15:
+            bonus = len(self.brick_field.bricks) / 2
+            malus = len(self.brick_field.bricks) - bonus
         elif self.level <= 20:
             bonus = len(self.brick_field.bricks) - int(
                 len(self.brick_field.bricks) * (self.level - 10) / 10
@@ -370,7 +384,7 @@ class Breakout:
 
         for brick in brick_bonus_malus:
 
-            if i <= bonus:
+            if (i <= bonus) and not (bonus == malus):
                 bonus_malus.append(
                     Bolus(
                         breakout=self,
@@ -381,7 +395,7 @@ class Breakout:
                         malus=False,
                     )
                 )
-            elif (malus != 0) and (i > bonus):
+            elif (malus != 0) and (i > bonus) and not (bonus == malus):
                 bonus_malus.append(
                     Bolus(
                         breakout=self,

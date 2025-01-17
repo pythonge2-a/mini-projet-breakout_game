@@ -19,6 +19,7 @@ class Racket(Game_object):
         self.border_width = C.RACKET_BORDER_WIDTH
         self.speed = C.RACKET_SPEED
         self.reverse = False
+        self.auto_mode = False
 
         # Load sprite
         self.load_sprite(C.TILESET_RACKETS_POS, C.TILESET_RACKETS_SIZE)
@@ -31,19 +32,26 @@ class Racket(Game_object):
         x = self.position[0]
         width = self.size[0]
 
-        # met à jour la taille de la raquette, je n'ai pas trouvé comment faire pour que 
+        # met à jour la taille de la raquette, je n'ai pas trouvé comment faire pour que
         # l'image suive la position si la fonction pour changer la taille est appelée que
         # quand la raquette change de taille
         self.change_size(self.position, self.size)
 
         # Check player's input, move the racket accordingly
-        if self.reverse :
+        if self.reverse and not self.auto_mode:
             if pygame.key.get_pressed()[pygame.K_RIGHT] and x > 0:
-               self.position[0] -= self.speed
+                self.position[0] -= self.speed
             if pygame.key.get_pressed()[pygame.K_LEFT] and x < C.WINDOW_WIDTH - width:
-               self.position[0] += self.speed
-        else :
+                self.position[0] += self.speed
+        elif self.auto_mode:
+            if (self.breakout.balls[0].position[0] < C.WINDOW_WIDTH - width / 2) and (
+                self.breakout.balls[0].position[0] > width / 2
+            ):
+                self.position[0] = self.breakout.balls[0].position[0] - (
+                    self.size[0] / 2
+                )
+        else:
             if pygame.key.get_pressed()[pygame.K_LEFT] and x > 0:
-               self.position[0] -= self.speed
+                self.position[0] -= self.speed
             if pygame.key.get_pressed()[pygame.K_RIGHT] and x < C.WINDOW_WIDTH - width:
-               self.position[0] += self.speed
+                self.position[0] += self.speed
