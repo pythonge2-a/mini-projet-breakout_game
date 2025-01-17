@@ -62,7 +62,7 @@ class Bolus(Game_object):
             [self.explosion, 17],
             [self.unbreakable, 18],
         ]
-        self.proba_bonus = [100, 50, 75, 75, 100, 5, 100, 30, 10]
+        self.proba_bonus = [100, 50, 75, 75, 100, 5, 100, 30, 1000000]
         self.proba_malus = [100, 75, 75, 50, 75, 10, 50, 50, 10]
 
         if self.bonus and not self.malus:
