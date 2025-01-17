@@ -43,13 +43,13 @@ background_start = pygame.transform.scale(
     background_start, (screen_width, screen_height)
 )
 
-background_win = pygame.image.load("breakout/tileset/backguound_win.png")
+background_win = pygame.image.load("breakout/tileset/backguound_Win.png")
 background_win = pygame.transform.scale(background_win, (screen_width, screen_height))
 
-background_win2 = pygame.image.load("breakout/tileset/backguound_win2.png")
+background_win2 = pygame.image.load("breakout/tileset/backguound_Win2.png")
 background_win2 = pygame.transform.scale(background_win2, (screen_width, screen_height))
 
-background_win3 = pygame.image.load("breakout/tileset/backguound_win3.png")
+background_win3 = pygame.image.load("breakout/tileset/backguound_Win3.png")
 background_win3 = pygame.transform.scale(background_win3, (screen_width, screen_height))
 
 screen = pygame.display.set_mode((screen_width, screen_height))
