@@ -239,7 +239,7 @@ def gest_song_bg():
         next_song = "breakout/son/Le Cycle Éternel.mp3"
     elif breakout.status == "win3":
         background_image = background_win3
-        next_song = "breakout/son/L'Étoile Qui S'Éteint.mp3"    
+        next_song = "breakout/son/L'Étoile Qui S'Éteint.mp3"
     if not pygame.mixer.music.get_busy():
 
         if breakout.num_song == 0:
@@ -265,7 +265,12 @@ while breakout.running:
     # Update the display
     pygame.display.flip()
 
-    if breakout.status == "game_over" or breakout.status == "win1" or breakout.status == "win2" or breakout.status == "win3":
+    if (
+        breakout.status == "game_over"
+        or breakout.status == "win1"
+        or breakout.status == "win2"
+        or breakout.status == "win3"
+    ):
         keys = pygame.key.get_pressed()
         if keys[pygame.K_RETURN] or keys[pygame.K_SPACE] or keys[pygame.K_ESCAPE]:
             # Reset the game
