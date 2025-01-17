@@ -90,14 +90,17 @@ class Breakout:
                 self.level += 1
                 with open("breakout/save.txt", "w", encoding="utf-8") as f:
                     f.write(f"{self.level}\n{self.score}")
-
-            if self.level == 23 and self.init == False:
+            if self.level == LEVELS_NUMBER and self.init == False:
+                self.status = "win"
+                pygame.mixer.music.load("breakout/son/Fragments d’Éternité.mp3")
+                pygame.mixer.music.play()
+            elif self.level == 23 and self.init == False:
                 self.status = "win3"
-                pygame.mixer.music.load("breakout/son/Lumière Éternelle.mp3")
+                pygame.mixer.music.load("breakout/son/L'Étoile Qui S'Éteint.mp3")
                 pygame.mixer.music.play()
             elif self.level == 22 and self.secret == False and self.init == False:
                 self.status = "win2"
-                pygame.mixer.music.load("breakout/son/Lumière Éternelle.mp3")
+                pygame.mixer.music.load("breakout/son/Le Cycle Éternel.mp3")
                 pygame.mixer.music.play()
             elif self.level == 11 and self.init == False:
                 self.status = "win1"
@@ -214,7 +217,47 @@ class Breakout:
                         next_song = "breakout/son/Le Dernier Éclat.mp3"
                     else:
                         next_song = "breakout/son/Le Dernier Éclat2.mp3"    
-
+                elif self.level == 23:
+                    if self.num_song == 0:
+                        next_song = "breakout/son/Les Ombres de Sol’Tarim.mp3"
+                    else:
+                        next_song = "breakout/son/Les Ombres de Sol’Tarim2.mp3"
+                elif self.level == 24:
+                    if self.num_song == 0:
+                        next_song = "breakout/son/Les Échos de Mémoire.mp3"
+                    else:
+                        next_song = "breakout/son/Les Échos de Mémoire2.mp3"
+                elif self.level == 25:
+                    next_song = "breakout/son/Le Rituel Interdit.mp3"
+                elif self.level == 26:
+                    next_song = "breakout/son/L’Appel des Fragments.mp3"
+                elif self.level == 27:
+                    next_song = "breakout/son/Au Cœur des Catacombes.mp3" 
+                elif self.level == 28:
+                    if self.num_song == 0:
+                        next_song = "breakout/son/Le Dilemme de l’Âme.mp3"
+                    else:
+                        next_song = "breakout/son/Le Dilemme de l’Âme2.mp3"
+                elif self.level == 29:
+                    if self.num_song == 0:
+                        next_song = "breakout/son/L’Éveil du Gardien Réanimé.mp3"
+                    else:
+                        next_song = "breakout/son/L’Éveil du Gardien Réanimé2.mp3"
+                elif self.level == 30:
+                    if self.num_song == 0:
+                        next_song = "breakout/son/La Confrontation.mp3"
+                    else:
+                        next_song = "breakout/son/La Confrontation2.mp3"
+                elif self.level == 31:
+                    if self.num_song == 0:
+                        next_song = "breakout/son/Le Choix Décisif.mp3"
+                    else:
+                        next_song = "breakout/son/Le Choix Décisif2.mp3"
+                elif self.level == 32:
+                    if self.num_song == 0:
+                        next_song = "breakout/son/L’Aube d’un Nouveau Cycle.mp3"
+                    else:
+                        next_song = "breakout/son/L’Aube d’un Nouveau Cycle2.mp3"
                 pygame.mixer.music.load(next_song)
                 pygame.mixer.music.play()
                 self.secret = False
@@ -269,6 +312,8 @@ class Breakout:
             self.show_win2()
         elif self.status == "win3":
             self.show_win3()
+        elif self.status == "win":
+            self.show_win()
     def display_infos(self):
         """Shows score, lives, level"""
         self.display_score()
@@ -390,6 +435,27 @@ class Breakout:
         self.screen.blit(win_txt2, win_rec)
 
         pass
+    def show_win(self):
+        """Show win screen"""
+        color = (
+            np.sin(pygame.time.get_ticks() * 0.001 + 0) * 127 + 128,
+            np.sin(pygame.time.get_ticks() * 0.001 + 2) * 127 + 128,
+            np.sin(pygame.time.get_ticks() * 0.001 + 4) * 127 + 128,
+        )
+        # Define text
+        win_txt1 = self.font.render("Thanks for playing", True, color)
+   
+        with open("breakout/save.txt", "w", encoding="utf-8") as f:
+            f.write(f"{0}\n{self.score}")
+          
+        # Define rectangle
+        win_rec = win_txt1.get_rect(
+            center=(C.WINDOW_WIDTH / 2, C.WINDOW_HEIGHT / 2 + C.WINDOW_HEIGHT / 4)
+        )
+        self.screen.blit(win_txt1, win_rec)
+
+        pass
+    
     def show_win2(self):
         """Show win screen"""
         color = (

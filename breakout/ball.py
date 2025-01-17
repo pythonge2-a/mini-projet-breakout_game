@@ -136,8 +136,8 @@ class Ball(Game_object):
                 )
             )
             if self.breakout.lives == 0 or len(self.breakout.balls) > 1:
-                #self.velocity[1] = -abs(self.velocity[1])
-                self.breakout.balls.remove(self)
+                self.velocity[1] = -abs(self.velocity[1])
+                #self.breakout.balls.remove(self)
             else:
                 self.breakout.lives -= 1
                 self.position[0] = (

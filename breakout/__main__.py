@@ -42,14 +42,16 @@ background_start = pygame.image.load("breakout/tileset/logo.png")
 background_start = pygame.transform.scale(
     background_start, (screen_width, screen_height)
 )
-
-background_win = pygame.image.load("breakout/tileset/backguound_win.png")
+background_win = pygame.image.load("breakout/tileset/backguound_Win.png")
 background_win = pygame.transform.scale(background_win, (screen_width, screen_height))
 
-background_win2 = pygame.image.load("breakout/tileset/backguound_win2.png")
+background_win1 = pygame.image.load("breakout/tileset/backguound_Win1.png")
+background_win1 = pygame.transform.scale(background_win1, (screen_width, screen_height))
+
+background_win2 = pygame.image.load("breakout/tileset/backguound_Win2.png")
 background_win2 = pygame.transform.scale(background_win2, (screen_width, screen_height))
 
-background_win3 = pygame.image.load("breakout/tileset/backguound_win3.png")
+background_win3 = pygame.image.load("breakout/tileset/backguound_Win3.png")
 background_win3 = pygame.transform.scale(background_win3, (screen_width, screen_height))
 
 screen = pygame.display.set_mode((screen_width, screen_height))
@@ -220,7 +222,48 @@ def gest_song_bg():
                 next_song = "breakout/son/Le Dernier Éclat.mp3"
             else:
                 next_song = "breakout/son/Le Dernier Éclat2.mp3"
-
+        
+        elif breakout.level == 23:
+            if breakout.num_song == 0:
+                next_song = "breakout/son/Les Ombres de Sol’Tarim.mp3"
+            else:
+                next_song = "breakout/son/Les Ombres de Sol’Tarim2.mp3"
+        elif breakout.level == 24:
+            if breakout.num_song == 0:
+                next_song = "breakout/son/Les Échos de Mémoire.mp3"
+            else:
+                next_song = "breakout/son/Les Échos de Mémoire2.mp3"
+        elif breakout.level == 25:
+            next_song = "breakout/son/Le Rituel Interdit.mp3"
+        elif breakout.level == 26:
+            next_song = "breakout/son/L’Appel des Fragments.mp3"
+        elif breakout.level == 27:
+            next_song = "breakout/son/Au Cœur des Catacombes.mp3" 
+        elif breakout.level == 28:
+            if breakout.num_song == 0:
+                next_song = "breakout/son/Le Dilemme de l’Âme.mp3"
+            else:
+                next_song = "breakout/son/Le Dilemme de l’Âme2.mp3"
+        elif breakout.level == 29:
+            if breakout.num_song == 0:
+                next_song = "breakout/son/L’Éveil du Gardien Réanimé.mp3"
+            else:
+                next_song = "breakout/son/L’Éveil du Gardien Réanimé2.mp3"
+        elif breakout.level == 30:
+            if breakout.num_song == 0:
+                next_song = "breakout/son/La Confrontation.mp3"
+            else:
+                next_song = "breakout/son/La Confrontation2.mp3"
+        elif breakout.level == 31:
+            if breakout.num_song == 0:
+                next_song = "breakout/son/Le Choix Décisif.mp3"
+            else:
+                next_song = "breakout/son/Le Choix Décisif2.mp3"
+        elif breakout.level == 32:
+            if breakout.num_song == 0:
+                next_song = "breakout/son/L’Aube d’un Nouveau Cycle.mp3"
+            else:
+                next_song = "breakout/son/L’Aube d’un Nouveau Cycle2.mp3"
         background_image = backgrounds_levels[breakout.level]
     elif breakout.status == "game_over":
         background_image = background_gameover
@@ -230,9 +273,9 @@ def gest_song_bg():
         next_song = "breakout/son/Histoire.mp3"
     elif breakout.status == "win":
         background_image = background_win
-        next_song = "breakout/son/Lumière Éternelle.mp3"
+        next_song = "breakout/son/Fragments d’Éternité.mp3"
     elif breakout.status == "win1":
-        background_image = background_win
+        background_image = background_win1
         next_song = "breakout/son/Lumière Éternelle.mp3"
     elif breakout.status == "win2":
         background_image = background_win2
@@ -265,7 +308,7 @@ while breakout.running:
     # Update the display
     pygame.display.flip()
 
-    if breakout.status == "game_over" or breakout.status == "win1" or breakout.status == "win2" or breakout.status == "win3":
+    if breakout.status == "game_over" or breakout.status == "win1" or breakout.status == "win2" or breakout.status == "win3" or breakout.status == "win":
         keys = pygame.key.get_pressed()
         if keys[pygame.K_RETURN] or keys[pygame.K_SPACE] or keys[pygame.K_ESCAPE]:
             # Reset the game
