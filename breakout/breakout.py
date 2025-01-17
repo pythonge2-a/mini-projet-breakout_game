@@ -111,30 +111,44 @@ class Breakout:
                 self.score += self.lives * 100
                 self.lives = C.GAME_START_LIVES
 
+                # remove bricks, balls and bonus sprites
                 self.all_sprites.remove(self.brick_field.bricks)
                 self.all_sprites.remove(self.bonus_malus)
                 self.all_sprites.remove(self.balls)
+
+                # remove bricks, balls and bonus
                 self.brick_field.bricks.clear()
                 self.bonus_malus.clear()
                 self.balls.clear()
+
+                # reload bricks and balls
                 self.balls.append(Ball(self, [None]))
                 self.brick_field.load_map(self.level)
-                self.bonus_malus = self.add_bonus_malus()
+
+                # Create bonus and malus for level
+                self.bonus_malus = self.add_bonus_malus()                
+
+                # reload bricks and balls sprites
                 self.all_sprites.add(self.balls[0])
                 self.all_sprites.add(self.brick_field.bricks)
-                self.all_sprites.add(self.bonus_malus)
+
+                # Resize racket
+                if self.racket.size[0] != C.RACKET_WIDTH:
+                    self.racket.size[0] = C.RACKET_WIDTH
+                self.racket.load_sprite(C.TILESET_RACKETS_POS, C.TILESET_RACKETS_SIZE)
+
                 if self.level == 0:
                     next_song = "breakout/son/Whispers_of_Eternia.mp3"
                 if self.level == 1:
                     if self.num_song == 0:
                         next_song = "breakout/son/Les Lueurs du Mystère.mp3"
                     else:
-                        next_song = "breakout/son/Les Lueurs du Mystère2.mp3"                
+                        next_song = "breakout/son/Les Lueurs du Mystère2.mp3"
                 elif self.level == 2:
                     if self.num_song == 0:
                         next_song = "breakout/son/Les Murmures du Vide.mp3"
                     else:
-                        next_song = "breakout/son/Les Questions Sans Réponses.mp3" 
+                        next_song = "breakout/son/Les Questions Sans Réponses.mp3"
                 elif self.level == 3:
                     next_song = "breakout/son/Au Bout des Étoiles.mp3"
                 elif self.level == 4:
@@ -163,12 +177,12 @@ class Breakout:
                     else:
                         next_song = "breakout/son/Les Légions du Néant2.mp3"
                 elif self.level == 9:
-                    next_song = "breakout/son/Le_chant_du_Vide.mp3"   
+                    next_song = "breakout/son/Le_chant_du_Vide.mp3"
                 elif self.level == 10:
                     if self.num_song == 0:
                         next_song = "breakout/son/L'Éclat des Survivants.mp3"
                     else:
-                        next_song = "breakout/son/L'Éclat des Survivants2.mp3"    
+                        next_song = "breakout/son/L'Éclat des Survivants2.mp3"
                 elif self.level == 11:
                     next_song = "breakout/son/L'Appel de Myrthos.mp3"
                 elif self.level == 12:
@@ -211,7 +225,7 @@ class Breakout:
                     if self.num_song == 0:
                         next_song = "breakout/son/Le Jugement des Étoiles.mp3"
                     else:
-                        next_song = "breakout/son/Le Jugement des Étoiles2.mp3"    
+                        next_song = "breakout/son/Le Jugement des Étoiles2.mp3"
                 elif self.level == 22:
                     if self.num_song == 0:
                         next_song = "breakout/son/Le Dernier Éclat.mp3"
@@ -262,7 +276,6 @@ class Breakout:
                 pygame.mixer.music.play()
                 self.secret = False
                 self.init = False
-
 
         else:
             for b in self.balls:
@@ -361,26 +374,80 @@ class Breakout:
     def add_bonus_malus(self):
         """add bonus or malus in bricks"""
 
+        # initialise le nombre de bonus et de malus à 0
+        bonus = 0
+        malus = 0
+
+        # calcule le nombre de bonus et de malus en fonction du niveau
+        if self.level <= 5:
+            bonus = len(self.brick_field.bricks) - int(
+                len(self.brick_field.bricks) * self.level / 10
+            )
+            malus = 0
+        elif self.level <= 10:
+            bonus = len(self.brick_field.bricks) - int(
+                len(self.brick_field.bricks) * (self.level - 6) / 20
+            )
+            malus = len(self.brick_field.bricks) - bonus
+        elif self.level <= 20:
+            bonus = len(self.brick_field.bricks) - int(
+                len(self.brick_field.bricks) * (self.level - 10) / 10
+            )
+            malus = len(self.brick_field.bricks) - bonus
+        else:
+            bonus = 0
+            malus = len(self.brick_field.bricks) - int(
+                len(self.brick_field.bricks) * (LEVELS_NUMBER - self.level) / 10
+            )
+
         # si le nombre de bonus/malus ne dépasse pas le nombre de briques, il n'y aura qu'un bonus/malus par brique
         bonus_malus = []
         i = 0
-        if len(self.brick_field.bricks) >= C.BONUS_QUANTITY:
-            brick_bonus_malus = rd.sample(self.brick_field.bricks, C.BONUS_QUANTITY)
-        else:
-            brick_bonus_malus = [
-                rd.choice(self.brick_field.bricks) for x in range(C.BONUS_QUANTITY)
-            ]
+        # if len(self.brick_field.bricks) >= C.BONUS_QUANTITY:
+        #    brick_bonus_malus = rd.sample(self.brick_field.bricks, C.BONUS_QUANTITY)
+        # else:
+        #    brick_bonus_malus = [
+        #        rd.choice(self.brick_field.bricks) for x in range(C.BONUS_QUANTITY)
+        #    ]
+
+        brick_bonus_malus = rd.sample(self.brick_field.bricks, bonus + malus)
 
         for brick in brick_bonus_malus:
 
-            bonus_malus.append(
-                Bolus(
-                    breakout=self,
-                    sprites=[None],
-                    brick=brick,
-                    racket=self.racket,
+            if i <= bonus:
+                bonus_malus.append(
+                    Bolus(
+                        breakout=self,
+                        sprites=[None],
+                        brick=brick,
+                        racket=self.racket,
+                        bonus=True,
+                        malus=False,
+                    )
                 )
-            )
+            elif (malus != 0) and (i > bonus):
+                bonus_malus.append(
+                    Bolus(
+                        breakout=self,
+                        sprites=[None],
+                        brick=brick,
+                        racket=self.racket,
+                        bonus=False,
+                        malus=True,
+                    )
+                )
+            else:
+                bonus_malus.append(
+                    Bolus(
+                        breakout=self,
+                        sprites=[None],
+                        brick=brick,
+                        racket=self.racket,
+                        bonus=False,
+                        malus=False,
+                    )
+                )
+
             self.all_sprites.add(bonus_malus[i])
             i += 1
 
@@ -418,11 +485,11 @@ class Breakout:
         # Define text
         win_txt1 = self.font.render("You won this continuous", True, color)
         win_txt2 = self.font.render("chapter to live the next one", True, color)
-   
+
         with open("breakout/save.txt", "w", encoding="utf-8") as f:
             if self.level < C.LEVELS_NUMBER:
                 f.write(f"{self.level}\n{self.score}")
-            else:    
+            else:
                 f.write(f"{0}\n{self.score}")
         # Define rectangle
         win_rec = win_txt1.get_rect(
@@ -465,7 +532,7 @@ class Breakout:
         )
         # Define text
         win_txt = self.font.render("Victory ?", True, color)
-   
+
         with open("breakout/save.txt", "w", encoding="utf-8") as f:
             f.write(f"{0}\n{self.score}")
         # Define rectangle
@@ -473,6 +540,7 @@ class Breakout:
             center=(C.WINDOW_WIDTH / 2, C.WINDOW_HEIGHT / 2 + C.WINDOW_HEIGHT / 4)
         )
         self.screen.blit(win_txt, win_rec)
+
     def show_win3(self):
         """Show win screen"""
         color = (
@@ -495,6 +563,7 @@ class Breakout:
         )
         self.screen.blit(win_txt2, win_rec)
         pass
+
     def load_histoire(self, filepath):
         """
         Lit le fichier et renvoie une liste de lignes,
@@ -571,50 +640,50 @@ class Breakout:
                 all_lines.append(current_line_tokens)
 
         return all_lines
-        
+
     def show_histoire(self, speed):
 
         y = self.histoire_offset
-        
+
         # Parcourt chaque ligne (liste de tokens)
         for line_tokens in self.histoire_lines:
             # 1) Calcul de la hauteur de la ligne et de sa largeur totale
             line_height = 0
             total_line_width = 0
-            
+
             # On va prévoir un espace (en pixels) entre chaque mot
             space_width, _ = self.font.size(" ")
-            
+
             # Pour savoir si on est sur le premier token (pour ne pas ajouter d'espace avant)
             first_token = True
-            
-            for (word, is_bold) in line_tokens:
+
+            for word, is_bold in line_tokens:
                 # Choisir la police
                 if is_bold:
                     font_used = self.font_bold
                 else:
                     font_used = self.font
-                
+
                 word_w, word_h = font_used.size(word)
-                
+
                 # Mise à jour de la hauteur max de la ligne
                 if word_h > line_height:
                     line_height = word_h
-                
+
                 # Mise à jour de la largeur totale
                 #  - on ajoute un espace sauf pour le premier mot
                 if first_token:
                     total_line_width += word_w
                     first_token = False
                 else:
-                    total_line_width += (space_width + word_w)
-            
+                    total_line_width += space_width + word_w
+
             # 2) Calcul de la position X pour centrer la ligne
             x = (C.WINDOW_WIDTH - total_line_width) // 2
-            
+
             # 3) Affichage effectif de la ligne
             first_token = True
-            for (word, is_bold) in line_tokens:
+            for word, is_bold in line_tokens:
                 if is_bold:
                     font_used = self.font_bold
                     color_texte = (255, 0, 0)
@@ -627,15 +696,15 @@ class Breakout:
                     x += space_width
                 else:
                     first_token = False
-                
+
                 # Dessin du mot
                 word_surface = font_used.render(word, True, color_texte)
                 self.screen.blit(word_surface, (x, y))
                 x += word_surface.get_width()
-            
+
             # Nouvelle ligne (on descend de line_height + 5)
-            y += (line_height + 5)
-        
+            y += line_height + 5
+
         # Défilement vers le haut
         self.histoire_offset -= speed
 
