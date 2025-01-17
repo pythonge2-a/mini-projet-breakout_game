@@ -132,6 +132,7 @@ class Breakout:
                 # Resize racket
                 if self.racket.size[0] != C.RACKET_WIDTH:
                     self.racket.size[0] = C.RACKET_WIDTH
+                self.racket.load_sprite(C.TILESET_RACKETS_POS, C.TILESET_RACKETS_SIZE)
 
                 if self.level == 0:
                     next_song = "breakout/son/Whispers_of_Eternia.mp3"
@@ -340,11 +341,20 @@ class Breakout:
             )
             malus = 0
         elif self.level <= 10:
-            bonus = len(self.brick_field.bricks) / 2
-            malus = len(self.brick_field.bricks) / 2
-        elif self.level <= 15:
+            bonus = len(self.brick_field.bricks) - int(
+                len(self.brick_field.bricks) * (self.level - 6) / 20
+            )
+            malus = len(self.brick_field.bricks) - bonus
+        elif self.level <= 20:
+            bonus = len(self.brick_field.bricks) - int(
+                len(self.brick_field.bricks) * (self.level - 10) / 10
+            )
+            malus = len(self.brick_field.bricks) - bonus
+        else:
             bonus = 0
-            malus = len(self.brick_field.bricks)
+            malus = len(self.brick_field.bricks) - int(
+                len(self.brick_field.bricks) * (LEVELS_NUMBER - self.level) / 10
+            )
 
         # si le nombre de bonus/malus ne dépasse pas le nombre de briques, il n'y aura qu'un bonus/malus par brique
         bonus_malus = []
@@ -394,14 +404,6 @@ class Breakout:
                     )
                 )
 
-            # bonus_malus.append(
-            #    Bolus(
-            #        breakout=self,
-            #        sprites=[None],
-            #        brick=brick,
-            #        racket=self.racket,
-            #    )
-            # )
             self.all_sprites.add(bonus_malus[i])
             i += 1
 
