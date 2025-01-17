@@ -394,12 +394,16 @@ class Breakout:
                 len(self.brick_field.bricks) * (self.level - 10) / 10
             )
             malus = len(self.brick_field.bricks) - bonus
+        elif self.level <= 30:
+            bonus = 0
+            malus = len(self.brick_field.bricks) - int(
+                len(self.brick_field.bricks) * (self.level - 20) / 10
+            )
         else:
             bonus = 0
             malus = len(self.brick_field.bricks) - int(
-                len(self.brick_field.bricks) * (LEVELS_NUMBER - self.level) / 10
+                len(self.brick_field.bricks) * (self.level - 30) / 10
             )
-
         # si le nombre de bonus/malus ne dépasse pas le nombre de briques, il n'y aura qu'un bonus/malus par brique
         bonus_malus = []
         i = 0

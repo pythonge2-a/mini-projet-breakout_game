@@ -238,7 +238,7 @@ def gest_song_bg():
         elif breakout.level == 26:
             next_song = "breakout/son/L’Appel des Fragments.mp3"
         elif breakout.level == 27:
-            next_song = "breakout/son/Au Cœur des Catacombes.mp3" 
+            next_song = "breakout/son/Au Cœur des Catacombes.mp3"
         elif breakout.level == 28:
             if breakout.num_song == 0:
                 next_song = "breakout/son/Le Dilemme de l’Âme.mp3"
@@ -284,7 +284,6 @@ def gest_song_bg():
         background_image = background_win3
         next_song = "breakout/son/L'Étoile Qui S'Éteint.mp3"
     if not pygame.mixer.music.get_busy():
-
         if breakout.num_song == 0:
             breakout.num_song = 1
         else:
@@ -308,7 +307,13 @@ while breakout.running:
     # Update the display
     pygame.display.flip()
 
-    if breakout.status == "game_over" or breakout.status == "win1" or breakout.status == "win2" or breakout.status == "win3" or breakout.status == "win":
+    if (
+        breakout.status == "game_over"
+        or breakout.status == "win1"
+        or breakout.status == "win2"
+        or breakout.status == "win3"
+        or breakout.status == "win"
+    ):
         keys = pygame.key.get_pressed()
         if keys[pygame.K_RETURN] or keys[pygame.K_SPACE] or keys[pygame.K_ESCAPE]:
             # Reset the game
