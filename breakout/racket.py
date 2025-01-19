@@ -20,6 +20,8 @@ class Racket(Game_object):
         self.speed = C.RACKET_SPEED
         self.reverse = False
         self.auto_mode = False
+        self.invisible = False
+        self.load_invisible = False
 
         # Load sprite
         self.load_sprite(C.TILESET_RACKETS_POS, C.TILESET_RACKETS_SIZE)
@@ -53,5 +55,19 @@ class Racket(Game_object):
         else:
             if pygame.key.get_pressed()[pygame.K_LEFT] and x > 0:
                 self.position[0] -= self.speed
+                if self.invisible and not self.load_invisible:
+                    self.load_sprite(C.TILESET_INVISIBLE_POS, C.TILESET_RACKETS_SIZE)
+                    self.load_invisible = True
             if pygame.key.get_pressed()[pygame.K_RIGHT] and x < C.WINDOW_WIDTH - width:
                 self.position[0] += self.speed
+                if self.invisible and not self.load_invisible:
+                    self.load_sprite(C.TILESET_INVISIBLE_POS, C.TILESET_RACKETS_SIZE)
+                    self.load_invisible = True
+
+            if (
+                not pygame.key.get_pressed()[pygame.K_RIGHT]
+                and not pygame.key.get_pressed()[pygame.K_LEFT]
+                and self.invisible
+            ):
+                self.load_sprite(C.TILESET_RACKETS_POS, C.TILESET_RACKETS_SIZE)
+                self.load_invisible = False

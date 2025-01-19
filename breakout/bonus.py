@@ -61,9 +61,10 @@ class Bolus(Game_object):
             [self.reverse, 16],
             [self.explosion, 17],
             [self.unbreakable, 18],
+            [self.invisible, 19],
         ]
         self.proba_bonus = [100, 50, 75, 75, 100, 10, 100, 30, 10]
-        self.proba_malus = [100, 75, 75, 50, 75, 10, 50, 50, 10]
+        self.proba_malus = [100, 75, 75, 50, 75, 10, 50, 50, 10, 5]
 
         if self.bonus and not self.malus:
             self.bolus = self.set_bonus()
@@ -460,7 +461,7 @@ class Bolus(Game_object):
             pos = [
                 C.TILESET_BRICKS_POS[0],
                 C.TILESET_BRICKS_POS[1]
-                + (C.TILESET_BRICKS_SIZE[1] + 1) * (C.BRICK_MAX_LIVES + 1),
+                + (C.TILESET_BRICKS_SIZE[1] + 1) * C.BRICK_MAX_LIVES,
             ]
             self.unbrickable.load_sprite(pos, C.TILESET_BRICKS_SIZE)
 
@@ -475,6 +476,20 @@ class Bolus(Game_object):
                     + (C.TILESET_BRICKS_SIZE[1] + 1) * (5 - (self.unbrickable.lives)),
                 ]
                 self.unbrickable.load_sprite(pos, C.TILESET_BRICKS_SIZE)
+            self.end = True
+            self.use = False
+
+    def invisible(self):
+        """Malus qui rend la raquette invisible quand elle bouge"""
+
+        # quand le malus est pris la raquette devient invisible en mouvement
+        if not self.start:
+            self.start = True
+            self.racket.invisible = True
+        # après un temps donné, la raquette est tout le temps visible
+        elif (self.count > C.ACTIVATION_TIME) and not self.end:
+            self.racket.invisible = False
+            self.racket.load_sprite(C.TILESET_RACKETS_POS, C.TILESET_RACKETS_SIZE)
             self.end = True
             self.use = False
 
