@@ -231,8 +231,8 @@ class Ball(Game_object):
                 # récupère la position où la raquette est touchée
                 self.pos_glu = self.breakout.racket.position[0] - self.position[0]
 
-            # Stop "unstoppable" bonus after 2 bounce
-            if self.unstoppable:
+            # Stop "unstoppable" bonus after 2 bounce if ghost is not active
+            if self.unstoppable and not self.ghost:
                 self.count_unstop, self.unstoppable = self.max_bounces(
                     self.count_unstop, self.unstoppable, C.UNSTOP_BOUNCES
                 )
@@ -363,7 +363,7 @@ class Ball(Game_object):
                     elif not self.ghost and not brick.unbreakable:
                         # Update points
                         self.breakout.score += brick.reward
-                    
+
                         self.breakout.all_sprites.remove(brick)
                         brick_field.bricks.remove(brick)
                         # add animation
@@ -379,7 +379,7 @@ class Ball(Game_object):
         self.coll_mur()
         self.coll_racket(racket)
         self.coll_bricks(brick_field)
-        #self.coll_balle()
+        # self.coll_balle()
 
     def max_bounces(self, count, bolus, max_bounces):
         # fonction pour compter les rebonds sur la raquette pour la désactivation de bonus/malus
@@ -392,5 +392,3 @@ class Ball(Game_object):
             count += 1
 
         return count, bolus
-
-        

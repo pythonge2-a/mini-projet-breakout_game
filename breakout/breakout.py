@@ -235,7 +235,7 @@ class Breakout:
                     if self.num_song == 0:
                         next_song = "breakout/son/Le Dernier Éclat.mp3"
                     else:
-                        next_song = "breakout/son/Le Dernier Éclat2.mp3"    
+                        next_song = "breakout/son/Le Dernier Éclat2.mp3"
                 elif self.level == 23:
                     if self.num_song == 0:
                         next_song = "breakout/son/Les Ombres de Sol’Tarim.mp3"
@@ -251,7 +251,7 @@ class Breakout:
                 elif self.level == 26:
                     next_song = "breakout/son/L’Appel des Fragments.mp3"
                 elif self.level == 27:
-                    next_song = "breakout/son/Au Cœur des Catacombes.mp3" 
+                    next_song = "breakout/son/Au Cœur des Catacombes.mp3"
                 elif self.level == 28:
                     if self.num_song == 0:
                         next_song = "breakout/son/Le Dilemme de l’Âme.mp3"
@@ -338,6 +338,7 @@ class Breakout:
             self.show_win3()
         elif self.status == "win":
             self.show_win()
+
     def display_infos(self):
         """Shows score, lives, level"""
         self.display_score()
@@ -401,38 +402,39 @@ class Breakout:
             )
             malus = len(self.brick_field.bricks) - bonus
         elif self.level <= 15:
-            bonus = len(self.brick_field.bricks) / 2
+            bonus = int(len(self.brick_field.bricks) / 2)
             malus = len(self.brick_field.bricks) - bonus
         elif self.level <= 20:
             bonus = len(self.brick_field.bricks) - int(
-                len(self.brick_field.bricks) * (self.level - 10) / 10
+                len(self.brick_field.bricks) * (self.level - 6) / 20
+            )
+            malus = int((len(self.brick_field.bricks) - bonus) / 2)
+        elif self.level <= 30:
+            bonus = len(self.brick_field.bricks) - int(
+                len(self.brick_field.bricks) * (self.level - 2) / 30
             )
             malus = len(self.brick_field.bricks) - bonus
-        elif self.level <= 30:
-            bonus = 0
-            malus = len(self.brick_field.bricks) - int(
-                len(self.brick_field.bricks) * (self.level - 20) / 10
-            )
         else:
             bonus = 0
             malus = len(self.brick_field.bricks) - int(
-                len(self.brick_field.bricks) * (self.level - 30) / 10
+                len(self.brick_field.bricks) * (C.LEVELS_NUMBER - self.level) / 10
             )
         # si le nombre de bonus/malus ne dépasse pas le nombre de briques, il n'y aura qu'un bonus/malus par brique
         bonus_malus = []
         i = 0
-        # if len(self.brick_field.bricks) >= C.BONUS_QUANTITY:
-        #    brick_bonus_malus = rd.sample(self.brick_field.bricks, C.BONUS_QUANTITY)
-        # else:
-        #    brick_bonus_malus = [
-        #        rd.choice(self.brick_field.bricks) for x in range(C.BONUS_QUANTITY)
-        #    ]
 
-        brick_bonus_malus = rd.sample(self.brick_field.bricks, bonus + malus)
+        if (len(self.brick_field.bricks) != 0) and (
+            (bonus + malus) <= len(self.brick_field.bricks)
+        ):
+            brick_bonus_malus = rd.sample(self.brick_field.bricks, bonus + malus)
+        elif (len(self.brick_field.bricks) != 0) and (
+            (bonus + malus) > len(self.brick_field.bricks)
+        ):
+            brick_bonus_malus = rd.choice(self.brick_field.bricks, (bonus + malus))
 
         for brick in brick_bonus_malus:
 
-            if (i <= bonus) and not (bonus == malus):
+            if (i < bonus) and not (bonus == malus):
                 bonus_malus.append(
                     Bolus(
                         breakout=self,
@@ -443,7 +445,7 @@ class Breakout:
                         malus=False,
                     )
                 )
-            elif (malus != 0) and (i > bonus) and not (bonus == malus):
+            elif (malus != 0) and (i >= bonus) and not (bonus == malus):
                 bonus_malus.append(
                     Bolus(
                         breakout=self,
@@ -520,6 +522,7 @@ class Breakout:
         self.screen.blit(win_txt2, win_rec)
 
         pass
+
     def show_win(self):
         """Show win screen"""
         color = (
@@ -529,10 +532,10 @@ class Breakout:
         )
         # Define text
         win_txt1 = self.font.render("Thanks for playing", True, color)
-   
+
         with open("breakout/save.txt", "w", encoding="utf-8") as f:
             f.write(f"{0}\n{self.score}")
-          
+
         # Define rectangle
         win_rec = win_txt1.get_rect(
             center=(C.WINDOW_WIDTH / 2, C.WINDOW_HEIGHT / 2 + C.WINDOW_HEIGHT / 4)
@@ -540,7 +543,7 @@ class Breakout:
         self.screen.blit(win_txt1, win_rec)
 
         pass
-    
+
     def show_win2(self):
         """Show win screen"""
         color = (

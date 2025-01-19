@@ -263,7 +263,7 @@ class Bolus(Game_object):
             self.start = True
             for b in self.breakout.balls:
                 # si une modification de la balle est active, le bonus ne s'active pas
-                if not b.unstoppable and not b.ghost:
+                if not b.unstoppable and not b.ghost and not b.explosion:
                     b.glu = True
                     # charge le sprite de la balle collante
                     b.load_sprite(C.TILESET_GLU_POS, C.TILESET_BALLS_SIZE)
@@ -409,6 +409,10 @@ class Bolus(Game_object):
             self.start = True
             # le malus ne fonctionne que sur une balle, la première de la liste
             self.breakout.balls[0].ghost = True
+            # désactive les bonus/malus actifs sur la balle
+            self.breakout.balls[0].unstoppable = False
+            self.breakout.balls[0].explosion = False
+            self.breakout.balls[0].glu = False
             self.end = True
             self.use = False
 
@@ -436,7 +440,8 @@ class Bolus(Game_object):
         if not self.start:
             self.start = True
             for b in self.breakout.balls:
-                if not b.explosion:
+                # explosion ne s'active pas sur les balles avec un bonus/malus actif
+                if not b.explosion and not b.ghost and not b.unstoppable:
                     b.explosion = True
                     # change le sprite de la balle quand le bonus est activé
                     b.load_sprite(C.TILESET_EXPL_POS, C.TILESET_BALLS_SIZE)
