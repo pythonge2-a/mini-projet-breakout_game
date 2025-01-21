@@ -55,6 +55,7 @@ class Ball(Game_object):
         self.change_speed = [0, 0]
         self.ghost_load = False
         self.unstop_load = False
+        self.pos_tileset = C.TILESET_BALLS_POS
 
     def update(self):
         """Updates ball"""
@@ -64,11 +65,13 @@ class Ball(Game_object):
             # change le sprite de la balle quand unstoppable est actif
             if not self.unstop_load:
                 self.load_sprite(C.TILESET_UNSTOPPABLE_POS, C.TILESET_BALLS_SIZE)
+                self.pos_tileset = C.TILESET_UNSTOPPABLE_POS
                 self.unstop_load = True
         elif self.ghost:
             # change le sprite de la balle quand le malus ghost est activé
             if not self.ghost_load:
                 self.load_sprite(C.TILESET_GHOST_POS, C.TILESET_BALLS_SIZE)
+                self.pos_tileset = C.TILESET_GHOST_POS
                 self.ghost_load = True
 
         # met à jour la taille de la balle, je n'ai pas trouvé comment faire pour que
@@ -91,6 +94,7 @@ class Ball(Game_object):
                 # remet le sprite de la balle si glu était actif
                 if self.glu:
                     self.load_sprite(C.TILESET_BALLS_POS, C.TILESET_BALLS_SIZE)
+                    self.pos_tileset = C.TILESET_BALLS_POS
                 self.glu = False
         else:
             # Check collisions
@@ -148,6 +152,7 @@ class Ball(Game_object):
             # si un bonus/malus de la balle est actif, il se désactive et ses variables sont réinitialisées
             if self.glu or self.ghost or self.unstoppable or self.explosion:
                 self.load_sprite(C.TILESET_BALLS_POS, C.TILESET_BALLS_SIZE)
+                self.pos_tileset = C.TILESET_BALLS_POS
                 self.glu = False
                 self.ghost = False
                 self.ghost_load = False
@@ -388,6 +393,7 @@ class Ball(Game_object):
             count = 0
             # reload ball sprite
             self.load_sprite(C.TILESET_BALLS_POS, C.TILESET_BALLS_SIZE)
+            self.pos_tileset = C.TILESET_BALLS_POS
         else:
             count += 1
 

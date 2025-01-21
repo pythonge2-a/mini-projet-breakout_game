@@ -64,7 +64,7 @@ class Bolus(Game_object):
             [self.invisible, 19],
         ]
         self.proba_bonus = [100, 50, 75, 75, 100, 10, 100, 30, 10]
-        self.proba_malus = [100, 75, 75, 50, 75, 10, 50, 50, 10, 5]
+        self.proba_malus = [100, 75, 75, 50, 75, 10, 50, 50, 10, 50000000000]
 
         if self.bonus and not self.malus:
             self.bolus = self.set_bonus()
@@ -193,6 +193,7 @@ class Bolus(Game_object):
             for b in self.breakout.balls:
                 if b.radius > C.BALL_RADIUS:
                     b.radius -= C.BALL_GROW_SIZE
+                    b.load_sprite(b.pos_tileset, C.TILESET_BALLS_SIZE)
             self.use = False
 
     def speed_up_racket(self):
@@ -268,6 +269,7 @@ class Bolus(Game_object):
                     b.glu = True
                     # charge le sprite de la balle collante
                     b.load_sprite(C.TILESET_GLU_POS, C.TILESET_BALLS_SIZE)
+                    b.pos_tileset = C.TILESET_GLU_POS
             self.end = True
             self.use = False
 
@@ -377,6 +379,7 @@ class Bolus(Game_object):
             for b in self.breakout.balls:
                 if b.radius < C.BALL_RADIUS:
                     b.radius += C.BALL_SHRINK_SIZE
+                    b.load_sprite(b.pos_tileset, C.TILESET_BALLS_SIZE)
             self.use = False
 
     def reinforce_brick(self):
@@ -446,6 +449,7 @@ class Bolus(Game_object):
                     b.explosion = True
                     # change le sprite de la balle quand le bonus est activé
                     b.load_sprite(C.TILESET_EXPL_POS, C.TILESET_BALLS_SIZE)
+                    b.pos_tileset = C.TILESET_EXPL_POS
 
     def unbreakable(self):
         """Malus qui rend une brique temporairement incassable"""
