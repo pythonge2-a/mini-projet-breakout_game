@@ -78,9 +78,12 @@ Chaignat Bastien
 - Création des bonus
 - Intégration dans les briques
 
-# Comment utiliser le code?
 
-Ce code est utilisable en tant que jeu (car c'est un casse brique), c'est un jeu intéressant qui regorge de secret que nous pouvons lancer en allant directement dans le fichier __main_.py et faire un run du projet. Cela ouvrira un menu dans lequel vous pourrez choisir si vous voulez recommencer une nouvelle aventure, continuer la partie précédente, lire l'histoire du jeu ou quitter le jeu. 
+# Comment utiliser le code?
+Pour lancer le code, veuillez taper : "python breakout" dans le terminal en vous situant dans la base du fichier, soit "MINI_PROJET_BREAKOUT_GAME".
+
+Ce code est utilisable en tant que jeu (car c'est un casse brique). C'est un jeu intéressant qui regorge de secret que nous pouvons lancer en allant directement dans le fichier __main_.py et faire un run du projet. Cela ouvrira un menu dans lequel vous pourrez choisir si vous voulez recommencer une nouvelle aventure, continuer la partie précédente, lire l'histoire du jeu ou quitter le jeu. 
+
 
 # Comment installer et développer sur le projet ?
 
