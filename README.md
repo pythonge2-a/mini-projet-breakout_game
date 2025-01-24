@@ -5,6 +5,23 @@
 L'objectif est de créer un casse brique modulable.
 Dans un premier temps, nous allons créer programmer une version simple du jeu afin de nous assurer que la base du jeu fonctionne. Pars la suite, nous allons ajouter les fonctionnalitées citées ci-dessous.
 
+
+## Breakout Challenge
+
+Dans ce jeu de casse-briques revisité, votre objectif est de détruire toutes les briques colorées à l’écran à l’aide d’une balle que vous contrôlez grâce à une raquette. Faites preuve de précision et de rapidité pour éviter de perdre la balle tout en récupérant des bonus qui vous aideront à franchir les niveaux de plus en plus difficiles.
+
+Les graphismes modernes, associés à une bande-son entraînante, rendent l’expérience à la fois immersive et accessible à tous. Idéal pour tester vos réflexes et battre vos propres records !
+
+### Caractéristiques :
+
+Une progression à travers plusieurs niveaux avec des défis croissants.
+Des bonus et malus qui modifient le gameplay.
+Un système de score pour mesurer vos performances.
+Un design épuré, parfait pour des parties rapides ou prolongées.
+
+### Objectif global du jeu:
+Détruire toutes les briques, compléter chaque niveau et atteindre le meilleur score possible tout en évitant de perdre la balle.
+
 ## Cahier des charge (basic)
 
 Comme décrit ci-dessus, voici la liste de fonctionnalitées basiques qu'il est nécessaire d'implémenter au
