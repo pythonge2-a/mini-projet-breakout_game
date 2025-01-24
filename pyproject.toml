@@ -1,0 +1,14 @@
+[tool.poetry]
+name = "breakout"
+version = "0.1.0"
+description = "C'est un jeu de casse brique amélioré. Il comporte plusieurs bonus et malus intégré aux différents niveaux créés."
+authors = ["tornare-magali <145576863+tornare-magali@users.noreply.github.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
